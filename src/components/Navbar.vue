@@ -13,16 +13,7 @@
           <a class="nav-link" href="/warehouse">倉庫</a>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">管理清單</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/manager/customers">発注人</a>
-            <a class="dropdown-item" href="/manager/partnumbers">部品</a>
-            <a class="dropdown-item" href="/manager/WarehousingHistories">出入庫歷史清單</a>
-          </div>
-        </li>
-
-        <li class="nav-item dropdown">
+        <li>
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">管理清單</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/manager/customers">発注人</a>
@@ -44,7 +35,7 @@
       </ul>
     </div>
 
-    <a href="/logout"><button class="btn btn-outline-danger my-2 my-sm-0">登出</button></a>
+    <button v-if="isAuthenticated" @click="logout" class="btn btn-outline-danger my-2 my-sm-0">登出</button>
 
   </nav>
 </template>
@@ -56,8 +47,14 @@ export default {
   computed: {
     ...mapState([
       'currentUser',
-      'isAuthenticated'
+      'isAuthenticated',
     ])
+  },
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    }
   },
 
 }

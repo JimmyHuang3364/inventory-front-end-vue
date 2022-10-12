@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import usersAPI from './../apis/users'
 
 Vue.use(Vuex)
 
@@ -10,9 +11,9 @@ export default new Vuex.Store({
       name: '',
       isAdmin: false,
       permissionLevel: -1,
-      token: ''
     },
-    isAuthenticated: false
+    isAuthenticated: false,
+    token: ''
   },
   getters: {
   },
@@ -26,12 +27,34 @@ export default new Vuex.Store({
       state.token = localStorage.getItem('token')
       // 將使用者的登入狀態改為 true
       state.isAuthenticated = true
+    },
+    revokeAuthentication(state) {
+      state.currentUser = {}
+      state.isAuthenticated = false
+      // 登出時一併將 state 內的 token 移除
+      state.token = ''
+      localStorage.removeItem('token')
     }
   },
   actions: {
-    // async fatchCurrentUser(commit) {
+    async fetchCurrentUser({ commit }) {
+      try {
+        const { data } = await usersAPI.getCurrentUser()
 
-    // }
+        const { id, name, isAdmin, permissionLevel } = data
+
+        commit('setCurrentUser', {
+          id,
+          name,
+          isAdmin,
+          permissionLevel
+        })
+        return true
+      } catch (error) {
+        console.error(error.message)
+        return false
+      }
+    }
   },
   modules: {
   }

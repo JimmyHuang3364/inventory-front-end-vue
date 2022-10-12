@@ -59,8 +59,6 @@ export default {
           throw new Error(data.message)
         }
 
-        console.log('data', data)
-
         // 將 token 存放在 localStorage 內
         localStorage.setItem('token', data.token)
 
