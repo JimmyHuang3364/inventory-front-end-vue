@@ -1,5 +1,6 @@
 <template>
-  <h1>
-    404 pag is not found!!
+  <h1 class="text-white">
+    404 找不到網頁!!
   </h1>
 </template>
+
