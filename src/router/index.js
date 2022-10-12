@@ -11,6 +11,11 @@ const routes = [
     component: () => import('../views/Signin.vue')
   },
   {
+    path: '/warehouse/partnumbers',
+    name: 'warehouse-part-numbers',
+    component: () => import('../views/PartNumbers.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: () => import('../views/NotFound.vue')
@@ -45,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
 
   // 如果 token 有效則轉址到餐廳首頁
   if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
-    next('/restaurants')
+    next('/warehouse/partnumbers')
     return
   }
 
