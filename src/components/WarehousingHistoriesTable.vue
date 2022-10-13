@@ -33,11 +33,11 @@
           <td>{{WarehousingHistory.PartNumber.name}}</td>
           <!--入庫-->
 
-          <td v-if="WarehousingHistory.quntityOfWarehousing" class="bg-danger">{{WarehousingHistory.quntityOfWarehousing}}</td>
+          <td v-if="WarehousingHistory.quntityOfWarehousing" class="text-dark" style="background-color: #ea9d06;">{{WarehousingHistory.quntityOfWarehousing}}</td>
           <td v-else>{{WarehousingHistory.quntityOfWarehousing}}</td>
           <!--出庫-->
           <td v-if="WarehousingHistory.quntityOfShipping" class="bg-success">{{WarehousingHistory.quntityOfShipping}}</td>
-          <td>{{WarehousingHistory.quntityOfShipping}}</td>
+          <td v-else>{{WarehousingHistory.quntityOfShipping}}</td>
           <!--餘存-->
           <td></td>
           <!--備註-->

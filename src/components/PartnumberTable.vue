@@ -1,6 +1,6 @@
 <template>
   <div class="partnumbers_area">
-    <table class="table table-sm table-striped table-hover table-bordered table-dark">
+    <table class="table table-sm table-hover table-bordered table-dark">
       <thead>
         <tr class="table-active" style="text-align: center;">
           <th scope="col">
@@ -18,28 +18,28 @@
         </tr>
       </thead>
 
-      <tbody v-for="partNumber in initialPartNumbers" :key="partNumber.id">
+      <tbody v-for="partNumber in initialPartNumbers" :key="partNumber.id" style="border-top: 0;">
 
         <tr style="text-align: center;">
           <!--品番-->
-          <th scope="row">{{partNumber.name}}</th>
+          <td scope="row">{{partNumber.name}}</td>
           <!--在庫數量-->
           <td>{{partNumber.quantity}}</td>
           <!--備註-->
-          <td>{{partNumber.commonName}}</td>
+          <td>{{partNumber.commentName}}</td>
           <!--安全庫存-->
           <td>{{partNumber.safetyStockQuantity}}</td>
         </tr>
 
-        <tr v-show="partNumber.subPartNumbers.length" v-for="subPartNumber in partNumber.subPartNumbers" :key="subPartNumber.id" style="text-align: center;">
+        <tr v-for="subPartNumber in partNumber.subPartNumbers" :key="subPartNumber.id" style="text-align: center;">
           <!--品番-->
-          <th class="py-1 text-info" scope="row">{{subPartNumber.name}}</th>
+          <td class="text-info" scope="row">{{subPartNumber.name}}</td>
           <!--在庫數量-->
-          <td class="py-1 bg-danger">{{subPartNumber.quantity}}</td>
+          <td>{{subPartNumber.quantity}}</td>
           <!--備註-->
-          <td class="py-1">{{subPartNumber.commonName}}</td>
+          <td>{{subPartNumber.commentName}}</td>
           <!--安全庫存-->
-          <td class="py-1">{{subPartNumber.safetyStockQuantity}}</td>
+          <td>{{subPartNumber.safetyStockQuantity}}</td>
         </tr>
 
       </tbody>

@@ -24,10 +24,10 @@
 
     <div class="d-flex flex-row justify-content-around align-items-center mt-3">
       <div class="mb-2">
-        <a class="btn btn-outline-secondary" href="#" role="button">全部</a>
-        <a v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-2" href="#" role="button">
+        <router-link class="btn btn-outline-secondary mr-1" to="/warehouse/partnumbers" role="button">全部</router-link>
+        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: {customerId: customer.id}}" role="button">
           {{ customer.name }}
-        </a>
+        </router-link>
       </div>
 
       <div class="mb-2">
@@ -56,6 +56,17 @@ import partNumbersAPI from '../apis/part_numbers'
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
 export default {
+  name: 'PartNumbers',
+  components: { PartnumberTable, WarehousingHistoriesTable },
+  beforeRouteUpdate(to, from, next) {
+    const { customerId = '' } = to.query
+    this.fetchPartNumbers({ queryCategoryId: customerId })
+    next();
+  },
+  created() {
+    const { customerId = '' } = this.$route.query
+    this.fetchPartNumbers({ queryCategoryId: customerId });
+  },
   data() {
     return {
       partNumbers: [],
@@ -63,10 +74,11 @@ export default {
       warehousingHistories: []
     };
   },
+
   methods: {
-    async fetchPartNumbers() {
+    async fetchPartNumbers({ queryCategoryId }) {
       try {
-        const response = await partNumbersAPI.getPartNumbers();
+        const response = await partNumbersAPI.getPartNumbers({ customerId: queryCategoryId });
         const { data, statusText } = response;
         const { partNumbers, customers, warehousingHistories } = data;
         if (statusText !== "OK") {
@@ -85,10 +97,6 @@ export default {
       }
     }
   },
-  created() {
-    this.fetchPartNumbers();
-  },
-  components: { PartnumberTable, WarehousingHistoriesTable }
 }
 </script>
 
