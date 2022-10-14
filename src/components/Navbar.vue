@@ -10,10 +10,10 @@
       <ul class="navbar-nav">
 
         <li class="nav-item">
-          <a class="nav-link" href="/warehouse">倉庫</a>
+          <router-link :to="{name: 'warehouse-part-numbers'}" class="nav-link">倉庫</router-link>
         </li>
 
-        <li>
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">管理清單</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/manager/customers">発注人</a>

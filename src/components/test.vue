@@ -18,9 +18,9 @@
         </tr>
       </thead>
 
-      <tbody v-for="partNumber in initialPartNumbers" :key="partNumber.id" style="border-top-width: 20px; border-color: rgb(19, 19, 19);">
+      <tbody v-for="partNumber in initialPartNumbers" :key="partNumber.id" style="border-color: #c2c2c2;">
 
-        <tr style="background-color:#182f8b; text-align: center;">
+        <tr style="text-align: center;">
           <!--品番-->
           <td scope="row">{{partNumber.name}}</td>
           <!--在庫數量-->
@@ -31,15 +31,15 @@
           <td>{{partNumber.safetyStockQuantity}}</td>
         </tr>
 
-        <tr v-for="subPartNumber in partNumber.subPartNumbers" :key="subPartNumber.id" style="text-align: center; background-color:#b0b0b0;">
+        <tr v-for="subPartNumber in partNumber.subPartNumbers" :key="subPartNumber.id" style="text-align: center;">
           <!--品番-->
-          <td class="text-dark" scope="row">{{subPartNumber.name}}</td>
+          <td class="text-info" scope="row">{{subPartNumber.name}}</td>
           <!--在庫數量-->
-          <td class="text-dark">{{subPartNumber.quantity}}</td>
+          <td>{{subPartNumber.quantity}}</td>
           <!--備註-->
-          <td class="text-dark">{{subPartNumber.commentName}}</td>
+          <td>{{subPartNumber.commentName}}</td>
           <!--安全庫存-->
-          <td class="text-dark">{{subPartNumber.safetyStockQuantity}}</td>
+          <td>{{subPartNumber.safetyStockQuantity}}</td>
         </tr>
 
       </tbody>
