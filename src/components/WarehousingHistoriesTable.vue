@@ -39,9 +39,9 @@
           <td v-if="WarehousingHistory.quntityOfShipping" class="bg-success">{{WarehousingHistory.quntityOfShipping}}</td>
           <td v-else>{{WarehousingHistory.quntityOfShipping}}</td>
           <!--餘存-->
-          <td></td>
+          <td>{{WarehousingHistory.totalQuntity}}</td>
           <!--備註-->
-          <td></td>
+          <td>{{WarehousingHistory.note}}</td>
         </tr>
 
       </tbody>

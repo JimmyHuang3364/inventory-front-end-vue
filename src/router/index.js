@@ -21,6 +21,21 @@ const routes = [
     component: () => import('../views/PartNumbers.vue')
   },
   {
+    path: '/manager/partnumbers',
+    name: 'manager-part-numbers',
+    component: () => import('../views/ManagerPartnumbers.vue')
+  },
+  {
+    path: '/manager/WarehousingHistories',
+    name: 'manager-warehousing-histories',
+    component: () => import('../views/ManagerWarehousingHistories.vue')
+  },
+  {
+    path: '/manager/customers',
+    name: 'manager-customers',
+    component: () => import('../views/ManagerCustomers.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: () => import('../views/NotFound.vue')

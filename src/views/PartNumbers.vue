@@ -24,7 +24,7 @@
 
     <div class="d-flex flex-row justify-content-around align-items-center mt-3">
       <div class="mb-2">
-        <router-link class="btn btn-outline-secondary mr-1" to="/warehouse/partnumbers" role="button">全部</router-link>
+        <router-link class="btn btn-outline-secondary mr-1" :to="{name: 'warehouse-part-numbers'}" role="button">全部</router-link>
         <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: {customerId: customer.id}}" role="button">
           {{ customer.name }}
         </router-link>
