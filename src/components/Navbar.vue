@@ -25,10 +25,8 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">其它</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/user/password">變更密碼</a>
-
-            <a class="dropdown-item" href="/admin/signup">註冊使用者</a>
-
+            <router-link :to="{name: 'users-change-password'}" class="dropdown-item" href="/user/password">變更密碼</router-link>
+            <router-link :to="{name: 'manager-users-new'}" class="dropdown-item">註冊使用者</router-link>
           </div>
         </li>
 

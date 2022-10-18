@@ -1,6 +1,8 @@
 <template>
   <div class="m-5">
-    <div class="d-flex justify-content-end mr-3"><a class="btn btn-primary btn-lg my-3" href="#">+発注人</a></div>
+    <div class="d-flex justify-content-end mr-3">
+      <router-link :to="{name: 'manager-customers-new'}" class="btn btn-primary btn-lg my-3">+発注人</router-link>
+    </div>
     <table class="table table-hover table-striped table-dark">
       <thead>
         <tr>

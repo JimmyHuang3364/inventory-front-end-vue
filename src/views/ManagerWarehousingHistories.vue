@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3">
+  <div class="m-5">
 
     <form class="d-flex justify-content-center" action="#" method="post">
       <div class="form-row">
@@ -15,18 +15,13 @@
       </div>
     </form>
 
-    <div class="d-flex flex-row justify-content-between align-items-center">
-      <div class="">
-        <router-link class="btn btn-outline-secondary mr-1" :to="{name: 'manager-part-numbers'}" role="button">全部</router-link>
-        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'manager-part-numbers', query: {customerId: customer.id}}" role="button">
-          {{ customer.name }}
-        </router-link>
-      </div>
-
-      <div>
-        <a class="btn btn-warning mb-2" href="#" role="button" style="margin-left: 60.994px;">+ 新增部品</a>
-      </div>
+    <div class="">
+      <router-link class="btn btn-outline-secondary mr-1 mb-1" :to="{name: 'manager-part-numbers'}" role="button">全部</router-link>
+      <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1 mb-1" :to="{ name: 'manager-part-numbers', query: {customerId: customer.id}}" role="button">
+        {{ customer.name }}
+      </router-link>
     </div>
+
 
     <div class="mt-2">
       <table class="table table-hover table-bordered table-dark">

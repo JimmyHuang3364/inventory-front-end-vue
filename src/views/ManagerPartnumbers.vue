@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3">
+  <div class="m-5">
 
     <form class="d-flex justify-content-center" action="#" method="post">
       <div class="form-row">
@@ -24,7 +24,7 @@
       </div>
 
       <div>
-        <a class="btn btn-warning mb-2" href="#" role="button" style="margin-left: 60.994px;">+ 新增部品</a>
+        <router-link :to="{name: 'manager-part-numbers-new'}" class="btn btn-warning mb-2" role="button" style="margin-left: 60.994px;">+ 新增部品</router-link>
       </div>
     </div>
 

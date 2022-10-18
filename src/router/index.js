@@ -21,9 +21,19 @@ const routes = [
     component: () => import('../views/PartNumbers.vue')
   },
   {
+    path: '/warehouse/ShippingWarehousing',
+    name: 'warehouse-ShippingWarehousing',
+    component: () => import('../views/ShippingWarehousing.vue')
+  },
+  {
     path: '/manager/partnumbers',
     name: 'manager-part-numbers',
     component: () => import('../views/ManagerPartnumbers.vue')
+  },
+  {
+    path: '/manager/partnumbers/new',
+    name: 'manager-part-numbers-new',
+    component: () => import('../views/ManagerPartNumberNew.vue')
   },
   {
     path: '/manager/WarehousingHistories',
@@ -34,6 +44,21 @@ const routes = [
     path: '/manager/customers',
     name: 'manager-customers',
     component: () => import('../views/ManagerCustomers.vue')
+  },
+  {
+    path: '/manager/customers/new',
+    name: 'manager-customers-new',
+    component: () => import('../views/ManagerCustomerNew.vue')
+  },
+  {
+    path: '/manager/users/new',
+    name: 'manager-users-new',
+    component: () => import('../views/ManagerUserSignup.vue')
+  },
+  {
+    path: '/users/change-password',
+    name: 'users-change-password',
+    component: () => import('../views/ChangePassword.vue')
   },
   {
     path: '*',

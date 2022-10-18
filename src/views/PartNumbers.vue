@@ -31,8 +31,7 @@
       </div>
 
       <div class="mb-2">
-        <a class="btn btn-warning mr-2" href="#" role="button">新增入庫</a>
-        <a class="btn btn-success" href="#" role="button">新增出庫</a>
+        <router-link :to="{name: 'warehouse-ShippingWarehousing'}" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
       </div>
     </div>
 
