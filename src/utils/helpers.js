@@ -30,3 +30,10 @@ export const ToastBottom = Swal.mixin({
   timer: 3000
 })
 
+export const ToastBase = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+})
+
