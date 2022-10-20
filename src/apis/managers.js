@@ -1,17 +1,31 @@
 import { apiHelper } from "../utils/helpers";
 
 export default {
-  // 帶入需要的參數
-  getPartNumbers(customerId) {
-    const searchParams = new URLSearchParams(customerId)
-    return apiHelper.get(`/manager/partnumbers?${searchParams.toString()}`)
+  partNumbers: {
+    // 帶入需要的參數
+    get(customerId) {
+      const searchParams = new URLSearchParams(customerId)
+      return apiHelper.get(`/manager/partnumbers?${searchParams.toString()}`)
+    },
+    getSearch(queryContent) {
+      const searchParams = new URLSearchParams(queryContent)
+      return apiHelper.get(`/manager/partnumbers/search?${searchParams.toString()}`)
+    }
   },
-  getCustomers() {
-    return apiHelper.get(`/manager/WarehousingHistories`)
+  customers: {
+    get() {
+      return apiHelper.get(`/manager/customers`)
+    }
   },
-  getWarehousingHistories(customerId) {
-    const searchParams = new URLSearchParams(customerId)
-    return apiHelper.get(`/manager/WarehousingHistories?${searchParams.toString()}`)
-  },
+  warehousingHistories: {
+    get(customerId) {
+      const searchParams = new URLSearchParams(customerId)
+      return apiHelper.get(`/manager/WarehousingHistories?${searchParams.toString()}`)
+    },
+    getSearch(queryContent) {
+      const searchParams = new URLSearchParams(queryContent)
+      return apiHelper.get(`/manager/WarehousingHistories/search?${searchParams.toString()}`)
+    }
+  }
 
 }

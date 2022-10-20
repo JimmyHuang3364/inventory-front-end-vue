@@ -1,23 +1,32 @@
 <template>
   <div class="m-5">
 
-    <form class="d-flex justify-content-center" action="#" method="post">
+    <form class="d-flex justify-content-center">
       <div class="form-row">
         <div class="col-auto">
           <p class="text-light m-0">品番</p>
-          <input list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
+          <input v-model="searchText" list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
           <datalist id="partnumberList">
           </datalist>
         </div>
+        <div class="col-auto">
+          <p class="text-light m-0">開始</p>
+          <input v-model="startDate" type="date" class="form-control" name="startDate" id="startDate" value="">
+        </div>
+        <div class="col-auto">
+          <p class="text-light m-0">結束</p>
+          <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
+        </div>
         <div class="col-auto align-self-end">
-          <button type="submit" class="btn btn-primary">搜尋</button>
+          <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
+          <router-link :to="{name: 'manager-warehousing-histories', query: {searchText: searchText, startDate: startDate, endDate: endDate}}" class="btn btn-primary" role="button">搜尋</router-link>
         </div>
       </div>
     </form>
 
     <div class="">
-      <router-link class="btn btn-outline-secondary mr-1 mb-1" :to="{name: 'manager-part-numbers'}" role="button">全部</router-link>
-      <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1 mb-1" :to="{ name: 'manager-part-numbers', query: {customerId: customer.id}}" role="button">
+      <router-link class="btn btn-outline-secondary mr-1 mb-1" :to="{name: 'manager-warehousing-histories'}" role="button">全部</router-link>
+      <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1 mb-1" :to="{ name: 'manager-warehousing-histories', query: {customerId: customer.id}}" role="button">
         {{ customer.name }}
       </router-link>
     </div>
@@ -92,24 +101,37 @@ export default {
   name: 'ManagerWarehousingHistories',
   components: {},
   beforeRouteUpdate(to, from, next) {
+    if (to.query.searchText || to.query.startDate || to.query.endDate) {
+      const queryContent = {
+        searchText: to.query.searchText,
+        startDate: to.query.startDate,
+        endDate: to.query.endDate
+      }
+      this.fetchSearchWarehousingHistories(queryContent)
+      next();
+      return
+    }
     const { customerId = '' } = to.query
-    this.fetchPartNumbers({ queryCategoryId: customerId })
+    this.fetchWarehousingHistories({ queryCategoryId: customerId })
     next();
   },
   created() {
     const { customerId = '' } = this.$route.query
-    this.fetchPartNumbers({ queryCategoryId: customerId });
+    this.fetchWarehousingHistories({ queryCategoryId: customerId });
   },
   data() {
     return {
       warehousingHistories: [],
       customers: [],
+      searchText: '',
+      startDate: '',
+      endDate: ''
     };
   },
   methods: {
-    async fetchPartNumbers({ queryCategoryId }) {
+    async fetchWarehousingHistories({ queryCategoryId }) {
       try {
-        const response = await managersAPI.getWarehousingHistories({ customerId: queryCategoryId });
+        const response = await managersAPI.warehousingHistories.get({ customerId: queryCategoryId });
         const { data, statusText } = response;
         const { warehousingHistories, customers } = data;
         if (statusText !== "OK") {
@@ -117,6 +139,9 @@ export default {
         }
         this.warehousingHistories = warehousingHistories;
         this.customers = customers;
+        this.searchText = ''
+        this.startDate = ''
+        this.endDate = ''
       }
       catch (error) {
         ToastBottom.fire({
@@ -124,6 +149,24 @@ export default {
           title: "載入錯誤，請稍後再試。"
         });
         console.log(error);
+      }
+    },
+    async fetchSearchWarehousingHistories(queryContent) {
+      try {
+        // console.log(queryContent)
+        const { data, statusText } = await managersAPI.warehousingHistories.getSearch(queryContent)
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        const { warehousingHistories, customers } = data;
+        this.warehousingHistories = warehousingHistories;
+        this.customers = customers;
+      } catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: "載入錯誤，請稍後再試。"
+        });
+        console.log(error)
       }
     }
   },

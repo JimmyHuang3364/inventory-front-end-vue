@@ -1,23 +1,24 @@
 <template>
   <div class="mt-3">
-    <form class="d-flex justify-content-center" action="/warehouse/partnumbers/search/?_method=GET" method="post">
+    <form class="d-flex justify-content-center">
       <div class="form-row">
         <div class="col-auto">
           <p class="text-light m-0">品番</p>
-          <input list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
+          <input v-model="searchText" list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
           <datalist id="partnumberList">
           </datalist>
         </div>
         <div class="col-auto">
           <p class="text-light m-0">開始</p>
-          <input type="date" class="form-control" name="startDate" id="startDate" value="">
+          <input v-model="startDate" type="date" class="form-control" name="startDate" id="startDate" value="">
         </div>
         <div class="col-auto">
           <p class="text-light m-0">結束</p>
-          <input type="date" class="form-control" name="endDate" id="endDate" value="">
+          <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
         </div>
         <div class="col-auto align-self-end">
-          <button type="submit" class="btn btn-primary">搜尋</button>
+          <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
+          <router-link :to="{name: 'warehouse-part-numbers', query: {searchText: searchText, startDate: startDate, endDate: endDate}}" class="btn btn-primary" role="button">搜尋</router-link>
         </div>
       </div>
     </form>
@@ -58,6 +59,16 @@ export default {
   name: 'PartNumbers',
   components: { PartnumberTable, WarehousingHistoriesTable },
   beforeRouteUpdate(to, from, next) {
+    if (to.query.searchText || to.query.startDate || to.query.endDate) {
+      const queryContent = {
+        searchText: to.query.searchText,
+        startDate: to.query.startDate,
+        endDate: to.query.endDate
+      }
+      this.handleSearchartNumbers(queryContent)
+      next();
+      return
+    }
     const { customerId = '' } = to.query
     this.fetchPartNumbers({ queryCategoryId: customerId })
     next();
@@ -70,7 +81,10 @@ export default {
     return {
       partNumbers: [],
       customers: [],
-      warehousingHistories: []
+      warehousingHistories: [],
+      searchText: '',
+      startDate: '',
+      endDate: ''
     };
   },
 
@@ -86,6 +100,9 @@ export default {
         this.partNumbers = partNumbers;
         this.customers = customers;
         this.warehousingHistories = warehousingHistories;
+        this.searchText = ''
+        this.startDate = ''
+        this.endDate = ''
       }
       catch (error) {
         ToastBottom.fire({
@@ -94,6 +111,22 @@ export default {
         });
         console.log(error);
       }
+    },
+    async handleSearchartNumbers(queryContent) {
+      try {
+        const { data, statusText } = await partNumbersAPI.getSearchPartNumbers(queryContent)
+        if (statusText !== "OK") { throw new Error() }
+        const { partNumbers, warehousingHistories } = data;
+        this.partNumbers = partNumbers;
+        this.warehousingHistories = warehousingHistories;
+      } catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: "載入錯誤，請稍後再試。"
+        });
+        console.log(error);
+      }
+
     }
   },
 }

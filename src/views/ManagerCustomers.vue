@@ -82,7 +82,7 @@ export default {
   methods: {
     async fetchCustomers() {
       try {
-        const { data, statusText } = await managersAPI.getCustomers()
+        const { data, statusText } = await managersAPI.customers.get()
         if (statusText !== 'OK') { throw new Error() }
         const { customers } = data
         this.customers = customers

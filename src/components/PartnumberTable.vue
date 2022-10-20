@@ -20,7 +20,18 @@
 
       <tbody v-for="partNumber in initialPartNumbers" :key="partNumber.id" style="border-top-width: 20px; border-color: rgb(19, 19, 19);">
 
-        <tr style="background-color:#182f8b; text-align: center;">
+        <tr v-if="partNumber.PartNumberId" style="background-color: #b0b0b0; text-align: center;">
+          <!--品番-->
+          <td class="text-dark" scope="row">{{partNumber.name}}</td>
+          <!--在庫數量-->
+          <td class="text-dark">{{partNumber.quantity}}</td>
+          <!--備註-->
+          <td class="text-dark">{{partNumber.commentName}}</td>
+          <!--安全庫存-->
+          <td class="text-dark">{{partNumber.safetyStockQuantity}}</td>
+        </tr>
+
+        <tr v-else style="background-color: #182f8b; text-align: center;">
           <!--品番-->
           <td scope="row">{{partNumber.name}}</td>
           <!--在庫數量-->
@@ -55,5 +66,14 @@ export default {
       type: Array,
     },
   },
+  data() {
+    return {
+      test: 'partnumber-bg-color'
+    }
+  },
 }
 </script>
+
+<style scoped>
+
+</style>

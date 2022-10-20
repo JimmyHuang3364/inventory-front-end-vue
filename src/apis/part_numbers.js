@@ -6,5 +6,10 @@ export default {
     // 這裡 return 的會是一個 Promise
     const searchParams = new URLSearchParams(customerId)
     return apiHelper.get(`/warehouse/partnumbers?${searchParams.toString()}`)
-  }
+  },
+  getSearchPartNumbers(queryContent) {
+    const searchParams = new URLSearchParams(queryContent)
+    return apiHelper.get(`/warehouse/partnumbers/search?${searchParams.toString()}`)
+  },
+
 }
