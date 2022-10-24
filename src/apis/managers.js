@@ -1,17 +1,6 @@
 import { apiHelper } from "../utils/helpers";
 
 export default {
-  partNumbers: {
-    // 帶入需要的參數
-    get(customerId) {
-      const searchParams = new URLSearchParams(customerId)
-      return apiHelper.get(`/manager/partnumbers?${searchParams.toString()}`)
-    },
-    getSearch(queryContent) {
-      const searchParams = new URLSearchParams(queryContent)
-      return apiHelper.get(`/manager/partnumbers/search?${searchParams.toString()}`)
-    }
-  },
   customers: {
     get() {
       return apiHelper.get(`/manager/customers`)
@@ -27,6 +16,22 @@ export default {
     },
     delete(customerId) {
       return apiHelper.delete(`/manager/customers/${customerId}`)
+    }
+  },
+  partNumbers: {
+    // 帶入需要的參數
+    get(customerId) {
+      const searchParams = new URLSearchParams(customerId)
+      return apiHelper.get(`/manager/partnumbers?${searchParams.toString()}`)
+    },
+    getSearch(queryContent) {
+      const searchParams = new URLSearchParams(queryContent)
+      return apiHelper.get(`/manager/partnumbers/search?${searchParams.toString()}`)
+    }
+  },
+  users: {
+    create(formData) {
+      return apiHelper.post('/manager/users/signup', formData)
     }
   },
   warehousingHistories: {
