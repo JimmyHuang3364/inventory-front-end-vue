@@ -66,11 +66,6 @@ export default {
       type: Array,
     },
   },
-  data() {
-    return {
-      test: 'partnumber-bg-color'
-    }
-  },
 }
 </script>
 

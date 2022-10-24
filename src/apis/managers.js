@@ -15,6 +15,18 @@ export default {
   customers: {
     get() {
       return apiHelper.get(`/manager/customers`)
+    },
+    getDetail(customerId) {
+      return apiHelper.get(`/manager/customers/${customerId}`)
+    },
+    create(formData) {
+      return apiHelper.post('/manager/customers/create', formData)
+    },
+    update({ customerId, formData }) {
+      return apiHelper.put(`/manager/customers/${customerId}`, formData)
+    },
+    delete(customerId) {
+      return apiHelper.delete(`/manager/customers/${customerId}`)
     }
   },
   warehousingHistories: {

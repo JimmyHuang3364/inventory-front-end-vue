@@ -187,7 +187,6 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        console.log(data)
         const { partNumbers, customers } = data;
         console.log(partNumbers.PartNumberId)
         this.partNumbers = partNumbers;
