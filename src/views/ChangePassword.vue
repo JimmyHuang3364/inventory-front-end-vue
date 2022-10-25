@@ -1,10 +1,10 @@
 <template>
   <div class="container mt-5 bg-dark container-bprder pb-3">
     <h1 class="text-white mt-3">變更密碼</h1>
-    <form class="">
+    <form @submit.stop.prevent="handleSubmit" class="">
       <div class="form-label-group text-white mt-4">
-        <label for="inputPassword">User</label>
-        <input type="text" name="name" class="form-control bg-secondary" value="root" readonly required>
+        <label for="inputPassword">{{ currentUser.name }}</label>
+        <input type="text" name="name" class="form-control bg-secondary" v-model="currentUser.name" readonly required>
       </div>
       <div class="form-label-group text-white mt-4">
         <label for="inputPassword">原來密碼</label>
@@ -19,14 +19,45 @@
         <input type="password" name="newPasswordCheck" class="form-control" placeholder="New Password Check" required>
       </div>
       <br />
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import usersAPI from '../apis/users'
+import { ToastBottom } from '../utils/helpers';
 export default {
+  name: 'ChangePassword',
+  computed: {
+    ...mapState([
+      'currentUser',
+    ])
+  },
+  methods: {
+    async handleSubmit(e) {
+      try {
+        const form = e.target
+        const formData = new FormData(form)
+        const userId = this.$store.state.currentUser.id
+        const { data, statusText } = await usersAPI.updatePassword(userId, formData)
+        if (statusText !== 'OK') { throw new Error(data.message) }
+        ToastBottom.fire({
+          icon: 'success',
+          title: data.message
+        })
+      } catch (error) {
+        ToastBottom.fire({
+          icon: 'error',
+          title: error
+        })
+      }
 
+    }
+  },
 }
 </script>
 
@@ -41,6 +72,6 @@ form input.bg-secondary {
 
 .container-bprder {
   border: 5px solid rgb(97, 134, 190);
-  border-radius: 5px;
+  border-radius: 20px;
 }
 </style>

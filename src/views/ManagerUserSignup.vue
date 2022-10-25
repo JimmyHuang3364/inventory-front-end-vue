@@ -8,7 +8,7 @@
       </div>
       <div class="form-label-group text-white mt-4">
         <label for="permissionLevel">使用權限 (0 訪客、1 管理者、2 維護者、3 一般使用者)</label>
-        <select v-model="test" class="custom-select" name="permissionLevel" id="permissionLevel" aria-label="Example select with button addon" required>
+        <select v-model="permissionLevel" class="custom-select" name="permissionLevel" id="permissionLevel" aria-label="Example select with button addon" required>
           <option selected>Choose...</option>
           <option value="0">訪客</option>
           <option value="1">管理者</option>
@@ -30,6 +30,12 @@ import { ToastBottom } from '../utils/helpers';
 
 export default {
   name: 'ManagerUserSignup',
+  data() {
+    return {
+      permissionLevel: 'Choose...',
+      name: ''
+    }
+  },
   methods: {
     async handleSubmit(e) {
       try {
@@ -41,6 +47,8 @@ export default {
           icon: 'success',
           title: data.message
         })
+        this.permissionLevel = 'Choose...'
+        this.name = ''
       } catch (error) {
         ToastBottom.fire({
           icon: 'error',
