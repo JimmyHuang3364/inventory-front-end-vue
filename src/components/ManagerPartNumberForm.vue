@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-3 pb-3">
-    <h1 class="text-white">新增部品</h1>
+  <div class="m-3 pb-3">
+    <h1 class="text-white">{{ initialPartNumber.name ? '修改部品' : '新增部品' }}</h1>
     <form @submit.stop.prevent="handleSubmit">
 
       <div class="form-group">
@@ -127,7 +127,6 @@ export default {
       this.newPartNumberData.safetyStockQuantity = newValue.safetyStockQuantity
       this.newPartNumberData.commonName = newValue.commonName
       this.subPartNumberCheck = newValue.isSubPartNumber
-
     },
     filterPartNumbersDataList(customerId) {
       this.partNumbersList = this.partNumbers.filter(partNumber => partNumber.CustomerId === customerId)

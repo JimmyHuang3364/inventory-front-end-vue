@@ -66,7 +66,10 @@ export default {
     getSearch(queryContent) {
       const searchParams = new URLSearchParams(queryContent)
       return apiHelper.get(`/manager/WarehousingHistories/search?${searchParams.toString()}`)
-    }
+    },
+    delete(queryId) {
+      return apiHelper.delete(`/manager/WarehousingHistories/${queryId}`)
+    },
   }
 
 }

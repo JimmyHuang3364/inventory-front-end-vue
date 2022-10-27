@@ -18,21 +18,21 @@
         </div>
         <div class="col-auto align-self-end">
           <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
-          <router-link :to="{name: 'warehouse-part-numbers', query: {searchText: searchText, startDate: startDate, endDate: endDate}}" class="btn btn-primary" role="button">搜尋</router-link>
+          <router-link :to="{ name: 'warehouse-part-numbers', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
         </div>
       </div>
     </form>
 
     <div class="d-flex flex-row justify-content-around align-items-center mt-3">
       <div class="mb-2">
-        <router-link class="btn btn-outline-secondary mr-1" :to="{name: 'warehouse-part-numbers'}" role="button">全部</router-link>
-        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: {customerId: customer.id}}" role="button">
+        <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-part-numbers' }" role="button">全部</router-link>
+        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: { customerId: customer.id } }" role="button">
           {{ customer.name }}
         </router-link>
       </div>
 
       <div class="mb-2">
-        <router-link :to="{name: 'warehouse-ShippingWarehousing'}" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
+        <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
       </div>
     </div>
 
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style scoped>
-@media (max-width: 1200px) {
+@media (max-width: 640px) {
   section {
     flex-direction: column-reverse;
   }
