@@ -24,10 +24,34 @@ export default {
       const searchParams = new URLSearchParams(customerId)
       return apiHelper.get(`/manager/partnumbers?${searchParams.toString()}`)
     },
+    getOneDetail(partNumberId) {
+      return apiHelper.get(`/manager/partnumbers/${partNumberId}`)
+    },
     getSearch(queryContent) {
       const searchParams = new URLSearchParams(queryContent)
       return apiHelper.get(`/manager/partnumbers/search?${searchParams.toString()}`)
+    },
+    create(formData) {
+      return apiHelper.post('/manager/partnumber/create', formData)
+
+    },
+    update(partNumberId, formData) {
+      return apiHelper.put(`/manager/partnumbers/${partNumberId}`, formData)
+    },
+    delete(partNumberId) {
+      return apiHelper.delete(`/manager/partnumbers/${partNumberId}`)
     }
+  },
+  subPartNumbers: {
+    getOneDetail(subPartNumberId) {
+      return apiHelper.get(`/manager/subpartnumbers/${subPartNumberId}`)
+    },
+    update(partNumberId, formData) {
+      return apiHelper.put(`/manager/subpartnumbers/${partNumberId}`, formData)
+    },
+    delete(subPartNumberId) {
+      return apiHelper.delete(`/manager/subpartnumbers/${subPartNumberId}`)
+    },
   },
   users: {
     create(formData) {

@@ -37,3 +37,10 @@ export const ToastBase = Swal.mixin({
   timer: 5000
 })
 
+export const ToastWarningCenter = Swal.mixin({
+  icon: 'warning'
+})
+
+export const ToastConfirm = Swal
+
+export const ToastConfirmed = Swal

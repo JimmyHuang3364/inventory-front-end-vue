@@ -36,6 +36,16 @@ const routes = [
     component: () => import('../views/ManagerPartNumberNew.vue')
   },
   {
+    path: '/manager/partnumbers/:id/edit',
+    name: 'manager-part-numbers-edit',
+    component: () => import('../views/ManagerPartNumberEdit.vue')
+  },
+  {
+    path: '/manager/subpartnumbers/:id/edit',
+    name: 'manager-sub-part-numbers-edit',
+    component: () => import('../views/ManagerSubPartNumberEdit.vue')
+  },
+  {
     path: '/manager/WarehousingHistories',
     name: 'manager-warehousing-histories',
     component: () => import('../views/ManagerWarehousingHistories.vue')

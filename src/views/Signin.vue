@@ -65,7 +65,7 @@ export default {
         //將資料傳到 vuex 中
         this.$store.commit('setCurrentUser', data.user)
 
-        // 成功登入後轉址到餐聽首頁
+        // 成功登入後轉址到首頁
         this.$router.push('/warehouse/partnumbers')
       } catch (error) {
         this.password = ''
