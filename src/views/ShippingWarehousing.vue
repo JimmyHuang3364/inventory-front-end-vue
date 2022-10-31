@@ -1,5 +1,5 @@
 <template>
-  <div class="view bg-dark p-3">
+  <div class="view bg-dark p-3" v-show="!isLoading">
     <div class="bg-dark mb-3 px-3">
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-white">新增</h1>
@@ -95,7 +95,7 @@
 
     </div>
     <div v-if="shipmentList.length > 0 || warehousingList.length > 0" class="d-flex justify-content-end">
-      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary">送出</button>
+      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary">{{ isProcessing ? "處理中..." : "送出" }}</button>
     </div>
   </div>
 
@@ -103,6 +103,7 @@
 </template>
 
 <script>
+/*eslint-disable*/
 import { ToastBase, ToastBottom, ToastErrorCenter, ToastSuccessCenter } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
 import warehouseAPI from '../apis/warehouse'
@@ -113,7 +114,7 @@ export default {
     this.fetchTodaysDate();
     this.fetchPartNumbers()
     this.fetchSubPartNumbers()
-
+    this.isLoading = !this.isLoading
   },
   data() {
     return {
@@ -128,7 +129,9 @@ export default {
         isSubPart: false
       },
       shipmentList: [],
-      warehousingList: []
+      warehousingList: [],
+      isProcessing: false,
+      isLoading: true
     }
   },
   methods: {
@@ -203,8 +206,8 @@ export default {
           this.warehousingList.push({
             ...this.newItem
           })
-          this.newItem.productId = '',
-            this.newItem.name = ''
+          this.newItem.productId = ''
+          this.newItem.name = ''
           this.newItem.quantity = ''
           this.newItem.note = ''
           this.newItem.isSubPart = false
@@ -243,12 +246,15 @@ export default {
         }
 
       } catch (error) {
-        console.log(error)
+        ToastBottom.fire({
+          icon: 'error',
+          title: '錯誤，再試一次。'
+        })
       }
     },
     async handleSubmit() {
-
       try {
+        this.isProcessing = true
         if (this.shipmentList.length) {
           const shippingFormData = new FormData()
           shippingFormData.append('shipmentList', JSON.stringify(this.shipmentList))
@@ -273,12 +279,14 @@ export default {
           title: '成功',
           text: `資料登載成功`
         })
+        this.isProcessing = false
 
       } catch (error) {
         ToastErrorCenter.fire({
           title: 'Oops...',
           text: error.message
         })
+        this.isProcessing = false
       }
 
 

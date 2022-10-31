@@ -1,5 +1,5 @@
 <template>
-  <div class="histories_area">
+  <div v-show="!isLoading" class="histories_area">
     <table class="table table-sm table-dark table-striped table-hover">
       <thead>
         <tr class="table-active" style="text-align: center;">
@@ -26,22 +26,22 @@
 
       <tbody>
 
-        <tr v-for="WarehousingHistory in initial_WarehousingHistories" :key="WarehousingHistory.id" style="text-align: center;">
+        <tr v-for="WarehousingHistory in warehousingHistories" :key="WarehousingHistory.id" style="text-align: center;">
           <!--日期-->
-          <th scope="row">{{WarehousingHistory.textCreatedAt}}</th>
+          <th scope="row">{{ WarehousingHistory.textCreatedAt }}</th>
           <!--品番-->
-          <td>{{WarehousingHistory.PartNumber.name}}</td>
+          <td>{{ WarehousingHistory.PartNumber.name }}</td>
           <!--入庫-->
 
-          <td v-if="WarehousingHistory.quntityOfWarehousing" class="text-dark" style="background-color: #ea9d06;">{{WarehousingHistory.quntityOfWarehousing}}</td>
-          <td v-else>{{WarehousingHistory.quntityOfWarehousing}}</td>
+          <td v-if="WarehousingHistory.quntityOfWarehousing" class="text-dark" style="background-color: #ea9d06;">{{ WarehousingHistory.quntityOfWarehousing }}</td>
+          <td v-else>{{ WarehousingHistory.quntityOfWarehousing }}</td>
           <!--出庫-->
-          <td v-if="WarehousingHistory.quntityOfShipping" class="bg-success">{{WarehousingHistory.quntityOfShipping}}</td>
-          <td v-else>{{WarehousingHistory.quntityOfShipping}}</td>
+          <td v-if="WarehousingHistory.quntityOfShipping" class="bg-success">{{ WarehousingHistory.quntityOfShipping }}</td>
+          <td v-else>{{ WarehousingHistory.quntityOfShipping }}</td>
           <!--餘存-->
-          <td>{{WarehousingHistory.totalQuntity}}</td>
+          <td>{{ WarehousingHistory.totalQuntity }}</td>
           <!--備註-->
-          <td>{{WarehousingHistory.note}}</td>
+          <td>{{ WarehousingHistory.note }}</td>
         </tr>
 
       </tbody>
@@ -53,9 +53,29 @@
 <script>
 export default {
   props: {
-    initial_WarehousingHistories: {
+    initialWarehousingHistories: {
       type: Array,
     },
+  },
+  created() {
+    this.fetchInitialWarehousingHistories(this.initialWarehousingHistories);
+    this.isLoading = false
+  },
+  data() {
+    return {
+      warehousingHistories: [],
+      isLoading: true
+    }
+  },
+  methods: {
+    fetchInitialWarehousingHistories(newValue) {
+      this.warehousingHistories = newValue
+    },
+  },
+  watch: {
+    initialWarehousingHistories(newValue) {
+      this.fetchInitialWarehousingHistories(newValue)
+    }
   },
 }
 </script>

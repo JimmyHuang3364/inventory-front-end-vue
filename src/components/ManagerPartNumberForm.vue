@@ -1,5 +1,5 @@
 <template>
-  <div class="m-3 pb-3">
+  <div class="m-3 pb-3" v-show="!isLoading">
     <h1 class="text-white">{{ initialPartNumber.name ? '修改部品' : '新增部品' }}</h1>
     <form @submit.stop.prevent="handleSubmit">
 
@@ -51,16 +51,17 @@
         <input v-model="newPartNumberData.commonName" type="text" class="form-control" name="commonName" id="commonName">
       </div>
       <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary mt-3">送出</button>
+        <button type="submit" class="btn btn-primary mt-3" :disabled="isProcessing">{{ isProcessing ? "處理中..." : "送出" }}</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { ToastBase, ToastBottom, ToastWarningCenter } from '../utils/helpers'
+import { ToastBase, ToastBottom } from '../utils/helpers'
 import managersAPI from '../apis/managers';
 export default {
+  name: 'ManagerPartNumberForm',
   props: {
     initialPartNumber: {
       type: Object,
@@ -74,10 +75,15 @@ export default {
         commonName: ''
       })
     },
+    isProcessing: {
+      type: Boolean,
+      default: false
+    }
   },
   created() {
     this.fetchPartNumbers()
     this.fetchCustomers()
+    this.isLoading = false
   },
   data() {
     return {
@@ -95,6 +101,7 @@ export default {
       partNumbers: [],
       partNumbersList: [],
       subPartNumberCheck: false,
+      isLoading: true
     }
   },
   methods: {
@@ -110,7 +117,6 @@ export default {
           icon: 'error',
           title: '載入錯誤，請稍後在試!!'
         })
-        console.log(error)
       }
     },
     async fetchCustomers() {
@@ -126,20 +132,13 @@ export default {
         })
       }
     },
-    fetchInitialPartNumber(newValue) {
-      this.belongsToCutomerId = newValue.customerId
-      this.newPartNumberData.name = newValue.name
-      this.newPartNumberData.affiliatedPartNumber = newValue.PartNumberId
-      this.newPartNumberData.usagePerUnit = newValue.usagePerUnit
-      this.newPartNumberData.unitPrice = newValue.unitPrice
-      this.newPartNumberData.quantity = newValue.quantity
-      this.newPartNumberData.safetyStockQuantity = newValue.safetyStockQuantity
-      this.newPartNumberData.commonName = newValue.commonName
-      this.subPartNumberCheck = newValue.isSubPartNumber
-    },
-    filterPartNumbersDataList(customerId) {
-      this.partNumbersList = this.partNumbers.filter(partNumber => partNumber.CustomerId === customerId)
-      this.partNumbersList = this.partNumbersList.filter(partNumber => partNumber.name !== this.newPartNumberData.name)
+    filterPartNumbersDataList(value) {
+      this.partNumbersList = this.partNumbers.filter(
+        partNumber => partNumber.CustomerId === value
+      )
+      this.partNumbersList = this.partNumbersList.filter(
+        partNumber => partNumber.name !== this.newPartNumberData.name
+      )
     },
     handleSubmit(e) {
       // 檢查資料完整性
@@ -157,14 +156,6 @@ export default {
         })
         return
       }
-      const isRepeat = this.partNumbersList.filter(partNumber => partNumber.name == this.newPartNumberData.name)
-      if (isRepeat.length) {
-        ToastWarningCenter.fire(
-          '錯誤!',
-          '子部品與母部品名稱重複',
-        )
-        return
-      }
       //
       const form = e.target
       const formData = new FormData(form)
@@ -179,7 +170,15 @@ export default {
       this.filterPartNumbersDataList(this.belongsToCutomerId)
     },
     initialPartNumber(newValue) {
-      this.fetchInitialPartNumber(newValue)
+      this.belongsToCutomerId = newValue.customerId
+      this.newPartNumberData.name = newValue.name
+      this.newPartNumberData.affiliatedPartNumber = newValue.PartNumberId
+      this.newPartNumberData.usagePerUnit = newValue.usagePerUnit
+      this.newPartNumberData.unitPrice = newValue.unitPrice
+      this.newPartNumberData.quantity = newValue.quantity
+      this.newPartNumberData.safetyStockQuantity = newValue.safetyStockQuantity
+      this.newPartNumberData.commonName = newValue.commonName
+      this.subPartNumberCheck = newValue.isSubPartNumber
     }
   },
 }

@@ -1,6 +1,5 @@
 <template>
-  <div class="m-5">
-
+  <div v-show="!isLoading" class="m-5">
     <form class="d-flex justify-content-center" action="#" method="post">
       <div class="form-row">
         <div class="col-auto">
@@ -160,12 +159,14 @@ export default {
   created() {
     const { customerId = '' } = this.$route.query
     this.fetchPartNumbers({ queryCategoryId: customerId });
+    this.isLoading = false
   },
   data() {
     return {
       partNumbers: [],
       customers: [],
-      searchText: ''
+      searchText: '',
+      isLoading: true,
     };
   },
 
@@ -187,11 +188,11 @@ export default {
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error);
       }
     },
     async fetchSearchPartNumbers(queryContent) {
       try {
+        this.isLoading = true
         const { data, statusText } = await managersAPI.partNumbers.getSearch(queryContent)
         if (statusText !== "OK") {
           throw new Error();
@@ -199,12 +200,12 @@ export default {
         const { partNumbers, customers } = data;
         this.partNumbers = partNumbers;
         this.customers = customers;
+        this.isLoading = false
       } catch (error) {
         ToastBottom.fire({
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error)
       }
     },
     async removeItem(partNumberId, partNumberType, affiliatedPartNumberId) {
@@ -241,7 +242,6 @@ export default {
             )
             this.partNumbers.map(partNumber => {
               if (partNumber.id === affiliatedPartNumberId) {
-                console.log(partNumber)
                 partNumber.subPartNumbers = partNumber.subPartNumbers.filter(subPartNumber => subPartNumber.id !== partNumberId)
               }
             })

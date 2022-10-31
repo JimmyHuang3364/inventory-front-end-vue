@@ -1,6 +1,6 @@
 <template>
   <div class="container container-border bg-dark mt-5">
-    <ManagerPartNumberForm @after-submit="handleAfterSubmit" :initial-part-number="subPartNumber" />
+    <ManagerPartNumberForm @after-submit="handleAfterSubmit" :initial-part-number="subPartNumber" :is-processing="isProcessing" />
   </div>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       subPartNumber: {},
+      isProcessing: false
     }
   },
   methods: {
@@ -37,8 +38,11 @@ export default {
     },
     async handleAfterSubmit(formData) {
       try {
+        this.isProcessing = true
         const { data, statusText } = await managerAPI.subPartNumbers.update(this.$route.params.id, formData)
-        if (statusText !== 'OK') { throw new Error }
+        const { status, message } = data
+        if (statusText !== 'OK' || status !== 'success') { throw new Error(message ? message : '載入錯誤，請稍後在試。') }
+        this.isProcessing = false
         this.$router.push({ name: 'manager-part-numbers' })
         ToastBottom.fire({
           icon: 'success',
@@ -47,9 +51,9 @@ export default {
       } catch (error) {
         ToastBottom.fire({
           icon: 'error',
-          title: '載入錯誤，請稍後在試。'
+          title: error.message
         })
-        console.log(error)
+        this.isProcessing = false
       }
     }
   },

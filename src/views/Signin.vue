@@ -1,7 +1,7 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 container-border bg-dark">
 
-    <form @submit.stop.prevent="handleSubmit" class="form-signin border border-secondary rounded p-4 m-auto" style="width: 50%; background-color: rgb(26, 21, 48);">
+    <form @submit.stop.prevent="handleSubmit" class="form-signin p-4 m-auto">
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal text-white">Sign In</h1>
       </div>
@@ -80,3 +80,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.container-border {
+  border: 5px solid rgb(97, 134, 190);
+  border-radius: 20px;
+}
+</style>

@@ -43,7 +43,7 @@
 
       <div class="mb-3" style="flex-basis: 50%;">
         <h5 class="text-light">歷史紀錄</h5>
-        <WarehousingHistoriesTable :initial_WarehousingHistories="warehousingHistories" />
+        <WarehousingHistoriesTable :initial-warehousing-histories="warehousingHistories" />
       </div>
     </section>
 
@@ -109,7 +109,6 @@ export default {
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error);
       }
     },
     async handleSearchartNumbers(queryContent) {
@@ -124,7 +123,6 @@ export default {
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error);
       }
 
     }

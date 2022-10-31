@@ -148,12 +148,10 @@ export default {
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error);
       }
     },
     async fetchSearchWarehousingHistories(queryContent) {
       try {
-        // console.log(queryContent)
         const { data, statusText } = await managersAPI.warehousingHistories.getSearch(queryContent)
         if (statusText !== "OK") {
           throw new Error();
@@ -166,7 +164,6 @@ export default {
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
-        console.log(error)
       }
     },
     async remvoeItem(queryId) {

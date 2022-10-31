@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5 bg-dark container-bprder">
-    <ManagerCustomerForm :initial-customer="customer" @after-submit="handleAfterSubmit" />
+    <ManagerCustomerForm :initial-customer="customer" @after-submit="handleAfterSubmit" :is-processing="isProcessing" />
   </div>
 </template>
 
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       customer: {},
+      isProcessing: false
     }
   },
   methods: {
@@ -41,20 +42,22 @@ export default {
     },
     async handleAfterSubmit(formData) {
       try {
+        this.isProcessing = true
         const customerId = this.$route.params.id
         const { data, statusText } = await managersAPI.customers.update({ customerId, formData })
         if (statusText !== 'OK') { throw new Error(data.message) }
-        console.log(data)
         this.$router.push({ name: 'manager-customers' })
         ToastBottom.fire({
           icon: 'success',
           title: data.message
         })
+        this.isProcessing = false
       } catch (error) {
         ToastBottom.fire({
           icon: 'error',
           title: error
         })
+        this.isProcessing = false
       }
     }
   },
