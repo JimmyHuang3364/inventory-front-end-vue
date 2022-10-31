@@ -36,7 +36,7 @@
       </div>
       <div class="form-group">
         <label for="unitPrice">單價</label>
-        <input v-model="newPartNumberData.unitPrice" type="number" class="form-control" name="unitPrice" id="unitPrice" min="0">
+        <input v-model="newPartNumberData.unitPrice" type="number" class="form-control" name="unitPrice" id="unitPrice" min="0" step="0.01">
       </div>
       <div class="form-group">
         <label for="inputCity">初設數量</label>
@@ -64,6 +64,15 @@ export default {
   props: {
     initialPartNumber: {
       type: Object,
+      default: () => ({
+        affiliatedPartNumber: '',
+        name: '',
+        usagePerUnit: 1,
+        unitPrice: 0,
+        quantity: 0,
+        safetyStockQuantity: 0,
+        commonName: ''
+      })
     },
   },
   created() {

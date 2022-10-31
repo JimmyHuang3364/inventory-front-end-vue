@@ -7,6 +7,9 @@ export default {
     const searchParams = new URLSearchParams(customerId)
     return apiHelper.get(`/warehouse/partnumbers?${searchParams.toString()}`)
   },
+  getSubPartNumbers() { //取得所有子部品
+    return apiHelper.get(`/warehouse/subpartnumbers`)
+  },
   getSearchPartNumbers(queryContent) {
     const searchParams = new URLSearchParams(queryContent)
     return apiHelper.get(`/warehouse/partnumbers/search?${searchParams.toString()}`)

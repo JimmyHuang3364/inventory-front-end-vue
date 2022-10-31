@@ -16,15 +16,18 @@
         </div>
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputNmae">品番號</label>
-          <input v-model="newItem.name" type="text" class="form-control" id="inputName">
+          <input v-model="newItem.name" list="partNumbers-list" type="text" class="form-control" id="inputName">
+          <datalist id="partNumbers-list">
+            <option v-for="partNumber of partNumbersList" :key="partNumber.id" :value="partNumber.name"></option>
+          </datalist>
         </div>
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputQuantity">數量</label>
-          <input v-model="newItem.quantity" type="number" class="form-control" id="inputQuantity" min="0">
+          <input v-model="newItem.quantity" type="number" class="form-control" id="inputQuantity">
         </div>
         <div class="form-group col-md-3">
-          <label class="add-form-label" for="inputDescription">備註</label>
-          <input v-model="newItem.description" type="text" class="form-control" id="inputDescription" placeholder="可空白...">
+          <label class="add-form-label" for="inputNote">備註</label>
+          <input v-model="newItem.note" type="text" class="form-control" id="inputNote" placeholder="可空白...">
         </div>
       </div>
     </div>
@@ -50,11 +53,11 @@
                   X
                 </button>
               </td>
-              <th style="width: 1%;" scope="row">{{index + 1}}</th>
-              <td style="width: 10%;">{{item.date}}</td>
-              <td style="width: 15%;">{{item.name}}</td>
-              <td style="width: 10%;">{{item.quantity}}</td>
-              <td>{{item.description}}</td>
+              <th style="width: 1%;" scope="row">{{ index + 1 }}</th>
+              <td style="width: 10%;">{{ item.date }}</td>
+              <td style="width: 15%;">{{ item.name }}</td>
+              <td style="width: 10%;">{{ item.quantity }}</td>
+              <td>{{ item.note }}</td>
             </tr>
           </tbody>
         </table>
@@ -80,11 +83,11 @@
                   X
                 </button>
               </td>
-              <th style="width: 1%;" scope="row">{{index + 1}}</th>
-              <td style="width: 10%;">{{item.date}}</td>
-              <td style="width: 15%;">{{item.name}}</td>
-              <td style="width: 10%;">{{item.quantity}}</td>
-              <td>{{item.description}}</td>
+              <th style="width: 1%;" scope="row">{{ index + 1 }}</th>
+              <td style="width: 10%;">{{ item.date }}</td>
+              <td style="width: 15%;">{{ item.name }}</td>
+              <td style="width: 10%;">{{ item.quantity }}</td>
+              <td>{{ item.note }}</td>
             </tr>
           </tbody>
         </table>
@@ -92,7 +95,7 @@
 
     </div>
     <div v-if="shipmentList.length > 0 || warehousingList.length > 0" class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary">送出</button>
+      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary">送出</button>
     </div>
   </div>
 
@@ -100,26 +103,61 @@
 </template>
 
 <script>
-import { ToastBase } from '../utils/helpers'
+import { ToastBase, ToastBottom, ToastErrorCenter, ToastSuccessCenter } from '../utils/helpers'
+import partNumbersAPI from '../apis/part_numbers'
+import warehouseAPI from '../apis/warehouse'
 
 export default {
   name: 'ShippingWarehousing',
   created() {
     this.fetchTodaysDate();
+    this.fetchPartNumbers()
+    this.fetchSubPartNumbers()
+
   },
   data() {
     return {
+      partNumbersList: [],
+      subPartNumbersList: [],
       newItem: {
+        productId: '',
         date: '',
         name: '',
         quantity: '',
-        description: ''
+        note: '',
+        isSubPart: false
       },
       shipmentList: [],
       warehousingList: []
     }
   },
   methods: {
+    async fetchPartNumbers() {
+      try {
+        const { data, statusText } = await partNumbersAPI.getPartNumbers()
+        if (statusText !== 'OK') { throw new Error() }
+        const { partNumbers } = data
+        this.partNumbersList = partNumbers
+      } catch (error) {
+        ToastBottom.fire({
+          icon: 'error',
+          title: '載入資料錯誤，請稍後在試。'
+        })
+      }
+    },
+    async fetchSubPartNumbers() {
+      try {
+        const { data, statusText } = await partNumbersAPI.getSubPartNumbers()
+        if (statusText !== 'OK') { throw new Error() }
+        const { subPartNumbers } = data
+        this.subPartNumbersList = subPartNumbers
+      } catch (error) {
+        ToastBottom.fire({
+          icon: 'error',
+          title: '載入資料錯誤，請稍後在試。'
+        })
+      }
+    },
     fetchTodaysDate() {
       let thisYear = (new Date().getFullYear()).toString()
       let thisMonth = ''
@@ -133,7 +171,8 @@ export default {
     },
     async addNewItem(action) {
       try {
-        const { date, name, quantity, description } = this.newItem
+        //檢查資料完整性
+        const { date, name, quantity } = this.newItem
         if (!date || !name || !quantity) {
           ToastBase.fire({
             icon: 'warning',
@@ -141,35 +180,52 @@ export default {
           })
           return
         }
+        //
+        //檢查該品番是否存在
+        let isExist = false
+        this.partNumbersList.map(partNumber => {
+          if (partNumber.name === this.newItem.name) {
+            this.newItem.productId = partNumber.id
+            isExist = true
+          }
+        })
+
+        this.subPartNumbersList.map(subPartNumbers => {
+          if (subPartNumbers.name === this.newItem.name) {
+            this.newItem.productId = subPartNumbers.id
+            this.newItem.isSubPart = true
+            isExist = true
+          }
+        })
+        if (!isExist) { throw new Error('此品番不存在') }
+        //
         if (action === 'warehousing') {
           this.warehousingList.push({
-            date,
-            name,
-            quantity,
-            description
+            ...this.newItem
           })
-          this.newItem.name = ''
+          this.newItem.productId = '',
+            this.newItem.name = ''
           this.newItem.quantity = ''
-          this.newItem.description = ''
+          this.newItem.note = ''
+          this.newItem.isSubPart = false
           return
         }
 
         if (action === 'shipping') {
           this.shipmentList.push({
-            date,
-            name,
-            quantity,
-            description
+            ...this.newItem
           })
+          this.newItem.productId = ''
           this.newItem.name = ''
           this.newItem.quantity = ''
-          this.newItem.description = ''
+          this.newItem.note = ''
+          this.newItem.isSubPart = false
           return
         }
       } catch (error) {
         ToastBase.fire({
           icon: 'error',
-          title: '發生錯誤'
+          title: error ? error : '發生不明錯誤!'
         })
       }
     },
@@ -187,8 +243,45 @@ export default {
         }
 
       } catch (error) {
-        // console.log(error)
+        console.log(error)
       }
+    },
+    async handleSubmit() {
+
+      try {
+        if (this.shipmentList.length) {
+          const shippingFormData = new FormData()
+          shippingFormData.append('shipmentList', JSON.stringify(this.shipmentList))
+          const { data, statusText } = await warehouseAPI.Shipping.create(shippingFormData)
+          const shippingDataStatus = data.status
+          const shippingDataMessage = data.message
+          if (shippingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(shippingDataMessage ? shippingDataMessage : `出貨時發生錯誤，請稍後在試。`) }
+          this.shipmentList = []
+        }
+
+        if (this.warehousingList.length) {
+          const WarehousingFormData = new FormData()
+          WarehousingFormData.append('warehousingList', JSON.stringify(this.warehousingList))
+          const { data, statusText } = await warehouseAPI.Warehousing.create(WarehousingFormData)
+          const WarehousingDataStatus = data.status
+          const WarehousingDataMessage = data.message
+          if (WarehousingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
+          this.warehousingList = []
+        }
+
+        ToastSuccessCenter.fire({
+          title: '成功',
+          text: `資料登載成功`
+        })
+
+      } catch (error) {
+        ToastErrorCenter.fire({
+          title: 'Oops...',
+          text: error.message
+        })
+      }
+
+
     }
   },
 }

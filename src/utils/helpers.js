@@ -41,6 +41,14 @@ export const ToastWarningCenter = Swal.mixin({
   icon: 'warning'
 })
 
+export const ToastErrorCenter = Swal.mixin({
+  icon: 'error'
+})
+
+export const ToastSuccessCenter = Swal.mixin({
+  icon: 'success'
+})
+
 export const ToastConfirm = Swal
 
 export const ToastConfirmed = Swal
