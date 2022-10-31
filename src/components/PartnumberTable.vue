@@ -24,7 +24,7 @@
           <!--品番-->
           <td class="text-dark" scope="row">{{ partNumber.name }}</td>
           <!--在庫數量-->
-          <td class="text-dark">{{ partNumber.quantity }}</td>
+          <td :class="[{ 'bg-danger': partNumber.quantity < partNumber.safetyStockQuantity }, { 'text-dark': partNumber.quantity >= partNumber.safetyStockQuantity }]">{{ partNumber.quantity }}</td>
           <!--備註-->
           <td class="text-dark">{{ partNumber.commentName }}</td>
           <!--安全庫存-->
@@ -35,7 +35,7 @@
           <!--品番-->
           <td scope="row">{{ partNumber.name }}</td>
           <!--在庫數量-->
-          <td>{{ partNumber.quantity }}</td>
+          <td :class="[{ 'bg-danger': partNumber.quantity < partNumber.safetyStockQuantity }]">{{ partNumber.quantity }}</td>
           <!--備註-->
           <td>{{ partNumber.commentName }}</td>
           <!--安全庫存-->
@@ -46,7 +46,7 @@
           <!--品番-->
           <td class="text-dark" scope="row">{{ subPartNumber.name }}</td>
           <!--在庫數量-->
-          <td class="text-dark">{{ subPartNumber.quantity }}</td>
+          <td :class="[{ 'bg-danger text-white': subPartNumber.quantity < subPartNumber.safetyStockQuantity }, { 'text-dark': subPartNumber.quantity >= subPartNumber.safetyStockQuantity }]">{{ subPartNumber.quantity }}</td>
           <!--備註-->
           <td class="text-dark">{{ subPartNumber.commentName }}</td>
           <!--安全庫存-->

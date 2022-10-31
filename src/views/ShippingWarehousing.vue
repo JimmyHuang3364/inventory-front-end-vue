@@ -95,7 +95,7 @@
 
     </div>
     <div v-if="shipmentList.length > 0 || warehousingList.length > 0" class="d-flex justify-content-end">
-      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary">{{ isProcessing ? "處理中..." : "送出" }}</button>
+      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary" :disabled="isProcessing">{{ isProcessing ? "處理中..." : "送出" }}</button>
     </div>
   </div>
 
@@ -255,6 +255,17 @@ export default {
     async handleSubmit() {
       try {
         this.isProcessing = true
+        if (this.warehousingList.length) {
+          const WarehousingFormData = new FormData()
+          WarehousingFormData.append('warehousingList', JSON.stringify(this.warehousingList))
+          const { data, statusText } = await warehouseAPI.Warehousing.create(WarehousingFormData)
+          const WarehousingDataStatus = data.status
+          const WarehousingDataMessage = data.message
+          console.log(WarehousingDataStatus)
+          if (WarehousingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
+          this.warehousingList = []
+        }
+
         if (this.shipmentList.length) {
           const shippingFormData = new FormData()
           shippingFormData.append('shipmentList', JSON.stringify(this.shipmentList))
@@ -263,16 +274,6 @@ export default {
           const shippingDataMessage = data.message
           if (shippingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(shippingDataMessage ? shippingDataMessage : `出貨時發生錯誤，請稍後在試。`) }
           this.shipmentList = []
-        }
-
-        if (this.warehousingList.length) {
-          const WarehousingFormData = new FormData()
-          WarehousingFormData.append('warehousingList', JSON.stringify(this.warehousingList))
-          const { data, statusText } = await warehouseAPI.Warehousing.create(WarehousingFormData)
-          const WarehousingDataStatus = data.status
-          const WarehousingDataMessage = data.message
-          if (WarehousingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
-          this.warehousingList = []
         }
 
         ToastSuccessCenter.fire({

@@ -30,7 +30,7 @@
           <!--日期-->
           <th scope="row">{{ WarehousingHistory.textCreatedAt }}</th>
           <!--品番-->
-          <td>{{ WarehousingHistory.PartNumber.name }}</td>
+          <td>{{ WarehousingHistory.PartNumber.name ? WarehousingHistory.PartNumber.name : WarehousingHistory.SubPartNumber.name }}</td>
           <!--入庫-->
 
           <td v-if="WarehousingHistory.quntityOfWarehousing" class="text-dark" style="background-color: #ea9d06;">{{ WarehousingHistory.quntityOfWarehousing }}</td>
@@ -74,7 +74,7 @@ export default {
   },
   watch: {
     initialWarehousingHistories(newValue) {
-      this.fetchInitialWarehousingHistories(newValue)
+      this.warehousingHistories = newValue
     }
   },
 }

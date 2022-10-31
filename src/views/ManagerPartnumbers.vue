@@ -60,7 +60,7 @@
             <!--單價-->
             <td class="text-dark">{{ partNumber.unitPrice }}</td>
             <!--在庫數量-->
-            <td class="text-dark">{{ partNumber.quantity }}</td>
+            <td :class="[{ 'bg-danger': partNumber.quantity < partNumber.safetyStockQuantity }, { 'text-dark': partNumber.quantity >= partNumber.safetyStockQuantity }]">{{ partNumber.quantity }}</td>
             <!--安全庫存-->
             <td class="text-dark">{{ partNumber.safetyStockQuantity }}</td>
             <!--備註-->
@@ -85,7 +85,7 @@
             <!--單價-->
             <td>{{ partNumber.unitPrice }}</td>
             <!--在庫數量-->
-            <td>{{ partNumber.quantity }}</td>
+            <td :class="[{ 'bg-danger': partNumber.quantity < partNumber.safetyStockQuantity }]">{{ partNumber.quantity }}</td>
             <!--安全庫存-->
             <td>{{ partNumber.safetyStockQuantity }}</td>
             <!--備註-->
@@ -110,7 +110,7 @@
             <!--品番-->
             <td class="text-dark" scope="row">{{ subPartNumber.unitPrice }}</td>
             <!--在庫數量-->
-            <td class="text-dark">{{ subPartNumber.quantity }}</td>
+            <td :class="[{ 'bg-danger text-white': subPartNumber.quantity < subPartNumber.safetyStockQuantity }, { 'text-dark': subPartNumber.quantity >= subPartNumber.safetyStockQuantity }]">{{ subPartNumber.quantity }}</td>
             <!--安全庫存-->
             <td class="text-dark">{{ subPartNumber.safetyStockQuantity }}</td>
             <!--備註-->
