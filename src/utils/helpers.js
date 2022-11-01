@@ -1,7 +1,7 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const baseURL = 'http://localhost:3000/api'
+const baseURL = 'https://inventory-system-test54545.herokuapp.com/api'
 
 const axiosInstance = Axios.create({
   baseURL
