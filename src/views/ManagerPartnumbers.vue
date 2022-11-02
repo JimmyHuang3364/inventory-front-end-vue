@@ -14,10 +14,10 @@
       </div>
     </form>
 
-    <div class="d-flex flex-row justify-content-between align-items-center">
+    <div class="d-flex flex-row justify-content-between align-items-center mt-3">
       <div class="">
         <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'manager-part-numbers' }" role="button">全部</router-link>
-        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'manager-part-numbers', query: { customerId: customer.id } }" role="button">
+        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1 mt-1" :to="{ name: 'manager-part-numbers', query: { customerId: customer.id } }" role="button">
           {{ customer.name }}
         </router-link>
       </div>

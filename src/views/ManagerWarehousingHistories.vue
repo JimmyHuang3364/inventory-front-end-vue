@@ -24,7 +24,7 @@
       </div>
     </form>
 
-    <div class="">
+    <div class="mt-3">
       <router-link class="btn btn-outline-secondary mr-1 mb-1" :to="{ name: 'manager-warehousing-histories' }" role="button">全部</router-link>
       <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1 mb-1" :to="{ name: 'manager-warehousing-histories', query: { customerId: customer.id } }" role="button">
         {{ customer.name }}
@@ -66,7 +66,7 @@
             <!--日期-->
             <th scope="row">{{ WarehousingHistory.textCreatedAt }}</th>
             <!--品番-->
-            <td>{{ WarehousingHistory.PartNumber.name }}</td>
+            <td>{{ WarehousingHistory.PartNumber.name ? WarehousingHistory.PartNumber.name : WarehousingHistory.SubPartNumber.name }}</td>
             <!--入庫-->
 
             <td v-if="WarehousingHistory.quntityOfWarehousing" class="text-dark" style="background-color: #ea9d06;">{{ WarehousingHistory.quntityOfWarehousing }}</td>
