@@ -189,10 +189,16 @@ export default {
         this.partNumbersList.map(partNumber => {
           if (partNumber.name === this.newItem.name) {
             this.newItem.productId = partNumber.id
+            //檢查是否有子部品並設定好每單位使用量
+            const { subPartNumbers } = partNumber
+            if (subPartNumbers.length) {
+              for (const subPartNumber of subPartNumbers) {
+                if (!subPartNumber.usagePerUnit > 0) { throw new Error(`${partNumber.name} 其子部品 ${subPartNumber.name} 尚未設定每單位使用量`) }
+              }
+            }
             isExist = true
           }
         })
-
         this.subPartNumbersList.map(subPartNumbers => {
           if (subPartNumbers.name === this.newItem.name) {
             this.newItem.productId = subPartNumbers.id
