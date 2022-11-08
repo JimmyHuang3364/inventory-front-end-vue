@@ -1,6 +1,5 @@
 <template>
   <div class="container mt-5 container-border bg-dark">
-
     <form @submit.stop.prevent="handleSubmit" class="form-signin p-4 m-auto">
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal text-white">Sign In</h1>
@@ -16,7 +15,6 @@
       <br />
       <button class="btn btn-lg btn-success btn-block" type="submit" :disabled="isProcessing">Submit</button>
     </form>
-
   </div>
 </template>
 

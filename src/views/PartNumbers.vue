@@ -1,52 +1,57 @@
 <template>
   <div class="mt-3">
-    <form class="d-flex justify-content-center">
-      <div class="form-row">
-        <div class="col-auto">
-          <p class="text-light m-0">品番</p>
-          <input v-model="searchText" list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
-          <datalist id="partnumberList">
-          </datalist>
-        </div>
-        <div class="col-auto">
-          <p class="text-light m-0">開始</p>
-          <input v-model="startDate" type="date" class="form-control" name="startDate" id="startDate" value="">
-        </div>
-        <div class="col-auto">
-          <p class="text-light m-0">結束</p>
-          <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
-        </div>
-        <div class="col-auto align-self-end">
-          <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
-          <router-link :to="{ name: 'warehouse-part-numbers', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
-        </div>
-      </div>
-    </form>
-
-    <div class="d-flex flex-row justify-content-around align-items-center mt-3">
-      <div class="mb-2">
-        <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-part-numbers' }" role="button">全部</router-link>
-        <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: { customerId: customer.id } }" role="button">
-          {{ customer.name }}
-        </router-link>
-      </div>
-
-      <div class="mb-2">
-        <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
-      </div>
+    <div v-if="isLoading">
+      <Loader />
     </div>
 
-    <section class="d-flex justify-content-around">
-      <div style="flex-basis: 45%;">
-        <PartnumberTable :initialPartNumbers="partNumbers" />
+    <div v-if="!isLoading">
+      <form class="d-flex justify-content-center">
+        <div class="form-row">
+          <div class="col-auto">
+            <p class="text-light m-0">品番</p>
+            <input v-model="searchText" list="partnumberList" type="text" class="form-control" name="searchText" id="searchText" placeholder="搜尋番號" value="">
+            <datalist id="partnumberList">
+            </datalist>
+          </div>
+          <div class="col-auto">
+            <p class="text-light m-0">開始</p>
+            <input v-model="startDate" type="date" class="form-control" name="startDate" id="startDate" value="">
+          </div>
+          <div class="col-auto">
+            <p class="text-light m-0">結束</p>
+            <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
+          </div>
+          <div class="col-auto align-self-end">
+            <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
+            <router-link :to="{ name: 'warehouse-part-numbers', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
+          </div>
+        </div>
+      </form>
+
+      <div class="d-flex flex-row justify-content-around align-items-center mt-3">
+        <div class="mb-2">
+          <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-part-numbers' }" role="button">全部</router-link>
+          <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: { customerId: customer.id } }" role="button">
+            {{ customer.name }}
+          </router-link>
+        </div>
+
+        <div class="mb-2">
+          <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
+        </div>
       </div>
 
-      <div class="mb-3" style="flex-basis: 50%;">
-        <h5 class="text-light">歷史紀錄</h5>
-        <WarehousingHistoriesTable :initial-warehousing-histories="warehousingHistories" />
-      </div>
-    </section>
+      <section class="d-flex justify-content-around">
+        <div style="flex-basis: 45%;">
+          <PartnumberTable :initialPartNumbers="partNumbers" />
+        </div>
 
+        <div class="mb-3" style="flex-basis: 50%;">
+          <h5 class="text-light">歷史紀錄</h5>
+          <WarehousingHistoriesTable :initial-warehousing-histories="warehousingHistories" />
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -55,9 +60,10 @@ import { ToastBottom } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
+import Loader from '../components/Loader.vue'
 export default {
   name: 'PartNumbers',
-  components: { PartnumberTable, WarehousingHistoriesTable },
+  components: { PartnumberTable, WarehousingHistoriesTable, Loader },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText || to.query.startDate || to.query.endDate) {
       const queryContent = {
@@ -84,13 +90,15 @@ export default {
       warehousingHistories: [],
       searchText: '',
       startDate: '',
-      endDate: ''
+      endDate: '',
+      isLoading: true
     };
   },
 
   methods: {
     async fetchPartNumbers({ queryCategoryId }) {
       try {
+        this.isLoading = true
         const response = await partNumbersAPI.getPartNumbers({ customerId: queryCategoryId });
         const { data, statusText } = response;
         const { partNumbers, customers, warehousingHistories } = data;
@@ -103,26 +111,31 @@ export default {
         this.searchText = ''
         this.startDate = ''
         this.endDate = ''
+        this.isLoading = false
       }
       catch (error) {
         ToastBottom.fire({
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
+        this.isLoading = false
       }
     },
     async handleSearchartNumbers(queryContent) {
       try {
+        this.isLoading = true
         const { data, statusText } = await partNumbersAPI.getSearchPartNumbers(queryContent)
         if (statusText !== "OK") { throw new Error() }
         const { partNumbers, warehousingHistories } = data;
         this.partNumbers = partNumbers;
         this.warehousingHistories = warehousingHistories;
+        this.isLoading = false
       } catch (error) {
         ToastBottom.fire({
           icon: "error",
           title: "載入錯誤，請稍後再試。"
         });
+        this.isLoading = false
       }
 
     }
