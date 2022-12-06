@@ -100,9 +100,9 @@ export default {
       try {
         this.isLoading = true
         const response = await partNumbersAPI.getPartNumbers({ customerId: queryCategoryId });
-        const { data, statusText } = response;
+        const { data, status, statusText } = response;
         const { partNumbers, customers, warehousingHistories } = data;
-        if (statusText !== "OK") {
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         this.partNumbers = partNumbers;
@@ -124,8 +124,8 @@ export default {
     async handleSearchartNumbers(queryContent) {
       try {
         this.isLoading = true
-        const { data, statusText } = await partNumbersAPI.getSearchPartNumbers(queryContent)
-        if (statusText !== "OK") { throw new Error() }
+        const { data, status, statusText } = await partNumbersAPI.getSearchPartNumbers(queryContent)
+        if (statusText !== "OK" && status !== 200) { throw new Error() }
         const { partNumbers, warehousingHistories } = data;
         this.partNumbers = partNumbers;
         this.warehousingHistories = warehousingHistories;

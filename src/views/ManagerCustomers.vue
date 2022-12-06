@@ -93,8 +93,8 @@ export default {
     async fetchCustomers() {
       try {
         this.isLoading = true
-        const { data, statusText } = await managersAPI.customers.get();
-        if (statusText !== "OK") {
+        const { data, status, statusText } = await managersAPI.customers.get();
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         const { customers } = data;
@@ -111,8 +111,8 @@ export default {
     },
     async deleteCustomer(customerId) {
       try {
-        const { data, statusText } = await managersAPI.customers.delete(customerId);
-        if (statusText !== "OK") {
+        const { data, status, statusText } = await managersAPI.customers.delete(customerId);
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         this.customers = this.customers.filter(customer => customer.id !== customerId);

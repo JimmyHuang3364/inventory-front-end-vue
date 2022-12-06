@@ -181,9 +181,9 @@ export default {
       try {
         this.isLoading = true
         const response = await managersAPI.partNumbers.get({ customerId: queryCategoryId });
-        const { data, statusText } = response;
+        const { data, status, statusText } = response;
         const { partNumbers, customers } = data;
-        if (statusText !== "OK") {
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         this.partNumbers = partNumbers;
@@ -202,8 +202,8 @@ export default {
     async fetchSearchPartNumbers(queryContent) {
       try {
         this.isLoading = true
-        const { data, statusText } = await managersAPI.partNumbers.getSearch(queryContent)
-        if (statusText !== "OK") {
+        const { data, status, statusText } = await managersAPI.partNumbers.getSearch(queryContent)
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         const { partNumbers, customers } = data;

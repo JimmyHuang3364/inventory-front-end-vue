@@ -140,9 +140,9 @@ export default {
       try {
         this.isLoading = true
         const response = await managersAPI.warehousingHistories.get({ customerId: queryCategoryId });
-        const { data, statusText } = response;
+        const { data, status, statusText } = response;
         const { warehousingHistories, customers } = data;
-        if (statusText !== "OK") {
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         this.warehousingHistories = warehousingHistories;
@@ -163,8 +163,8 @@ export default {
     async fetchSearchWarehousingHistories(queryContent) {
       try {
         this.isLoading = true
-        const { data, statusText } = await managersAPI.warehousingHistories.getSearch(queryContent)
-        if (statusText !== "OK") {
+        const { data, status, statusText } = await managersAPI.warehousingHistories.getSearch(queryContent)
+        if (statusText !== "OK" && status !== 200) {
           throw new Error();
         }
         const { warehousingHistories, customers } = data;
