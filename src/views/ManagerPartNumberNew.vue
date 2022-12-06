@@ -20,8 +20,8 @@ export default {
     async handleAfterSubmit(formData) {
       try {
         this.isProcessing = true
-        const { data, statusText } = await managersAPI.partNumbers.create(formData)
-        if (statusText !== 'OK' || data.status !== 'success') { throw new Error(data.message) }
+        const { data, status, statusText } = await managersAPI.partNumbers.create(formData)
+        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
         this.$router.push({ name: 'manager-part-numbers' })
         ToastBottom.fire({
           icon: 'success',

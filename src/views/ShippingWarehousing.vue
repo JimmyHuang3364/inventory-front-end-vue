@@ -137,8 +137,8 @@ export default {
   methods: {
     async fetchPartNumbers() {
       try {
-        const { data, statusText } = await partNumbersAPI.getPartNumbers()
-        if (statusText !== 'OK') { throw new Error() }
+        const { data, status, statusText } = await partNumbersAPI.getPartNumbers()
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
         const { partNumbers } = data
         this.partNumbersList = partNumbers
       } catch (error) {
@@ -150,8 +150,8 @@ export default {
     },
     async fetchSubPartNumbers() {
       try {
-        const { data, statusText } = await partNumbersAPI.getSubPartNumbers()
-        if (statusText !== 'OK') { throw new Error() }
+        const { data, status, statusText } = await partNumbersAPI.getSubPartNumbers()
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
         const { subPartNumbers } = data
         this.subPartNumbersList = subPartNumbers
       } catch (error) {
@@ -268,7 +268,7 @@ export default {
           const WarehousingDataStatus = data.status
           const WarehousingDataMessage = data.message
           console.log(WarehousingDataStatus)
-          if (WarehousingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
+          if (WarehousingDataStatus !== 'success' && statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
           this.warehousingList = []
         }
 
@@ -278,7 +278,7 @@ export default {
           const { data, statusText } = await warehouseAPI.Shipping.create(shippingFormData)
           const shippingDataStatus = data.status
           const shippingDataMessage = data.message
-          if (shippingDataStatus !== 'success' || statusText !== 'OK') { throw new Error(shippingDataMessage ? shippingDataMessage : `出貨時發生錯誤，請稍後在試。`) }
+          if (shippingDataStatus !== 'success' && statusText !== 'OK') { throw new Error(shippingDataMessage ? shippingDataMessage : `出貨時發生錯誤，請稍後在試。`) }
           this.shipmentList = []
         }
 

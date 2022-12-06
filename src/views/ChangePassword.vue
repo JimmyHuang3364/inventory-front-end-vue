@@ -43,8 +43,8 @@ export default {
         const form = e.target
         const formData = new FormData(form)
         const userId = this.$store.state.currentUser.id
-        const { data, statusText } = await usersAPI.updatePassword(userId, formData)
-        if (statusText !== 'OK') { throw new Error(data.message) }
+        const { data, status, statusText } = await usersAPI.updatePassword(userId, formData)
+        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
         ToastBottom.fire({
           icon: 'success',
           title: data.message

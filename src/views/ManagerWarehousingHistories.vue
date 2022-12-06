@@ -191,8 +191,8 @@ export default {
           confirmButtonText: '確定'
         })
         if (deleteConfirm.value) {
-          const { data, statusText } = await managersAPI.warehousingHistories.delete(queryId)
-          if (statusText !== 'OK') { throw new Error() }
+          const { data, status, statusText } = await managersAPI.warehousingHistories.delete(queryId)
+          if (statusText !== 'OK' && status !== 200) { throw new Error() }
           ToastConfirmed.fire(
             '刪除！',
             `${data.message}`,

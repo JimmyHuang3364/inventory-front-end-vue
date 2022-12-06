@@ -107,8 +107,8 @@ export default {
   methods: {
     async fetchPartNumbers() {
       try {
-        const { data, statusText } = await managersAPI.partNumbers.get()
-        if (statusText !== 'OK') { throw new Error() }
+        const { data, status, statusText } = await managersAPI.partNumbers.get()
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
         const { partNumbers } = data
         this.partNumbers = partNumbers
         this.partNumbersList = { ...partNumbers }
@@ -121,8 +121,8 @@ export default {
     },
     async fetchCustomers() {
       try {
-        const { data, statusText } = await managersAPI.customers.get()
-        if (statusText !== 'OK') { throw new Error() }
+        const { data, status, statusText } = await managersAPI.customers.get()
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
         const { customers } = data
         this.customers = customers
       } catch (error) {

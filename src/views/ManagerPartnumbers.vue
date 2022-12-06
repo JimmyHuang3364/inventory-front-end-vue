@@ -231,8 +231,8 @@ export default {
         })
         if (deleteConfirm.value) {
           if (partNumberType === 'part-number') {
-            const { data, statusText } = await managersAPI.partNumbers.delete(partNumberId)
-            if (statusText !== 'OK' || data.status !== 'success') { throw new Error() }
+            const { data, status, statusText } = await managersAPI.partNumbers.delete(partNumberId)
+            if (statusText !== 'OK' && status !== 200) { throw new Error() }
             ToastConfirmed.fire(
               '刪除！',
               `${data.message}`,
@@ -243,8 +243,8 @@ export default {
           }
 
           if (partNumberType === 'sub-part-number') {
-            const { data, statusText } = await managersAPI.subPartNumbers.delete(partNumberId)
-            if (statusText !== 'OK' || data.status !== 'success') { throw new Error() }
+            const { data, status, statusText } = await managersAPI.subPartNumbers.delete(partNumberId)
+            if (statusText !== 'OK' && status !== 200) { throw new Error() }
             ToastConfirmed.fire(
               '刪除！',
               `${data.message}`,

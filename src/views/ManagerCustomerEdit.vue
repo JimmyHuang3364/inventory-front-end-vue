@@ -29,8 +29,8 @@ export default {
   methods: {
     async fetchCustomerData(customerId) {
       try {
-        const { data, statusText } = await managersAPI.customers.getDetail(customerId)
-        if (statusText !== 'OK' || data.status === 'error') { throw new Error(data.message) }
+        const { data, status, statusText } = await managersAPI.customers.getDetail(customerId)
+        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
         const { customer } = data
         this.customer = customer
       } catch (error) {
@@ -44,8 +44,8 @@ export default {
       try {
         this.isProcessing = true
         const customerId = this.$route.params.id
-        const { data, statusText } = await managersAPI.customers.update({ customerId, formData })
-        if (statusText !== 'OK') { throw new Error(data.message) }
+        const { data, status, statusText } = await managersAPI.customers.update({ customerId, formData })
+        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
         this.$router.push({ name: 'manager-customers' })
         ToastBottom.fire({
           icon: 'success',

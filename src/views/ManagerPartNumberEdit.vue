@@ -23,8 +23,8 @@ export default {
   methods: {
     async fetchPartNumber(partNumberId) {
       try {
-        const { data, statusText } = await managerAPI.partNumbers.getOneDetail(partNumberId)
-        if (statusText !== 'OK') { throw new Error() }
+        const { data, status, statusText } = await managerAPI.partNumbers.getOneDetail(partNumberId)
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
         const { partNumber } = data
         this.partNumber = partNumber
         this.partNumber.isSubPartNumber = false
@@ -38,9 +38,9 @@ export default {
     async handleAfterSubmit(formData) {
       try {
         this.isProcessing = true
-        const { data, statusText } = await managerAPI.partNumbers.update(this.$route.params.id, formData)
-        const { status, message } = data
-        if (statusText !== 'OK' || status !== 'success') { throw new Error(message ? message : '載入錯誤，請稍後在試。') }
+        const { data, statusText, status } = await managerAPI.partNumbers.update(this.$route.params.id, formData)
+        const { message } = data
+        if (statusText !== 'OK' && status !== 200) { throw new Error(message ? message : '載入錯誤，請稍後在試。') }
         this.isProcessing = false
         this.$router.push({ name: 'manager-part-numbers' })
         ToastBottom.fire({

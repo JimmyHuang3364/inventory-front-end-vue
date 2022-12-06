@@ -41,8 +41,8 @@ export default {
       try {
         const form = e.target
         const formData = new FormData(form)
-        const { data, statusText } = await managersAPI.users.create(formData)
-        if (statusText !== 'OK' || data.status !== 'success') { throw new Error(data.message) }
+        const { data, status, statusText } = await managersAPI.users.create(formData)
+        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
         ToastBottom.fire({
           icon: 'success',
           title: data.message
