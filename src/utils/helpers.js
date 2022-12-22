@@ -1,8 +1,8 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const baseURL = 'https://web-production-63f5.up.railway.app/api'
-// const baseURL = '127.0.0.1:3000'
+// const baseURL = 'https://web-production-63f5.up.railway.app/api'
+const baseURL = 'http://localhost:3000/api'
 
 const axiosInstance = Axios.create({
   baseURL

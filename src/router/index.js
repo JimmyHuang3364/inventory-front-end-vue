@@ -66,6 +66,11 @@ const routes = [
     component: () => import('../views/ManagerCustomerEdit.vue')
   },
   {
+    path: '/manager/users',
+    name: 'manager-users',
+    component: () => import('../views/ManagerUsers.vue')
+  },
+  {
     path: '/manager/users/new',
     name: 'manager-users-new',
     component: () => import('../views/ManagerUserSignup.vue')

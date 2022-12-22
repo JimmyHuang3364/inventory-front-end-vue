@@ -56,6 +56,12 @@ export default {
   users: {
     create(formData) {
       return apiHelper.post('/manager/users/signup', formData)
+    },
+    get() {
+      return apiHelper.get(`/manager/users`)
+    },
+    delete(userId) {
+      return apiHelper.delete(`/manager/users/${userId}`)
     }
   },
   warehousingHistories: {

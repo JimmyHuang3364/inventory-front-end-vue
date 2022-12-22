@@ -13,7 +13,7 @@
           <router-link :to="{ name: 'warehouse-part-numbers' }" class="nav-link">倉庫</router-link>
         </li>
 
-        <li class="nav-item dropdown">
+        <li v-if="currentUser.permissionLevel === 2 || currentUser.permissionLevel === 1" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">管理清單</a>
           <div class="dropdown-menu">
             <router-link :to="{ name: 'manager-customers' }" class="dropdown-item">発注人</router-link>
@@ -26,7 +26,13 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">其它</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <router-link :to="{ name: 'users-change-password' }" class="dropdown-item" href="/user/password">變更密碼</router-link>
-            <router-link :to="{ name: 'manager-users-new' }" class="dropdown-item">註冊使用者</router-link>
+          </div>
+        </li>
+
+        <li v-if="currentUser.permissionLevel === 1" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">後台管理</a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <router-link :to="{ name: 'manager-users' }" class="dropdown-item">使用者清單</router-link>
           </div>
         </li>
 
