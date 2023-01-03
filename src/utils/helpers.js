@@ -1,7 +1,7 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const baseURL = 'https://104.155.237.132:3000/api'
+const baseURL = 'http://104.155.237.132:3000/api'
 
 const axiosInstance = Axios.create({
   baseURL
