@@ -64,7 +64,7 @@ export default {
         this.$store.commit('setCurrentUser', data.user)
 
         // 成功登入後轉址到首頁
-        this.$router.push('/warehouse/partnumbers')
+        this.$router.push('/warehouse/home')
       } catch (error) {
         this.password = ''
         this.isProcessing = false

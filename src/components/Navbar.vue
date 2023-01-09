@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(36, 36, 36);">
-    <router-link :to="{ name: 'warehouse-part-numbers' }" class="navbar-brand" style="font-weight: bold;">
+    <router-link :to="{ name: 'warehouse-home' }" class="navbar-brand" style="font-weight: bold;">
       <h2>明盛公司</h2>
     </router-link>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,7 +10,7 @@
       <ul class="navbar-nav">
 
         <li class="nav-item">
-          <router-link :to="{ name: 'warehouse-part-numbers' }" class="nav-link">倉庫</router-link>
+          <router-link :to="{ name: 'warehouse-home' }" class="nav-link">倉庫</router-link>
         </li>
 
         <li v-if="currentUser.permissionLevel === 2 || currentUser.permissionLevel === 1" class="nav-item dropdown">

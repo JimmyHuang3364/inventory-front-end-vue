@@ -62,7 +62,7 @@ import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
 import Loader from '../components/Loader.vue'
 export default {
-  name: 'PartNumbers',
+  name: 'Home',
   components: { PartnumberTable, WarehousingHistoriesTable, Loader },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText || to.query.startDate || to.query.endDate) {
