@@ -17,6 +17,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">管理清單</a>
           <div class="dropdown-menu">
             <router-link :to="{ name: 'manager-customers' }" class="dropdown-item">発注人</router-link>
+            <router-link :to="{ name: 'manager-partner-factories' }" class="dropdown-item">協力廠商</router-link>
             <router-link :to="{ name: 'manager-part-numbers' }" class="dropdown-item">部品</router-link>
             <router-link :to="{ name: 'manager-warehousing-histories' }" class="dropdown-item">出入庫歷史清單</router-link>
           </div>

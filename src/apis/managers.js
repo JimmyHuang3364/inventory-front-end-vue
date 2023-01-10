@@ -76,6 +76,24 @@ export default {
     delete(queryId) {
       return apiHelper.delete(`/manager/WarehousingHistories/${queryId}`)
     },
+  },
+
+  partnerFactories: {
+    getAll() {
+      return apiHelper.get(`/manager/partner_factories`)
+    },
+    create(formData) {
+      return apiHelper.post('/manager/partner_factories/create', formData)
+    },
+    delete(partnerFactoryId) {
+      return apiHelper.delete(`/manager/partner_factories/${partnerFactoryId}`)
+    },
+    getOneDetail(partnerFactoryId) {
+      return apiHelper.get(`/manager/partner_factories/${partnerFactoryId}`)
+    },
+    update(partnerFactoryId, formData) {
+      return apiHelper.put(`/manager/partner_factories/${partnerFactoryId}`, formData)
+    },
   }
 
 }

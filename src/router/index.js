@@ -71,6 +71,21 @@ const routes = [
     component: () => import('../views/ManagerCustomerEdit.vue')
   },
   {
+    path: '/manager/partner_factories',
+    name: 'manager-partner-factories',
+    component: () => import('../views/ManagerPartnerFactories.vue')
+  },
+  {
+    path: '/manager/partner_factories/new',
+    name: 'manager-partner-factories-new',
+    component: () => import('../views/ManagerPartnerFactoryNew.vue')
+  },
+  {
+    path: '/manager/partner_factories/:id/edit',
+    name: 'manager-partner-factories-edit',
+    component: () => import('../views/ManagerPartnerFactoryEdit.vue')
+  },
+  {
     path: '/manager/users',
     name: 'manager-users',
     component: () => import('../views/ManagerUsers.vue')
