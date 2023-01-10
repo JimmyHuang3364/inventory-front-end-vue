@@ -22,22 +22,17 @@
             <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
           </div>
           <div class="col-auto align-self-end">
-            <!-- <button type="submit" class="btn btn-primary">搜尋</button> -->
-            <router-link :to="{ name: 'warehouse-part-numbers', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
+            <router-link :to="{ name: 'warehouse-home', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
           </div>
         </div>
       </form>
 
       <div class="d-flex flex-row justify-content-around align-items-center mt-3">
         <div class="mb-2">
-          <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-part-numbers' }" role="button">全部</router-link>
-          <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-part-numbers', query: { customerId: customer.id } }" role="button">
+          <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-home' }" role="button">全部</router-link>
+          <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-home', query: { customerId: customer.id } }" role="button">
             {{ customer.name }}
           </router-link>
-        </div>
-
-        <div class="mb-2">
-          <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
         </div>
       </div>
 
@@ -47,8 +42,22 @@
         </div>
 
         <div class="mb-3" style="flex-basis: 50%;">
-          <h5 class="text-light">歷史紀錄</h5>
-          <WarehousingHistoriesTable :initial-warehousing-histories="warehousingHistories" />
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-outline-light active">
+                <input @click="handleShowWarehousingHistoriesTable" type="radio" name="options" id="option1" checked> 出入庫紀錄
+              </label>
+              <label class="btn btn-outline-light">
+                <input @click="handleShowOutsourcingListsTable" type="radio" name="options" id="option3"> 外包清單
+              </label>
+            </div>
+            <div>
+              <router-link v-show="!showOutsourcingListsTable" :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
+              <router-link v-show="showOutsourcingListsTable" :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-primary mr-2" role="button">新增外包</router-link>
+            </div>
+          </div>
+          <WarehousingHistoriesTable v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" />
+          <OutsourcingListsTable v-show="showOutsourcingListsTable" :initial-outsourcing-lists="outsourcinglists" />
         </div>
       </section>
     </div>
@@ -58,12 +67,14 @@
 <script>
 import { ToastBottom } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
+import warehouseAPI from '../apis/warehouse'
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
+import OutsourcingListsTable from '../components/OutsourcingListsTable.vue'
 import Loader from '../components/Loader.vue'
 export default {
   name: 'Home',
-  components: { PartnumberTable, WarehousingHistoriesTable, Loader },
+  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, Loader },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText || to.query.startDate || to.query.endDate) {
       const queryContent = {
@@ -82,16 +93,19 @@ export default {
   created() {
     const { customerId = '' } = this.$route.query
     this.fetchPartNumbers({ queryCategoryId: customerId });
+    this.fetchOutsourcingLists()
   },
   data() {
     return {
       partNumbers: [],
       customers: [],
       warehousingHistories: [],
+      outsourcinglists: [],
       searchText: '',
       startDate: '',
       endDate: '',
-      isLoading: true
+      isLoading: true,
+      showOutsourcingListsTable: false
     };
   },
 
@@ -121,6 +135,26 @@ export default {
         this.isLoading = false
       }
     },
+    async fetchOutsourcingLists() {
+      try {
+        const response = await warehouseAPI.outsourcinglist.get()
+        const { data, status, statusText } = response
+        const { outsourcinglists } = data
+        if (statusText !== "OK" && status !== 200) { throw new Error() }
+        if (data.status !== 'success') { throw new Error(data.message) }
+        outsourcinglists.map(outsourcinglist => {
+          outsourcinglist.actionDate = `${new Date(outsourcinglist.actionDate).getFullYear()}/${new Date(outsourcinglist.actionDate).getMonth() + 1}/${new Date(outsourcinglist.actionDate).getDate()}`
+        })
+        this.outsourcinglists = outsourcinglists
+      }
+      catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: error ? error : "載入錯誤，請稍後再試。"
+        });
+        this.isLoading = false
+      }
+    },
     async handleSearchartNumbers(queryContent) {
       try {
         this.isLoading = true
@@ -137,7 +171,12 @@ export default {
         });
         this.isLoading = false
       }
-
+    },
+    handleShowOutsourcingListsTable() {
+      this.showOutsourcingListsTable = true
+    },
+    handleShowWarehousingHistoriesTable() {
+      this.showOutsourcingListsTable = false
     }
   },
 }

@@ -10,5 +10,10 @@ export default {
     create(formData) {
       return apiHelper.post('/warehouse/shipping', formData)
     },
+  },
+  outsourcinglist: {
+    get() {
+      return apiHelper.get('/warehouse/outsourcinglist')
+    },
   }
 }
