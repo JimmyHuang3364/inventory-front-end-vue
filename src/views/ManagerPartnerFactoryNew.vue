@@ -20,7 +20,6 @@ export default {
     async handleAfterSubmit(formData) {
       try {
         this.isProcessing = true
-        console.log(formData)
         const { data } = await managersAPI.partnerFactories.create(formData)
         if (data.status === 'error') { throw new Error(data.message) }
         this.isProcessing = false

@@ -94,6 +94,21 @@ export default {
     update(partnerFactoryId, formData) {
       return apiHelper.put(`/manager/partner_factories/${partnerFactoryId}`, formData)
     },
+  },
+
+  productionProcessItems: {
+    getAll() {
+      return apiHelper.get(`/manager/production_process_items`)
+    },
+    create(formData) {
+      return apiHelper.post('/manager/production_process_items/create', formData)
+    },
+    delete(productionProcessItemId) {
+      return apiHelper.delete(`/manager/production_process_items/${productionProcessItemId}`)
+    },
+    update(productionProcessItemId, name) {
+      return apiHelper.put(`/manager/production_process_items/${productionProcessItemId}`, name)
+    },
   }
 
 }

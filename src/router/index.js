@@ -86,6 +86,11 @@ const routes = [
     component: () => import('../views/ManagerPartnerFactoryEdit.vue')
   },
   {
+    path: '/manager/production_process_items',
+    name: 'manager-production-process-items',
+    component: () => import('../views/ManagerProductionProcessItems.vue'),
+  },
+  {
     path: '/manager/users',
     name: 'manager-users',
     component: () => import('../views/ManagerUsers.vue')
