@@ -11,9 +11,18 @@ export default {
       return apiHelper.post('/warehouse/shipping', formData)
     },
   },
-  outsourcinglist: {
+  Outsourcinglist: {
     get() {
       return apiHelper.get('/warehouse/outsourcinglist')
     },
+    create(formData) {
+      return apiHelper.post(`/warehouse/outsourcinglist/create`, formData)
+    },
+    delete(outsourcinglistId) {
+      return apiHelper.delete(`/warehouse/outsourcinglist/${outsourcinglistId}`)
+    },
+    done(outsourcinglistId, formData) {
+      return apiHelper.post(`/warehouse/outsourcinglist/${outsourcinglistId}/done`, formData)
+    }
   }
 }

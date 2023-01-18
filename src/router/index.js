@@ -26,6 +26,11 @@ const routes = [
   //   component: () => import('../views/PartNumbers.vue')
   // },
   {
+    path: '/warehouse/outsourcing/new',
+    name: 'warehouse-outsourcing-new',
+    component: () => import('../views/Outsourcing.vue')
+  },
+  {
     path: '/warehouse/ShippingWarehousing',
     name: 'warehouse-ShippingWarehousing',
     component: () => import('../views/ShippingWarehousing.vue')

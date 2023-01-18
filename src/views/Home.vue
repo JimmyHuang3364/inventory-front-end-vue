@@ -27,7 +27,7 @@
         </div>
       </form>
 
-      <div class="d-flex flex-row justify-content-around align-items-center mt-3">
+      <div class="d-flex flex-row justify-content-around align-items-center my-3">
         <div class="mb-2">
           <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-home' }" role="button">全部</router-link>
           <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-home', query: { customerId: customer.id } }" role="button">
@@ -45,19 +45,26 @@
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-outline-light active">
-                <input @click="handleShowWarehousingHistoriesTable" type="radio" name="options" id="option1" checked> 出入庫紀錄
+                <input @click="afterHandleShowWarehousingHistoriesTable" type="radio" name="options" id="option1" checked> 出入庫紀錄
               </label>
               <label class="btn btn-outline-light">
-                <input @click="handleShowOutsourcingListsTable" type="radio" name="options" id="option3"> 外包清單
+                <input @click="afterHandleShowOutsourcingListsTable" type="radio" name="options" id="option3"> 外包清單
               </label>
             </div>
             <div>
-              <router-link v-show="!showOutsourcingListsTable" :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info mr-2" role="button">新增出入庫</router-link>
-              <router-link v-show="showOutsourcingListsTable" :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-primary mr-2" role="button">新增外包</router-link>
+              <div v-show="!showOutsourcingListsTable">
+                <button v-show="!isShowFastShippingWarehousingFormArea" @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-warning mr-2">快速新增(未實裝)</button>
+                <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info" role="button">新增出入庫</router-link>
+              </div>
+
+              <div v-show="showOutsourcingListsTable">
+                <button v-show="!isShowFastOutsourcingFormArea" @click="toggleShowFastOutsourcingFormArea" class="btn btn-outline-warning mr-2">快速新增</button>
+                <router-link :to="{ name: 'warehouse-outsourcing-new' }" class="btn btn-primary" role="button">新增外包</router-link>
+              </div>
             </div>
           </div>
-          <WarehousingHistoriesTable v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" />
-          <OutsourcingListsTable v-show="showOutsourcingListsTable" :initial-outsourcing-lists="outsourcinglists" />
+          <WarehousingHistoriesTable @after-click-toggle-fast-form-area="toggleShowFastShippingWarehousingFormArea" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
+          <OutsourcingListsTable @outsourcing-is-done-to-submit="updateQuantity" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
         </div>
       </section>
     </div>
@@ -67,7 +74,6 @@
 <script>
 import { ToastBottom } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
-import warehouseAPI from '../apis/warehouse'
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
 import OutsourcingListsTable from '../components/OutsourcingListsTable.vue'
@@ -93,19 +99,19 @@ export default {
   created() {
     const { customerId = '' } = this.$route.query
     this.fetchPartNumbers({ queryCategoryId: customerId });
-    this.fetchOutsourcingLists()
   },
   data() {
     return {
       partNumbers: [],
       customers: [],
       warehousingHistories: [],
-      outsourcinglists: [],
       searchText: '',
       startDate: '',
       endDate: '',
       isLoading: true,
-      showOutsourcingListsTable: false
+      showOutsourcingListsTable: false,
+      isShowFastShippingWarehousingFormArea: false,
+      isShowFastOutsourcingFormArea: false,
     };
   },
 
@@ -135,26 +141,6 @@ export default {
         this.isLoading = false
       }
     },
-    async fetchOutsourcingLists() {
-      try {
-        const response = await warehouseAPI.outsourcinglist.get()
-        const { data, status, statusText } = response
-        const { outsourcinglists } = data
-        if (statusText !== "OK" && status !== 200) { throw new Error() }
-        if (data.status !== 'success') { throw new Error(data.message) }
-        outsourcinglists.map(outsourcinglist => {
-          outsourcinglist.actionDate = `${new Date(outsourcinglist.actionDate).getFullYear()}/${new Date(outsourcinglist.actionDate).getMonth() + 1}/${new Date(outsourcinglist.actionDate).getDate()}`
-        })
-        this.outsourcinglists = outsourcinglists
-      }
-      catch (error) {
-        ToastBottom.fire({
-          icon: "error",
-          title: error ? error : "載入錯誤，請稍後再試。"
-        });
-        this.isLoading = false
-      }
-    },
     async handleSearchartNumbers(queryContent) {
       try {
         this.isLoading = true
@@ -172,11 +158,24 @@ export default {
         this.isLoading = false
       }
     },
-    handleShowOutsourcingListsTable() {
+    updateQuantity(outsourcingData) {
+      this.partNumbers.map(partNumber => {
+        if (partNumber.id === Number(outsourcingData.partNumberId)) {
+          partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)
+        }
+      })
+    },
+    afterHandleShowOutsourcingListsTable() {
       this.showOutsourcingListsTable = true
     },
-    handleShowWarehousingHistoriesTable() {
+    afterHandleShowWarehousingHistoriesTable() {
       this.showOutsourcingListsTable = false
+    },
+    toggleShowFastShippingWarehousingFormArea() {
+      this.isShowFastShippingWarehousingFormArea = !this.isShowFastShippingWarehousingFormArea
+    },
+    toggleShowFastOutsourcingFormArea() {
+      this.isShowFastOutsourcingFormArea = !this.isShowFastOutsourcingFormArea
     }
   },
 }
