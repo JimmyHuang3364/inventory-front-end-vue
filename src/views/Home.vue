@@ -53,7 +53,7 @@
             </div>
             <div>
               <div v-show="!showOutsourcingListsTable">
-                <button v-show="!isShowFastShippingWarehousingFormArea" @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-warning mr-2">快速新增(未實裝)</button>
+                <button v-show="!isShowFastShippingWarehousingFormArea" @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-warning mr-2">快速新增</button>
                 <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info" role="button">新增出入庫</router-link>
               </div>
 
@@ -63,8 +63,8 @@
               </div>
             </div>
           </div>
-          <WarehousingHistoriesTable @after-click-toggle-fast-form-area="toggleShowFastShippingWarehousingFormArea" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
-          <OutsourcingListsTable @outsourcing-is-done-to-submit="updateQuantity" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
+          <WarehousingHistoriesTable @after-click-toggle-fast-form-area="toggleShowFastShippingWarehousingFormArea" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-part-numbers="partNumbers" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
+          <OutsourcingListsTable @outsourcing-is-done-to-submit="afterOutsourcingDoneToUpdateQuantity" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
         </div>
       </section>
     </div>
@@ -158,7 +158,7 @@ export default {
         this.isLoading = false
       }
     },
-    updateQuantity(outsourcingData) {
+    afterOutsourcingDoneToUpdateQuantity(outsourcingData) {
       this.partNumbers.map(partNumber => {
         if (partNumber.id === Number(outsourcingData.partNumberId)) {
           partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)

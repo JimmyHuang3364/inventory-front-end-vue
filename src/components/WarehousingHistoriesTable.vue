@@ -1,35 +1,35 @@
 <template>
   <div v-show="!isLoading" class="histories_area">
 
-    <div v-show="isShowFastShippingWarehousingFormArea" class="view bg-dark mb-3 px-3">
+    <div v-if="isShowFastShippingWarehousingFormArea" class="view bg-dark mb-3 px-3">
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-white">新增</h1>
         <div>
-          <button class="btn btn-outline-warning mr-4">入庫</button>
-          <button class="btn btn-outline-success mr-4">出庫</button>
-          <button @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-danger mr-2">Close</button>
+          <button @click.stop.prevent="handleSubmitWarehousing" class="btn btn-outline-warning mr-4">入庫</button>
+          <button @click.stop.prevent="handleSubmitShipping" class="btn btn-outline-success mr-4">出庫</button>
+          <button @click.stop.prevent="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-danger mr-2">Close</button>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputDate">日期</label>
-          <input type="date" class="form-control" id="inputDate">
+          <input v-model="newWarehousingOrShipping.date" type="date" class="form-control" id="inputDate">
         </div>
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputNmae">品番號</label>
-          <input list="partNumbers-list" type="text" class="form-control" id="inputName">
+          <input v-model="newWarehousingOrShipping.name" list="partNumbers-list" type="text" class="form-control" id="inputName">
           <datalist id="partNumbers-list">
-            <option></option>
+            <option v-for="item of partNumbersAndSubPartNumbersList" :key="item.index" :value="item.name"></option>
           </datalist>
         </div>
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputQuantity">數量</label>
-          <input type="number" class="form-control" id="inputQuantity">
+          <input v-model="newWarehousingOrShipping.quantity" type="number" class="form-control" id="inputQuantity" min="0">
         </div>
         <div class="form-group col-md-3">
           <label class="add-form-label" for="inputNote">備註</label>
-          <input type="text" class="form-control" id="inputNote" placeholder="可空白...">
+          <input v-model="newWarehousingOrShipping.note" type="text" class="form-control" id="inputNote" placeholder="可空白...">
         </div>
       </div>
     </div>
@@ -86,23 +86,47 @@
 </template>
 
 <script>
+import { ToastBottom } from '../utils/helpers'
+import partNumbersAPI from '../apis/part_numbers'
+import warehouseAPI from '../apis/warehouse'
+
 export default {
+  inject: ['reload'],
   props: {
     initialWarehousingHistories: {
       type: Array,
     },
     initialIsShowFastShippingWarehousingFormArea: {
       type: Boolean
+    },
+    initialPartNumbers: {
+      type: Array
     }
   },
   created() {
     this.fetchInitialWarehousingHistories(this.initialWarehousingHistories);
     this.fetchIsShowFastShippingWarehousingFormArea(this.initialIsShowFastShippingWarehousingFormArea)
+    this.fetchInitialPartNumbers(this.initialPartNumbers)
+    this.fetchSubPartNumbers()
+    // this.mergePartNumbersAndSubPartNumbersToList() 這邊呼叫無變化，故從 this.fetchSubPartNumbers() 裡面呼叫。
     this.isLoading = false
   },
   data() {
     return {
+      newWarehousingOrShipping: {
+        date: '',
+        name: '',
+        quantity: 0,
+        note: '',
+        productId: '',
+        isSubPart: false
+      },
+      partNumbersList: [],
+      subPartNumbersList: [],
+      partNumbersAndSubPartNumbersList: [],
       warehousingHistories: [],
+      shipmentList: [],
+      warehousingList: [],
       isLoading: true,
       isShowFastShippingWarehousingFormArea: false
     }
@@ -114,6 +138,129 @@ export default {
     fetchIsShowFastShippingWarehousingFormArea(newValue) {
       this.isShowFastShippingWarehousingFormArea = newValue
     },
+    fetchInitialPartNumbers(newValue) {
+      this.partNumbersList = newValue
+    },
+    async fetchSubPartNumbers() {
+      try {
+        const { data, status, statusText } = await partNumbersAPI.getSubPartNumbers()
+        if (statusText !== 'OK' && status !== 200) { throw new Error() }
+        const { subPartNumbers } = data
+        this.subPartNumbersList = subPartNumbers
+        this.mergePartNumbersAndSubPartNumbersToList() // 從created呼叫無變化，所以從這邊呼叫
+      } catch (error) {
+        ToastBottom.fire({
+          icon: 'error',
+          title: '載入資料錯誤，請稍後在試。'
+        })
+      }
+    },
+    mergePartNumbersAndSubPartNumbersToList() {  // 合併partNumbersList & subPartNumbersList 至 partNumbersAndSubPartNumbersList 給 品番號 option element 使用
+      this.partNumbersAndSubPartNumbersList = this.partNumbersList.concat(this.subPartNumbersList)
+    },
+    async handleSubmitWarehousing() {
+      try {
+        if (!this.verifyDataAfterSubmit()) { throw new Error('日期、品番號、數量不可空白') } // 驗證資料完整性
+        this.warehousingList.push(this.fetchPartNumberIdOrSubPartNumberId())
+        const WarehousingFormData = new FormData()
+        WarehousingFormData.append('warehousingList', JSON.stringify(this.warehousingList))
+        const { data, statusText } = await warehouseAPI.Warehousing.create(WarehousingFormData)
+        const WarehousingDataStatus = data.status
+        const WarehousingDataMessage = data.message
+        if (WarehousingDataStatus !== 'success' && statusText !== 'OK') { throw new Error(WarehousingDataMessage ? WarehousingDataMessage : `入庫時發生錯誤，請稍後在試。`) }
+        this.warehousingList = []
+        ToastBottom.fire({
+          icon: 'success',
+          title: `入庫資料登載成功`
+        })
+        this.reload();
+      }
+      catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: error ? error : "拿取製程項目清單錯誤，請稍後再試。"
+        })
+      }
+    },
+    async handleSubmitShipping() {
+      try {
+        if (!this.verifyDataAfterSubmit()) { throw new Error('日期、品番號、數量不可空白') } // 驗證資料完整性
+        if (!this.checkPartOrSubPartQuantityToShip()) { throw new Error('數量不足以出貨，請檢查在庫量。') }
+        this.shipmentList.push(this.fetchPartNumberIdOrSubPartNumberId())
+        const shippingFormData = new FormData()
+        shippingFormData.append('shipmentList', JSON.stringify(this.shipmentList))
+        const { data, statusText } = await warehouseAPI.Shipping.create(shippingFormData)
+        const shippingDataStatus = data.status
+        const shippingDataMessage = data.message
+        if (shippingDataStatus !== 'success' && statusText !== 'OK') { throw new Error(shippingDataMessage ? shippingDataMessage : `出貨時發生錯誤，請稍後在試。`) }
+        this.shipmentList = []
+        ToastBottom.fire({
+          icon: 'success',
+          title: `出庫資料登載成功`
+        })
+        this.reload();
+      }
+      catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: error ? error : "拿取製程項目清單錯誤，請稍後再試。"
+        })
+      }
+    },
+    verifyDataAfterSubmit() {  // 驗證資料完整性
+      if (
+        this.newWarehousingOrShipping.date !== '' &&
+        this.newWarehousingOrShipping.name !== '' &&
+        Number(this.newWarehousingOrShipping.quantity) > 0
+      ) {
+        return true
+      }
+    },
+    fetchPartNumberIdOrSubPartNumberId() {
+      try {
+        for (let partNumber of this.partNumbersList) {
+          if (partNumber.name === this.newWarehousingOrShipping.name) {
+            this.newWarehousingOrShipping.productId = partNumber.id
+            return this.newWarehousingOrShipping
+          }
+        }
+
+        for (let subPartNumber of this.subPartNumbersList) {
+          if (subPartNumber.name === this.newWarehousingOrShipping.name) {
+            this.newWarehousingOrShipping.productId = subPartNumber.id
+            this.newWarehousingOrShipping.isSubPart = true
+            return this.newWarehousingOrShipping
+          }
+        }
+      }
+      catch (error) {
+        ToastBottom.fire({
+          icon: "error",
+          title: "取得不品ID時出現錯誤。"
+        })
+      }
+    },
+    checkPartOrSubPartQuantityToShip() {
+      for (let partNumber of this.partNumbersList) {
+        if (partNumber.name === this.newWarehousingOrShipping.name) {
+          if ((partNumber.quantity - Number(this.newWarehousingOrShipping.quantity)) >= 0) {
+            return true
+          } else {
+            return false
+          }
+        }
+      }
+
+      for (let subPartNumber of this.subPartNumbersList) {
+        if (subPartNumber.name === this.newWarehousingOrShipping.name) {
+          if ((subPartNumber.quantity - Number(this.newWarehousingOrShipping.quantity)) >= 0) {
+            return true
+          } else {
+            return false
+          }
+        }
+      }
+    },
     toggleShowFastShippingWarehousingFormArea() {
       this.$emit('after-click-toggle-fast-form-area')
     }
@@ -124,6 +271,9 @@ export default {
     },
     initialIsShowFastShippingWarehousingFormArea(newValue) {
       this.fetchIsShowFastShippingWarehousingFormArea(newValue)
+    },
+    initialPartNumbers(newValue) {
+      this.fetchInitialPartNumbers(newValue)
     }
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view />
+    <router-view v-if="isRouterAlive" />
   </div>
 </template>
 
@@ -11,7 +11,27 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Navbar from './components/Navbar.vue';
 export default {
   name: "App",
-  components: { Navbar }
+  components: { Navbar },
+  provide() {
+    return {
+      reload: this.reload
+    }
+  },
+
+  data() {
+    return {
+      isRouterAlive: true
+    }
+  },
+
+  methods: {
+    reload() {
+      this.isRouterAlive = false;
+      this.$nextTick(function () {
+        this.isRouterAlive = true;
+      });
+    }
+  },
 }
 </script>
 
