@@ -5,7 +5,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-white">新增</h1>
         <div>
-          <button @click="handleSubmit" class="btn btn-outline-warning mr-4" :disabled="isProcessing">{{ isProcessing? '處理中...': '送出' }}</button>
+          <button @click="handleSubmit" class="btn btn-outline-warning mr-4" :disabled="isProcessing">{{ isProcessing ? '處理中...' : '送出' }}</button>
           <button @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-danger mr-2">Close</button>
         </div>
       </div>
@@ -96,7 +96,7 @@
                 Done
               </button>
 
-              <button @click.stop.prevent="deleteOutsourcing(outsourcinglist.id)" class="btn btn-outline-danger btn-sm ml-3">
+              <button @click.stop.prevent="deleteOutsourcing(outsourcinglist.id, { partNumberId: outsourcinglist.PartNumber.id, quantity: outsourcinglist.quantity })" class="btn btn-outline-danger btn-sm ml-3">
                 Delete
               </button>
             </div>
@@ -110,7 +110,8 @@
 </template>
 
 <script>
-import { ToastBottom } from '../utils/helpers'
+/* es-lint */
+import { ToastBottom, OutsourcingIsDoneToWhere } from '../utils/helpers'
 import warehouseAPI from '../apis/warehouse'
 import partnerFactoriesAPI from '../apis/partner_factories'
 import ProductionProcessItemsAPI from '../apis/production_process_items'
@@ -206,18 +207,39 @@ export default {
         })
       }
     },
-    async handleSubmit() {
+    async handleSubmit() {  //新增外包
       try {
         this.isProcessing = true
+        const checkPartNumberQuantity = (partNumberName, outsourcingAmount) => { //  檢查數量是否足夠function
+          let left = -1, right = this.partNumbers.length
+          while (left + 1 !== right) {
+            let mid = Math.floor((left + right) / 2)
+            if (this.partNumbers[mid].name === partNumberName) {
+              if (this.partNumbers[mid].quantity - outsourcingAmount < 0) {
+                throw new Error(`"${partNumberName}" 數量不足以發外包`)
+              } else {
+                return
+              }
+
+            } else if (this.partNumbers[mid].name < partNumberName) {
+              left = mid
+            } else {
+              right = mid
+            }
+          }
+          return { result: false, message: '找不到此部品' }
+        }
+        //
         if (!this.verifyDataAfterSubmit()) { throw new Error('日期、品番號、廠商、製程、數量不可空白') }
+        checkPartNumberQuantity(this.newOutsourcing.partNumberName, this.newOutsourcing.quantity) // 呼叫檢查數量是否足夠
         this.fetchAllItemIdAfterSubmit()
         const outsourcingFormData = new FormData()
         outsourcingFormData.append('outsourcinglist', JSON.stringify([this.newOutsourcing]))
         const { data, status, statusText } = await warehouseAPI.Outsourcinglist.create(outsourcingFormData)
         if (status !== 200 && statusText !== 'OK') { throw new Error() }
         if (data.status !== 'success') { throw new Error(data.message) }
-        this.outsourcinglists.unshift(this.unshiftOutsourcingDataAfterSubmit(this.newOutsourcing, data.outsourcinglists))
-        console.log(data.outsourcinglists)
+        this.outsourcinglists.unshift(this.unshiftOutsourcingDataAfterSubmit(this.newOutsourcing, data.outsourcinglists[0]))
+        this.$emit('after-submited-new', data.partNumbers[0], data.warehousingHistories[0], data.outsourcinglists[0].actionDate)
         this.newOutsourcing = { ...this.clearDataAfterSubmit() }
         this.isProcessing = false
         ToastBottom.fire({
@@ -242,8 +264,10 @@ export default {
       ) {
         return true
       }
+
+      return false
     },
-    fetchAllItemIdAfterSubmit() {
+    fetchAllItemIdAfterSubmit() {  //拿取部品ID
       this.partNumbers.map(partNumber => {
         if (partNumber.name === this.newOutsourcing.partNumberName) {
           return this.newOutsourcing.partNumberId = partNumber.id
@@ -295,12 +319,12 @@ export default {
       }
       return cleanData
     },
-    async deleteOutsourcing(outsourcinglistId) {
+    async deleteOutsourcing(outsourcinglistId, outsourcingData) {
       try {
         const { data, status, statusText } = await warehouseAPI.Outsourcinglist.delete(outsourcinglistId)
         if (statusText !== "OK" && status !== 200) { throw new Error() }
         if (data.status !== 'success') { throw new Error(data.message) }
-
+        this.$emit('outsourcing-delete', outsourcingData)  //修改頁面(將數量加回去)
         this.outsourcinglists = this.outsourcinglists.filter(outsourcinglist => outsourcinglist.id !== outsourcinglistId)
         ToastBottom.fire({
           icon: "success",
@@ -316,14 +340,45 @@ export default {
     },
     async theOutsourcingIsDoneToSubmit(outsourcinglistId, outsourcingData) {
       try {
+        const inputBoxPartNumberName = await OutsourcingIsDoneToWhere.fire({  //部品名稱輸入詢問對話框
+          inputValue: '',
+          inputValidator: (value) => {
+            if (!value) { return 'You need to write something!' }
+            const findOnePartNumber = (partNumbers, name) => {
+              let left = -1, right = partNumbers.length
+              while (left + 1 !== right) {
+                let mid = Math.floor((left + right) / 2)
+                if (partNumbers[mid].name === name) { return true }
+                else if (partNumbers[mid].name < name) { left = mid }
+                else if (partNumbers[mid].name > name) { right = mid }
+              }
+              return null
+            }
+            if (!findOnePartNumber(this.partNumbers, value)) { return '找不到此部品' }
+          }
+
+        })
+
         const formData = new FormData()
+        const fetchPartNumberId = (partNumberName) => { // 拿取部品ID
+          let left = -1, right = this.partNumbers.length
+          while (left + 1 <= right) {
+            let mid = Math.floor((left + right) / 2)
+            if (this.partNumbers[mid].name === partNumberName) { return this.partNumbers[mid].id }
+            if (this.partNumbers[mid].name < partNumberName) { left = mid; continue }
+            if (this.partNumbers[mid].name > partNumberName) { right = mid; continue }
+          }
+          return null
+        }
+        outsourcingData.partNumberId = fetchPartNumberId(inputBoxPartNumberName.value)
         formData.append('partNumberId', JSON.stringify(outsourcingData.partNumberId))
         formData.append('quantity', JSON.stringify(outsourcingData.quantity))
         const { data, status, statusText } = await warehouseAPI.Outsourcinglist.done(outsourcinglistId, formData)
         if (statusText !== "OK" && status !== 200) { throw new Error() }
         if (data.status !== 'success') { throw new Error(data.message) }
         this.outsourcinglists = this.outsourcinglists.filter(outsourcinglist => outsourcinglist.id !== outsourcinglistId)
-        this.$emit('outsourcing-is-done-to-submit', outsourcingData)
+        data.warehousingHistory.partNumberName = inputBoxPartNumberName.value
+        this.$emit('outsourcing-is-done-to-submit', outsourcingData, data.warehousingHistory)
         ToastBottom.fire({
           icon: "success",
           text: data.message

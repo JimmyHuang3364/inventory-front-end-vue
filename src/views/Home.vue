@@ -64,7 +64,7 @@
             </div>
           </div>
           <WarehousingHistoriesTable @after-click-toggle-fast-form-area="toggleShowFastShippingWarehousingFormArea" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-part-numbers="partNumbers" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
-          <OutsourcingListsTable @outsourcing-is-done-to-submit="afterOutsourcingDoneToUpdateQuantity" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
+          <OutsourcingListsTable @outsourcing-delete="afterOutsourcingDoneToUpdateQuantity" @outsourcing-is-done-to-submit="afterOutsourcingDoneToUpdateQuantity" @after-submited-new="after_submited_new" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
         </div>
       </section>
     </div>
@@ -158,18 +158,60 @@ export default {
         this.isLoading = false
       }
     },
-    afterOutsourcingDoneToUpdateQuantity(outsourcingData) {
+    afterOutsourcingDoneToUpdateQuantity(outsourcingData, warehousingHistory) { //更新partNumbers數量，更新出入庫紀錄
       this.partNumbers.map(partNumber => {
         if (partNumber.id === Number(outsourcingData.partNumberId)) {
           partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)
         }
       })
+      this.warehousingHistory_update(warehousingHistory) //呼叫更新出入庫紀錄
+    },
+    warehousingHistory_update(warehousingHistory) { // function---更新出入庫紀錄
+      // 更新出入庫版面
+      this.warehousingHistories.unshift({
+        PartNumber: { name: warehousingHistory.partNumberName },
+        note: warehousingHistory.note,
+        quntityOfShipping: null,
+        quntityOfWarehousing: warehousingHistory.quntityOfWarehousing,
+        textCreatedAt: `${new Date(warehousingHistory.updatedAt).getFullYear()}/${new Date(warehousingHistory.updatedAt).getMonth() + 1}/${new Date(warehousingHistory.updatedAt).getDate()}`,
+        totalQuntity: warehousingHistory.totalQuntity,
+      })
+
+      this.warehousingHistories.pop()
     },
     afterHandleShowOutsourcingListsTable() {
       this.showOutsourcingListsTable = true
     },
     afterHandleShowWarehousingHistoriesTable() {
       this.showOutsourcingListsTable = false
+    },
+    after_submited_new(partNumber, warehousingHistory, actionDate) {
+      // console.log('收到更新數量通知')
+      // console.log(partNumbers)
+      let left = -1, right = this.partNumbers.length
+      while (left + 1 !== right) {
+        let mid = Math.floor((left + right) / 2)
+        if (this.partNumbers[mid].name === partNumber.name) {
+          this.partNumbers[mid].quantity = partNumber.quantity
+          break
+        } else if (this.partNumbers[mid].name < partNumber.name) {
+          left = mid
+        } else {
+          right = mid
+        }
+      }
+
+      // 更新出入庫版面
+      this.warehousingHistories.unshift({
+        PartNumber: { name: partNumber.name },
+        note: warehousingHistory.note,
+        quntityOfShipping: warehousingHistory.quntityOfShipping,
+        quntityOfWarehousing: null,
+        textCreatedAt: `${new Date(actionDate).getFullYear()}/${new Date(actionDate).getMonth() + 1}/${new Date(actionDate).getDate()}`,
+        totalQuntity: warehousingHistory.totalQuntity,
+      })
+
+      this.warehousingHistories.pop()
     },
     toggleShowFastShippingWarehousingFormArea() {
       this.isShowFastShippingWarehousingFormArea = !this.isShowFastShippingWarehousingFormArea
