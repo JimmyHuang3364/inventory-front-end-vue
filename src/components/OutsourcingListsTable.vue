@@ -341,7 +341,6 @@ export default {
     async theOutsourcingIsDoneToSubmit(outsourcinglistId, outsourcingData) {
       try {
         const inputBoxPartNumberName = await OutsourcingIsDoneToWhere.fire({  //部品名稱輸入詢問對話框
-          inputValue: '',
           inputValidator: (value) => {
             if (!value) { return 'You need to write something!' }
             const findOnePartNumber = (partNumbers, name) => {
@@ -356,9 +355,8 @@ export default {
             }
             if (!findOnePartNumber(this.partNumbers, value)) { return '找不到此部品' }
           }
-
         })
-
+        if (!inputBoxPartNumberName.value) { return }
         const formData = new FormData()
         const fetchPartNumberId = (partNumberName) => { // 拿取部品ID
           let left = -1, right = this.partNumbers.length

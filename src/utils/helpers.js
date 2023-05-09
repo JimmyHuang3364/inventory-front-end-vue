@@ -56,6 +56,5 @@ export const ToastConfirmed = Swal
 export const OutsourcingIsDoneToWhere = Swal.mixin({
   title: '請填入庫位置',
   input: 'text',
-  inputLabel: 'Your IP address',
   showCancelButton: true,
 })
