@@ -95,11 +95,9 @@
 
     </div>
     <div v-if="shipmentList.length > 0 || warehousingList.length > 0" class="d-flex justify-content-end">
-      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary" :disabled="isProcessing">{{ isProcessing? "處理中...": "送出" }}</button>
+      <button @click.stop.prevent="handleSubmit" type="submit" class="btn btn-primary" :disabled="isProcessing">{{ isProcessing ? "處理中..." : "送出" }}</button>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -111,7 +109,7 @@ import warehouseAPI from '../apis/warehouse'
 export default {
   name: 'ShippingWarehousing',
   created() {
-    this.fetchTodaysDate();
+    this.fetchTodaysDate()
     this.fetchPartNumbers()
     this.fetchSubPartNumbers()
     this.isLoading = !this.isLoading

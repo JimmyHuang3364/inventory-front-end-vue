@@ -85,7 +85,7 @@
 
       </div>
       <div v-if="newOutsourcingLists.length > 0" class="d-flex justify-content-end">
-        <button @click.stop.prevent="handleAfterSubmit" type="submit" class="btn btn-primary" :disabled="isProcessing">{{ isProcessing? "處理中...": "送出" }}</button>
+        <button @click.stop.prevent="handleAfterSubmit" type="submit" class="btn btn-primary" :disabled="isProcessing">{{ isProcessing ? "處理中..." : "送出" }}</button>
       </div>
     </div>
   </div>
@@ -103,6 +103,7 @@ export default {
   name: 'Outsourcing',
   components: { Loader, },
   created() {
+    this.fetchTodaysDate()
     this.fetchPartNumers();
     this.fetchPartnerFactories();
     this.fetchProductionProcessItems();
@@ -118,7 +119,7 @@ export default {
         partNumberId: '',
         partnerFactoryId: '',
         productionProcessItemId: '',
-        quantity: 0,
+        quantity: null,
         note: ''
       },
       newOutsourcing: {
@@ -129,7 +130,7 @@ export default {
         partNumberId: '',
         partnerFactoryId: '',
         productionProcessItemId: '',
-        quantity: 0,
+        quantity: null,
         note: ''
       },
       newOutsourcingLists: [],
@@ -186,7 +187,8 @@ export default {
     },
     addNewOutsourcingToNewoutsourcingLists() {
       try {
-        if (!this.verifyDataAfterAddNewClick()) { throw new Error('日期、品番號、廠商、製程、數量不可空白') }
+        if (!this.verifyDataAfterAddNewClick()) { throw new Error('日期、品番號、廠商、製程、數量不可空白') } //呼叫驗證資料完整性
+        if (!this.checkQuantity()) { throw new Error('數量不足以發包') } //呼叫確認庫存是否足夠
         this.fetchAllItemIdAfterSubmit()  //呼叫代入各項對應PK ID函式
         this.newOutsourcingLists.push(this.newOutsourcing)  //加入待送出清單
         this.newOutsourcing = { ...this.blankNewOutsourcing }  //清空表單
@@ -226,6 +228,26 @@ export default {
         }
       })
     },
+    checkQuantity() { //確認庫存是否足夠
+      let left = -1, right = this.partNumbersList.length
+
+      while (left + 1 !== right) {
+        let mid = Math.floor((left + right) / 2)
+        if (this.partNumbersList[mid].name === this.newOutsourcing.partNumberName) {
+          if (this.partNumbersList[mid].quantity < this.newOutsourcing.quantity) {
+            return false
+          } else {
+            return true
+          }
+        } else if (this.partNumbersList[mid].name < this.newOutsourcing.partNumberName) {
+          left = mid
+        } else {
+          right = mid
+        }
+      }
+
+      return false
+    },
     removeItem(index) {
       try {
         this.newOutsourcingLists.splice(index, 1)
@@ -258,7 +280,19 @@ export default {
           title: error ? error : "拿取製程項目清單錯誤，請稍後再試。"
         })
       }
-    }
+    },
+    fetchTodaysDate() {
+      let thisYear = (new Date().getFullYear()).toString()
+      let thisMonth = ''
+      let thisDate = ''
+
+      if (new Date().getMonth() < 9) { thisMonth = `0${(new Date().getMonth() + 1).toString()}` } else { thisMonth = (new Date().getMonth() + 1).toString() }
+      if (new Date().getDate() < 10) { thisDate = `0${new Date().getDate().toString()}` } else { thisDate = new Date().getDate().toString() }
+
+      const todaysDate = `${thisYear}-${thisMonth}-${thisDate}`
+      this.newOutsourcing.actionDate = todaysDate
+      this.blankNewOutsourcing.actionDate = todaysDate
+    },
   },
 }
 </script>
