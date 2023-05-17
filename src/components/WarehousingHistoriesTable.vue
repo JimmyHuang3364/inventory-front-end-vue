@@ -108,6 +108,7 @@ export default {
     this.fetchIsShowFastShippingWarehousingFormArea(this.initialIsShowFastShippingWarehousingFormArea)
     this.fetchInitialPartNumbers(this.initialPartNumbers)
     this.fetchSubPartNumbers()
+    this.fetchTodaysDate()
     // this.mergePartNumbersAndSubPartNumbersToList() 這邊呼叫無變化，故從 this.fetchSubPartNumbers() 裡面呼叫。
     this.isLoading = false
   },
@@ -116,7 +117,7 @@ export default {
       newWarehousingOrShipping: {
         date: '',
         name: '',
-        quantity: 0,
+        quantity: null,
         note: '',
         productId: '',
         isSubPart: false
@@ -263,7 +264,18 @@ export default {
     },
     toggleShowFastShippingWarehousingFormArea() {
       this.$emit('after-click-toggle-fast-form-area')
-    }
+    },
+    fetchTodaysDate() {
+      let thisYear = (new Date().getFullYear()).toString()
+      let thisMonth = ''
+      let thisDate = ''
+
+      if (new Date().getMonth() < 9) { thisMonth = `0${(new Date().getMonth() + 1).toString()}` } else { thisMonth = (new Date().getMonth() + 1).toString() }
+      if (new Date().getDate() < 10) { thisDate = `0${new Date().getDate().toString()}` } else { thisDate = new Date().getDate().toString() }
+
+      const todaysDate = `${thisYear}-${thisMonth}-${thisDate}`
+      this.newWarehousingOrShipping.date = todaysDate
+    },
   },
   watch: {
     initialWarehousingHistories(newValue) {

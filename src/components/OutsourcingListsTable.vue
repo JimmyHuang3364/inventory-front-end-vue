@@ -132,6 +132,7 @@ export default {
     this.fetchPartnerFactories()
     this.fetchProductionProcessItems()
     this.fetchIsShowFastOutsourcingFormArea(this.initialIsShowFastOutsourcingFormArea)
+    this.fetchTodaysDate()
     this.isLoading = false
   },
   data() {
@@ -147,7 +148,7 @@ export default {
         partNumberId: '',
         partnerFactoryId: '',
         productionProcessItemId: '',
-        quantity: 0,
+        quantity: null,
         note: ''
       },
       outsourcinglists: [],
@@ -241,6 +242,7 @@ export default {
         this.outsourcinglists.unshift(this.unshiftOutsourcingDataAfterSubmit(this.newOutsourcing, data.outsourcinglists[0]))
         this.$emit('after-submited-new', data.partNumbers[0], data.warehousingHistories[0], data.outsourcinglists[0].actionDate)
         this.newOutsourcing = { ...this.clearDataAfterSubmit() }
+        this.fetchTodaysDate()
         this.isProcessing = false
         ToastBottom.fire({
           icon: "success",
@@ -314,7 +316,7 @@ export default {
         partNumberId: '',
         partnerFactoryId: '',
         productionProcessItemId: '',
-        quantity: 0,
+        quantity: null,
         note: ''
       }
       return cleanData
@@ -338,7 +340,7 @@ export default {
         })
       }
     },
-    async theOutsourcingIsDoneToSubmit(outsourcinglistId, outsourcingData) {
+    async theOutsourcingIsDoneToSubmit(outsourcinglistId, outsourcingData) { // 外包完成回廠
       try {
         const inputBoxPartNumberName = await OutsourcingIsDoneToWhere.fire({  //部品名稱輸入詢問對話框
           inputValidator: (value) => {
@@ -397,6 +399,17 @@ export default {
     },
     toggleShowFastShippingWarehousingFormArea() {
       this.$emit('after-click-toggle-fast-form-area')
+    },
+    fetchTodaysDate() {
+      let thisYear = (new Date().getFullYear()).toString()
+      let thisMonth = ''
+      let thisDate = ''
+
+      if (new Date().getMonth() < 9) { thisMonth = `0${(new Date().getMonth() + 1).toString()}` } else { thisMonth = (new Date().getMonth() + 1).toString() }
+      if (new Date().getDate() < 10) { thisDate = `0${new Date().getDate().toString()}` } else { thisDate = new Date().getDate().toString() }
+
+      const todaysDate = `${thisYear}-${thisMonth}-${thisDate}`
+      this.newOutsourcing.actionDate = todaysDate
     },
   },
   watch: {
