@@ -11,36 +11,44 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group col-md-2">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputDate">日期</label>
           <input v-model="newOutsourcing.actionDate" type="date" class="form-control" id="actionDate">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputNmae">品番號</label>
           <input v-model="newOutsourcing.partNumberName" list="partNumber-list" type="text" class="form-control" id="inputPartnerFactoryName">
           <datalist id="partNumber-list">
             <option v-for="partNumber of partNumbers" :key="partNumber.id" :value="partNumber.name"></option>
           </datalist>
         </div>
-        <div class="form-group col-md-2">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputNmae">廠商</label>
           <input v-model="newOutsourcing.partnerFactoryName" list="partnerFactories-list" type="text" class="form-control" id="inputPartnerFactoryName">
           <datalist id="partnerFactories-list">
             <option v-for="partnerFactory of partnerFactories" :key="partnerFactory.id" :value="partnerFactory.name"></option>
           </datalist>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputNmae">製程</label>
           <input v-model="newOutsourcing.productionProcessItemName" list="productionProcessItems-list" type="text" class="form-control" id="inputProductionProcessItemName">
           <datalist id="productionProcessItems-list">
             <option v-for="productionProcessItem of productionProcessItems" :key="productionProcessItem.id" :value="productionProcessItem.processName"></option>
           </datalist>
         </div>
-        <div class="form-group col-md-1">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputQuantity">數量</label>
           <input v-model="newOutsourcing.quantity" newOutsourcing type="number" class="form-control" id="inputQuantity" min="0">
         </div>
-        <div class="form-group col-md-2">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md">
           <label class="add-form-label" for="inputNote">備註</label>
           <input v-model="newOutsourcing.note" type="text" class="form-control" id="inputNote" placeholder="可空白...">
         </div>
