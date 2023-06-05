@@ -159,12 +159,20 @@ export default {
       }
     },
     afterOutsourcingDoneToUpdateQuantity(outsourcingData, warehousingHistory) { //更新partNumbers數量，更新出入庫紀錄
-      this.partNumbers.map(partNumber => {
-        if (partNumber.id === Number(outsourcingData.partNumberId)) {
-          partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)
-        }
-      })
       this.warehousingHistory_update(warehousingHistory) //呼叫更新出入庫紀錄
+      for (let partNumber of this.partNumbers) {
+        if (partNumber.name === outsourcingData.partNumberName) {
+          partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)
+          return
+        } else {
+          for (let subPartNumber of partNumber.subPartNumbers) {
+            if (subPartNumber.name === outsourcingData.partNumberName) {
+              subPartNumber.quantity = subPartNumber.quantity + Number(outsourcingData.quantity)
+              return
+            }
+          }
+        }
+      }
     },
     warehousingHistory_update(warehousingHistory) { // function---更新出入庫紀錄
       // 更新出入庫版面

@@ -118,7 +118,7 @@
 </template>
 
 <script>
-/* es-lint */
+/* eslint-disable */
 import { ToastBottom, OutsourcingIsDoneToWhere } from '../utils/helpers'
 import warehouseAPI from '../apis/warehouse'
 import partnerFactoriesAPI from '../apis/partner_factories'
@@ -162,7 +162,8 @@ export default {
       outsourcinglists: [],
       partnerFactories: [],
       partNumbers: [],
-      productionProcessItems: []
+      productionProcessItems: [],
+      subPartNumbers: []
     }
   },
   methods: {
@@ -352,35 +353,53 @@ export default {
       try {
         const inputBoxPartNumberName = await OutsourcingIsDoneToWhere.fire({  //部品名稱輸入詢問對話框
           inputValidator: (value) => {
-            if (!value) { return 'You need to write something!' }
-            const findOnePartNumber = (partNumbers, name) => {
+            if (!value) { return '請輸入部品番!' }
+            const findOnePartNumber = (partNumbers, subPartNumbers, name) => {
               let left = -1, right = partNumbers.length
-              while (left + 1 !== right) {
+              while (left + 1 !== right) {  //搜尋是否有這部品
                 let mid = Math.floor((left + right) / 2)
                 if (partNumbers[mid].name === name) { return true }
                 else if (partNumbers[mid].name < name) { left = mid }
                 else if (partNumbers[mid].name > name) { right = mid }
               }
+              left = -1, right = subPartNumbers.length
+              while (left + 1 !== right) {  //搜尋是否有這子部品
+                let mid = Math.floor((left + right) / 2)
+                if (subPartNumbers[mid].name === name) { return true }
+                else if (subPartNumbers[mid].name < name) { left = mid }
+                else if (subPartNumbers[mid].name > name) { right = mid }
+              }
               return null
             }
-            if (!findOnePartNumber(this.partNumbers, value)) { return '找不到此部品' }
+            if (!findOnePartNumber(this.partNumbers, this.subPartNumbers, value)) { return '找不到此部品' }
           }
         })
         if (!inputBoxPartNumberName.value) { return }
         const formData = new FormData()
         const fetchPartNumberId = (partNumberName) => { // 拿取部品ID
           let left = -1, right = this.partNumbers.length
-          while (left + 1 <= right) {
+          while (left + 1 !== right) { //查找母部品
             let mid = Math.floor((left + right) / 2)
-            if (this.partNumbers[mid].name === partNumberName) { return this.partNumbers[mid].id }
+            if (this.partNumbers[mid].name === partNumberName) { return { id: this.partNumbers[mid].id, isSub: false } }
             if (this.partNumbers[mid].name < partNumberName) { left = mid; continue }
             if (this.partNumbers[mid].name > partNumberName) { right = mid; continue }
           }
+          left = -1, right = this.subPartNumbers.length
+          while (left + 1 !== right) { //查找子部品
+            let mid = Math.floor((left + right) / 2)
+            if (this.subPartNumbers[mid].name === partNumberName) { return { id: this.subPartNumbers[mid].id, isSub: true } }
+            if (this.subPartNumbers[mid].name < partNumberName) { left = mid; continue }
+            if (this.subPartNumbers[mid].name > partNumberName) { right = mid; continue }
+          }
           return null
         }
-        outsourcingData.partNumberId = fetchPartNumberId(inputBoxPartNumberName.value)
+        let fetchedPartNumberData = fetchPartNumberId(inputBoxPartNumberName.value)
+        outsourcingData.partNumberId = fetchedPartNumberData.id
+        outsourcingData.isSub = fetchedPartNumberData.isSub
+        outsourcingData.partNumberName = inputBoxPartNumberName.value
         formData.append('partNumberId', JSON.stringify(outsourcingData.partNumberId))
         formData.append('quantity', JSON.stringify(outsourcingData.quantity))
+        formData.append('isSub', JSON.stringify(outsourcingData.isSub))
         const { data, status, statusText } = await warehouseAPI.Outsourcinglist.done(outsourcinglistId, formData)
         if (statusText !== "OK" && status !== 200) { throw new Error() }
         if (data.status !== 'success') { throw new Error(data.message) }
@@ -401,6 +420,12 @@ export default {
     },
     fetchPartNumbers(newValue) {
       this.partNumbers = newValue
+      for (let partNumber of newValue) {
+        if (partNumber.SubPartNumbers.length) {
+          this.subPartNumbers.push(...partNumber.SubPartNumbers)
+        }
+      }
+
     },
     fetchIsShowFastOutsourcingFormArea(newValue) {
       this.isShowFastOutsourcingFormArea = newValue
