@@ -16,6 +16,11 @@ const routes = [
     component: () => import('../views/Signin.vue')
   },
   {
+    path: '/personalPractise',
+    name: 'personalPractise',
+    component: () => import('../views/PersonalPractise.vue')
+  },
+  {
     path: '/warehouse/home',
     name: 'warehouse-home',
     component: () => import('../views/Home.vue')
@@ -161,7 +166,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 對於不需要驗證 token 的頁面
-  const pathsWithoutAuthentication = ['sign-in']
+  const pathsWithoutAuthentication = ['sign-in', 'not-found', 'personalPractise']
 
   // 如果 token 無效則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
@@ -169,7 +174,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // 如果 token 有效則轉址到餐廳首頁
+  // 如果 token 有效則轉址到首頁
   if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
     next('/warehouse/home')
     return

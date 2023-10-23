@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(36, 36, 36);">
     <router-link :to="{ name: 'warehouse-home' }" class="navbar-brand" style="font-weight: bold;">
-      <h2>明盛公司</h2>
+      <h2>{{ titleName }}</h2>
     </router-link>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -57,12 +57,33 @@ export default {
       'isAuthenticated',
     ])
   },
+  data() {
+    return {
+      titleName: ''
+    }
+  },
   methods: {
     logout() {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
+    },
+    switchTitleName() { //轉換Navbar titleName
+      let rootPath = this.$route.path.split('/')
+      rootPath = rootPath[1]
+      if (rootPath === 'signin' || rootPath === 'warehouse' || rootPath === 'manager' || rootPath === 'users') {
+        this.titleName = '明盛企業社'
+      } else if (rootPath === 'personalPractise') {
+        this.titleName = '個人練習作品'
+      }
     }
   },
-
+  created() {
+    this.switchTitleName();
+  },
+  watch: {
+    $route() {
+      this.switchTitleName()
+    }
+  },
 }
 </script>
