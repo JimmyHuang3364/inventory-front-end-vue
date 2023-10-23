@@ -18,6 +18,7 @@
           <div class="dropdown-menu">
             <router-link :to="{ name: 'manager-customers' }" class="dropdown-item">発注人</router-link>
             <router-link :to="{ name: 'manager-partner-factories' }" class="dropdown-item">協力廠商</router-link>
+            <!-- <router-link :to="{ name: 'manager-Stamping_Dies' }" class="dropdown-item">模具管理_test</router-link> -->
             <router-link :to="{ name: 'manager-part-numbers' }" class="dropdown-item">部品</router-link>
             <router-link :to="{ name: 'manager-warehousing-histories' }" class="dropdown-item">出入庫歷史清單</router-link>
             <router-link :to="{ name: 'manager-production-process-items' }" class="dropdown-item">製程項目管理</router-link>

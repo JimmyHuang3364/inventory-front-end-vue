@@ -25,16 +25,19 @@ const routes = [
   //   name: 'warehouse-part-numbers',
   //   component: () => import('../views/PartNumbers.vue')
   // },
+  // outsourcing
   {
     path: '/warehouse/outsourcing/new',
     name: 'warehouse-outsourcing-new',
     component: () => import('../views/Outsourcing.vue')
   },
+  // ShippingWarehousing
   {
     path: '/warehouse/ShippingWarehousing',
     name: 'warehouse-ShippingWarehousing',
     component: () => import('../views/ShippingWarehousing.vue')
   },
+  // partnumbers
   {
     path: '/manager/partnumbers',
     name: 'manager-part-numbers',
@@ -55,11 +58,13 @@ const routes = [
     name: 'manager-sub-part-numbers-edit',
     component: () => import('../views/ManagerSubPartNumberEdit.vue')
   },
+  // WarehousingHistories
   {
     path: '/manager/WarehousingHistories',
     name: 'manager-warehousing-histories',
     component: () => import('../views/ManagerWarehousingHistories.vue')
   },
+  // customers
   {
     path: '/manager/customers',
     name: 'manager-customers',
@@ -75,6 +80,7 @@ const routes = [
     name: 'manager-customers-edit',
     component: () => import('../views/ManagerCustomerEdit.vue')
   },
+  // partner_factories
   {
     path: '/manager/partner_factories',
     name: 'manager-partner-factories',
@@ -90,11 +96,13 @@ const routes = [
     name: 'manager-partner-factories-edit',
     component: () => import('../views/ManagerPartnerFactoryEdit.vue')
   },
+  // production_process_items
   {
     path: '/manager/production_process_items',
     name: 'manager-production-process-items',
     component: () => import('../views/ManagerProductionProcessItems.vue'),
   },
+  // users
   {
     path: '/manager/users',
     name: 'manager-users',
@@ -105,11 +113,29 @@ const routes = [
     name: 'manager-users-new',
     component: () => import('../views/ManagerUserSignup.vue')
   },
+  // Stamping_Dies
+  {
+    path: '/manager/Stamping_Dies',
+    name: 'manager-Stamping_Dies',
+    component: () => import('../views/ManagerStampingDiesList.vue')
+  },
+  {
+    path: '/manager/Stamping_Dies/new',
+    name: 'manager-Stamping_Dies_New',
+    component: () => import('../views/ManagerStampingDiesNew.vue')
+  },
+  {
+    path: '/manager/Stamping_Die_Content/id=:id',
+    name: 'manager-Stamping_Die_Content',
+    component: () => import('../views/ManagerStampingDieContent.vue')
+  },
+  // personal-option
   {
     path: '/users/change-password',
     name: 'users-change-password',
     component: () => import('../views/ChangePassword.vue')
   },
+  // other
   {
     path: '*',
     name: 'not-found',
