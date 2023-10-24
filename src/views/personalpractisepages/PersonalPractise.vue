@@ -19,9 +19,9 @@
     <div class="card m-2" style="width: 18rem;">
       <img src="https://scontent.frmq2-2.fna.fbcdn.net/v/t31.18172-8/460143_10200722428495196_176637871_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=2be8e3&_nc_ohc=m_bnoRy8g-AAX9C17wH&_nc_ht=scontent.frmq2-2.fna&oh=00_AfBl5r7FBRWLlDZ2G_5yChGM9m-LBSErbquOuJ9nWDVmbg&oe=655D7961" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">努力練習產出中...</h5>
-        <p class="card-text">努力找目標練習產出中...</p>
-        <router-link :to="{ name: 'personalPractise' }" class="btn btn-disable">努力練習產出中...</router-link>
+        <h5 class="card-title">載入中的狀態頁面</h5>
+        <p class="card-text">七彩旋轉的載入標誌</p>
+        <router-link :to="{ name: 'personalPractise-loaderPage' }" class="btn btn-primary">Go...</router-link>
       </div>
     </div>
     <div class="card m-2" style="width: 18rem;">

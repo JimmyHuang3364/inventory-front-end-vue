@@ -157,6 +157,11 @@ const routes = [
     name: 'personalPractise-color-code',
     component: () => import('../views/personalpractisepages/ColorCode.vue')
   },
+  {
+    path: '/personalPractise/loaderPage',
+    name: 'personalPractise-loaderPage',
+    component: () => import('../views/personalpractisepages/LoaderPage.vue')
+  },
 ]
 
 const router = new VueRouter({
@@ -182,7 +187,8 @@ router.beforeEach(async (to, from, next) => {
     'not-found',
     'personalPractise',
     'personalPractise-resume',
-    'personalPractise-color-code'
+    'personalPractise-color-code',
+    'personalPractise-loaderPage'
   ]
 
   // 如果 token 無效則轉址到登入頁

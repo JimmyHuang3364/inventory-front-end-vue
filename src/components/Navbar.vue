@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(36, 36, 36);">
-    <router-link :to="{ name: 'warehouse-home' }" class="navbar-brand" style="font-weight: bold;">
+    <router-link :to="{ name: homePageLinkName }" class="navbar-brand" style="font-weight: bold;">
       <h2>{{ titleName }}</h2>
     </router-link>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,8 @@ export default {
   },
   data() {
     return {
-      titleName: ''
+      titleName: '',
+      homePageLinkName: '',
     }
   },
   methods: {
@@ -72,8 +73,10 @@ export default {
       rootPath = rootPath[1]
       if (rootPath === 'signin' || rootPath === 'warehouse' || rootPath === 'manager' || rootPath === 'users') {
         this.titleName = '明盛企業社'
+        this.homePageLinkName = 'warehouse-home'
       } else if (rootPath === 'personalPractise') {
         this.titleName = '個人練習作品'
+        this.homePageLinkName = 'personalPractise'
       }
     }
   },
