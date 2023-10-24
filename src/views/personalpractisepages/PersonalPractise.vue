@@ -5,7 +5,7 @@
       <div class="card-body">
         <h5 class="card-title">個人資訊簡歷的頁面</h5>
         <p class="card-text">就簡簡單單的簡歷</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <router-link :to="{ name: 'personalPractise-resume' }" class="btn btn-primary">Go...</router-link>
       </div>
     </div>
     <div class="card m-2" style="width: 18rem;">
@@ -13,7 +13,7 @@
       <div class="card-body">
         <h5 class="card-title">RGB色碼表</h5>
         <p class="card-text">調出喜歡的顏色並提供色碼，Background color會隨著不同的值跟著變換。</p>
-        <a href="#" class="btn btn-primary">Go...</a>
+        <router-link :to="{ name: 'personalPractise-color-code' }" class="btn btn-primary">Go...</router-link>
       </div>
     </div>
     <div class="card m-2" style="width: 18rem;">
@@ -21,7 +21,7 @@
       <div class="card-body">
         <h5 class="card-title">努力練習產出中...</h5>
         <p class="card-text">努力找目標練習產出中...</p>
-        <a href="#" class="btn btn-primary">努力練習產出中...</a>
+        <router-link :to="{ name: 'personalPractise' }" class="btn btn-disable">努力練習產出中...</router-link>
       </div>
     </div>
     <div class="card m-2" style="width: 18rem;">
@@ -29,7 +29,7 @@
       <div class="card-body">
         <h5 class="card-title">努力練習產出中...</h5>
         <p class="card-text">努力找目標練習產出中...</p>
-        <a href="#" class="btn btn-primary">努力練習產出中...</a>
+        <router-link :to="{ name: 'personalPractise' }" class="btn btn-disable">努力練習產出中...</router-link>
       </div>
     </div>
   </div>
@@ -40,3 +40,10 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.btn-disable {
+  background-color: #8d8d8d;
+  cursor: not-allowed;
+}
+</style>
