@@ -16,11 +16,6 @@ const routes = [
     component: () => import('../views/Signin.vue')
   },
   {
-    path: '/personalPractise',
-    name: 'personalPractise',
-    component: () => import('../views/PersonalPractise.vue')
-  },
-  {
     path: '/warehouse/home',
     name: 'warehouse-home',
     component: () => import('../views/Home.vue')
@@ -146,6 +141,22 @@ const routes = [
     name: 'not-found',
     component: () => import('../views/NotFound.vue')
   },
+  // personalPractise
+  {
+    path: '/personalPractise',
+    name: 'personalPractise',
+    component: () => import('../views/personalpractisepages/PersonalPractise.vue')
+  },
+  {
+    path: '/personalPractise/resume',
+    name: 'personalPractise-resume',
+    component: () => import('../views/personalpractisepages/Resume.vue')
+  },
+  {
+    path: '/personalPractise/colorCode',
+    name: 'personalPractise-color-code',
+    component: () => import('../views/personalpractisepages/ColorCode.vue')
+  },
 ]
 
 const router = new VueRouter({
@@ -166,7 +177,13 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 對於不需要驗證 token 的頁面
-  const pathsWithoutAuthentication = ['sign-in', 'not-found', 'personalPractise']
+  const pathsWithoutAuthentication = [
+    'sign-in',
+    'not-found',
+    'personalPractise',
+    'personalPractise-resume',
+    'personalPractise-color-code'
+  ]
 
   // 如果 token 無效則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
