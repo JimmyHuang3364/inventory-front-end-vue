@@ -20,7 +20,7 @@
       <img src="https://scontent.frmq2-2.fna.fbcdn.net/v/t39.30808-6/395075322_10228629051023318_2455155141404381895_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=AT59f3flF-UAX9y23ev&_nc_ht=scontent.frmq2-2.fna&oh=00_AfDMZRpHMfhgMqR2o-MBsNu57TZA-akfNy7DnimOPtNe2w&oe=653B9BFA" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">載入中的狀態頁面</h5>
-        <p class="card-text">七彩旋轉的載入標誌</p>
+        <p class="card-text">七彩旋轉的載入畫面</p>
         <router-link :to="{ name: 'personalPractise-loaderPage' }" class="btn btn-primary">Go...</router-link>
       </div>
     </div>
