@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div v-if="isLoading">
-      <Loader />
+      <PageLoader />
     </div>
 
     <div v-if="!isLoading">
@@ -77,10 +77,10 @@ import partNumbersAPI from '../apis/part_numbers'
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
 import OutsourcingListsTable from '../components/OutsourcingListsTable.vue'
-import Loader from '../components/Loader.vue'
+import PageLoader from '../components/PageLoader.vue'
 export default {
-  name: 'Home',
-  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, Loader },
+  name: 'HomePage',
+  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, PageLoader },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText || to.query.startDate || to.query.endDate) {
       const queryContent = {

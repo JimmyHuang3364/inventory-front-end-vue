@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 import store from './../store'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -13,12 +10,12 @@ const routes = [
   {
     path: '/signin',
     name: 'sign-in',
-    component: () => import('../views/Signin.vue')
+    component: () => import('../views/SigninView.vue')
   },
   {
     path: '/warehouse/home',
     name: 'warehouse-home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/HomePage.vue')
   },
   // {
   //   path: '/warehouse/partnumbers',
@@ -29,7 +26,7 @@ const routes = [
   {
     path: '/warehouse/outsourcing/new',
     name: 'warehouse-outsourcing-new',
-    component: () => import('../views/Outsourcing.vue')
+    component: () => import('../views/OutsourcingView.vue')
   },
   // ShippingWarehousing
   {
@@ -137,7 +134,7 @@ const routes = [
   },
   // other
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../views/NotFound.vue')
   },
@@ -150,7 +147,7 @@ const routes = [
   {
     path: '/personalPractise/resume',
     name: 'personalPractise-resume',
-    component: () => import('../views/personalpractisepages/Resume.vue')
+    component: () => import('../views/personalpractisepages/ResumeView.vue')
   },
   {
     path: '/personalPractise/colorCode',
@@ -164,7 +161,8 @@ const routes = [
   },
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   linkExactActiveClass: 'active',
   routes
 })

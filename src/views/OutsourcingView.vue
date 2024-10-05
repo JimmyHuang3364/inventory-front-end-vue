@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isLoading">
-      <Loader />
+      <PageLoader />
     </div>
     <div v-if="!isLoading" class="view bg-dark mb-3 p-3">
       <div class="d-flex justify-content-between align-items-center">
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import Loader from '../components/Loader.vue';
+import PageLoader from '../components/PageLoader.vue';
 import { ToastBottom } from '../utils/helpers'
 import warehouseAPI from '../apis/warehouse'
 import partNumbersAPI from '../apis/part_numbers'
@@ -100,8 +100,8 @@ import partnerFactoriesAPI from '../apis/partner_factories'
 import ProductionProcessItemsAPI from '../apis/production_process_items'
 
 export default {
-  name: 'Outsourcing',
-  components: { Loader, },
+  name: 'OutsourcingView',
+  components: { PageLoader, },
   created() {
     this.fetchTodaysDate()
     this.fetchPartNumers();

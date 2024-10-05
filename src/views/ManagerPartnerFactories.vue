@@ -1,7 +1,7 @@
 <template>
   <div class="m-5">
     <div v-if="isLoading">
-      <Loader />
+      <PageLoader />
     </div>
 
     <div v-if="!isLoading">
@@ -76,11 +76,11 @@
 <script>
 import { ToastBottom } from '../utils/helpers'
 import managersAPI from '../apis/managers';
-import Loader from '../components/Loader.vue'
+import PageLoader from '../components/PageLoader.vue'
 
 export default {
   name: 'ManagerPartnerFactories',
-  components: { Loader, },
+  components: { PageLoader, },
   created() {
     this.fetchPartnerFactories();
     this.isLoading = false
