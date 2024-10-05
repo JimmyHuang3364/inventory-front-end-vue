@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5 container">
     <div v-if="isLoading">
-      <Loader />
+      <PageLoader />
     </div>
 
     <div v-if="!isLoading">
@@ -71,11 +71,11 @@
 
 <script>
 import { ToastBottom, ToastConfirm, ToastConfirmed } from '../utils/helpers'
-import Loader from '../components/Loader.vue'
+import PageLoader from '../components/PageLoader.vue'
 import managersAPI from '../apis/managers';
 
 export default {
-  components: { Loader, },
+  components: { PageLoader, },
   name: 'ManagerProductionProcessItems',
   created() {
     this.fetchProductionProcessItems();

@@ -1,7 +1,7 @@
 <template>
   <div class="m-5">
     <div v-if="isLoading">
-      <Loader />
+      <PageLoader />
     </div>
 
     <div v-if="!isLoading">
@@ -145,10 +145,10 @@
 <script>
 import { ToastBottom, ToastConfirm, ToastConfirmed } from '../utils/helpers'
 import managersAPI from '../apis/managers'
-import Loader from '../components/Loader.vue'
+import PageLoader from '../components/PageLoader.vue'
 export default {
   name: 'ManagerPartnumbers',
-  components: { Loader },
+  components: { PageLoader },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText) {
       const queryContent = {

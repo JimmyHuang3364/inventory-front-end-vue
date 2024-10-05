@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar />
+    <TopNavbar />
     <router-view v-if="isRouterAlive" />
   </div>
 </template>
@@ -8,10 +8,10 @@
 <script>
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Navbar from './components/Navbar.vue';
+import TopNavbar from './components/TopNavbar.vue';
 export default {
   name: "App",
-  components: { Navbar },
+  components: { TopNavbar },
   provide() {
     return {
       reload: this.reload

@@ -1,6 +1,6 @@
 <template>
   <div v-show="!isLoading" class="partnumbers_area">
-    <H2 class="text-light">庫存總攬</H2>
+    <h2 class="text-light">庫存總攬</h2>
     <table class="table table-sm table-hover table-bordered table-dark">
       <thead>
         <tr class="table-active" style="text-align: center;">
