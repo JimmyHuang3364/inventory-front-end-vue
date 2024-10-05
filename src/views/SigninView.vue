@@ -6,11 +6,11 @@
       </div>
       <div class="form-label-group text-white">
         <label for="inputName">User</label>
-        <input v-model="name" type="text" name="name" class="form-control" placeholder="name" autofocus>
+        <input v-model="name" type="text" name="name" class="form-control" placeholder="name" autofocus autocomplete="username">
       </div>
       <div class="form-label-group text-white mt-4">
         <label for="inputPassword">Password</label>
-        <input v-model="password" type="password" name="password" class="form-control" placeholder="Password">
+        <input v-model="password" type="password" name="password" class="form-control" placeholder="Password" autocomplete="current-password">
       </div>
       <br />
       <button class="btn btn-lg btn-success btn-block" type="submit" :disabled="isProcessing">Submit</button>
@@ -33,7 +33,6 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-
         if (!this.name || !this.password) {
           ToastBottom.fire({
             icon: 'warning',
