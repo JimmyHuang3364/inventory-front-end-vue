@@ -27,14 +27,18 @@
         </div>
       </form>
 
-      <div class="d-flex flex-row justify-content-around align-items-center my-3">
-        <div class="mb-2">
-          <router-link class="btn btn-outline-secondary mr-1" :to="{ name: 'warehouse-home' }" role="button">全部</router-link>
-          <router-link v-for="customer in customers" :key="customer.id" class="btn btn-outline-secondary mx-1" :to="{ name: 'warehouse-home', query: { customerId: customer.id } }" role="button">
-            {{ customer.name }}
-          </router-link>
-        </div>
-      </div>
+      <Swiper :slides-per-view="'auto'" :space-between="10" :watch-overflow="true" class="customer-btn-container">
+        <Swiper-slide class="t-flex t-justify-center customer-btn">
+          <router-link class="" :to="{ name: 'warehouse-home' }" role="button">全部</router-link>
+        </Swiper-slide>
+        <template v-for="customer in customers" :key="customer.id">
+          <Swiper-slide class="t-flex t-justify-center customer-btn">
+            <router-link :to="{ name: 'warehouse-home', query: { customerId: customer.id } }" role="button">
+              {{ customer.name }}
+            </router-link>
+          </Swiper-slide>
+        </template>
+      </Swiper>
 
       <section class="d-flex justify-content-around">
         <div style="flex-basis: 45%;">
@@ -72,6 +76,9 @@
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/swiper-bundle.css'
+
 import { ToastBottom } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
 import PartnumberTable from '../components/PartnumberTable.vue'
@@ -80,7 +87,7 @@ import OutsourcingListsTable from '../components/OutsourcingListsTable.vue'
 import PageLoader from '../components/PageLoader.vue'
 export default {
   name: 'HomePage',
-  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, PageLoader },
+  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, PageLoader, Swiper, SwiperSlide },
   beforeRouteUpdate(to, from, next) {
     if (to.query.searchText || to.query.startDate || to.query.endDate) {
       const queryContent = {
@@ -232,6 +239,21 @@ export default {
 </script>
 
 <style scoped>
+.customer-btn-container {
+  margin: 0.5rem 0.5rem;
+  .customer-btn {
+    width: auto !important;
+    padding: 2px;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    &.active {
+      background-color: #007bff;
+      color: #fff;
+    }
+  }
+}
+
 @media (max-width: 640px) {
   section {
     flex-direction: column-reverse;
