@@ -18,22 +18,24 @@
   </div>
 </template>
 
-<script>
-import authorizationAPI from './../apis/authorization'
-import { ToastBottom } from '../utils/helpers';
 
-export default {
-  data() {
-    return {
-      name: '',
-      password: '',
-      isProcessing: false
-    }
-  },
-  methods: {
-    async handleSubmit() {
-      try {
-        if (!this.name || !this.password) {
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useStore } from "vuex"
+import { useRouter } from "vue-router"
+
+import authorizationAPI from './../apis/authorization'
+import { ToastBottom } from '../utils/helpers'
+
+const router = useRouter()
+const store = useStore()
+const name = ref('')
+const password = ref('')
+const isProcessing = ref(false)
+
+const handleSubmit = async () => {
+  try {
+        if (!name.value || !password.value) {
           ToastBottom.fire({
             icon: 'warning',
             title: '請填入 email 和 password'
@@ -41,13 +43,13 @@ export default {
           return
         }
 
-        this.isProcessing = true
+        isProcessing.value = true
 
         // 使用 authorizationAPI 的 signIn 方法
         // 並且帶入使用者填寫的 email 和 password
         const response = await authorizationAPI.signIn({
-          name: this.name,
-          password: this.password
+          name: name.value,
+          password: password.value
         })
 
         const { data } = response
@@ -60,21 +62,20 @@ export default {
         localStorage.setItem('token', data.token)
 
         //將資料傳到 vuex 中
-        this.$store.commit('setCurrentUser', data.user)
+        store.commit('setCurrentUser', data.user)
 
         // 成功登入後轉址到首頁
-        this.$router.push('/warehouse/home')
+        router.push('/warehouse/home')
       } catch (error) {
-        this.password = ''
-        this.isProcessing = false
+        console.log('error', error)
+        password.value = ''
+        isProcessing.value = false
 
         ToastBottom.fire({
           icon: 'warning',
           title: '請確認您輸入了正確的帳號密碼'
         })
       }
-    }
-  },
 }
 </script>
 
