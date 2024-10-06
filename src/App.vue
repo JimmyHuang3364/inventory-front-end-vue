@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <TopNavbar />
     <router-view v-if="isRouterAlive" />
   </div>

@@ -1,7 +1,7 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const baseURL = process.env.VUE_APP_BASE_API
+const baseURL = import.meta.env.VITE_APP_BASE_API
 
 const axiosInstance = Axios.create({
   baseURL
