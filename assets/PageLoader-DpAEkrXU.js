@@ -1,1 +1,0 @@
-import{_ as s,o as n,c as o,b as t}from"./index-Dd-8Ru_X.js";const a={},r={class:"loader-center m-0 p-0 text-white d-flex justify-content-center align-items-center"};function c(d,e,l,i,p,_){return n(),o("div",r,e[0]||(e[0]=[t("div",{class:"loader-ring"},null,-1),t("span",null,"loading...",-1)]))}const m=s(a,[["render",c],["__scopeId","data-v-3b4a3b59"]]);export{m as P};
