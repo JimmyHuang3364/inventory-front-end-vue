@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+// import { useUserStore } from '../stores/userStore';
 import store from './../store'
 
 const routes = [
@@ -168,6 +169,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  // const userStore = useUserStore();
+
   // 從 localStorage 取出 token
   const tokenInLocalStorage = localStorage.getItem('token')
   const tokenInStore = store.state.token
@@ -177,6 +180,7 @@ router.beforeEach(async (to, from, next) => {
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     // 取得驗證成功與否
     isAuthenticated = await store.dispatch('fetchCurrentUser')
+    // isAuthenticated = await userStore.fetchCurrentUser()
   }
 
   // 對於不需要驗證 token 的頁面
