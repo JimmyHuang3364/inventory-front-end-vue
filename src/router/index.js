@@ -142,22 +142,34 @@ const routes = [
   {
     path: '/personalPractise',
     name: 'personalPractise',
-    component: () => import('../views/personalpractisepages/PersonalPractise.vue')
+    component: () => import('../views/personalpractisepages/PersonalPractise.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
   },
   {
     path: '/personalPractise/resume',
     name: 'personalPractise-resume',
-    component: () => import('../views/personalpractisepages/ResumeView.vue')
+    component: () => import('../views/personalpractisepages/ResumeView.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
   },
   {
     path: '/personalPractise/colorCode',
     name: 'personalPractise-color-code',
-    component: () => import('../views/personalpractisepages/ColorCode.vue')
+    component: () => import('../views/personalpractisepages/ColorCode.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
   },
   {
     path: '/personalPractise/loaderPage',
     name: 'personalPractise-loaderPage',
-    component: () => import('../views/personalpractisepages/LoaderPage.vue')
+    component: () => import('../views/personalpractisepages/LoaderPage.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
   },
 ]
 
@@ -203,5 +215,11 @@ router.beforeEach(async (to, from, next) => {
 
   next()
 })
+
+// 動態變換 title
+router.afterEach((to) => {
+  const title = to.meta.title || '明盛企業社 - 倉庫管理'; // 如果路由有設定 meta.title，則使用它，否則使用預設標題
+  document.title = title;
+});
 
 export default router
