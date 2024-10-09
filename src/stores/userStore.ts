@@ -31,6 +31,18 @@ export const useUserStore = defineStore({
         console.error(error.message);
         return false;
       }
+    },
+    revokeAuthentication() {
+      console.log('Authentication revoked');
+      this.currentUser = {
+        id: -1,
+        name: '',
+        isAdmin: false,
+        permissionLevel: -1,
+      };
+      this.isAuthenticated = false;
+      this.token = ''; // 登出時清空 token
+      localStorage.removeItem('token'); // 登出時清空 localStorage 的 token
     }
-  },
+  }
 });

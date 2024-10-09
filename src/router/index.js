@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-// import { useUserStore } from '../stores/userStore';
-import store from './../store'
+import { useUserStore } from '../stores/userStore';
+import { storeToRefs } from 'pinia';
 
 const routes = [
   {
@@ -181,18 +181,17 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  // const userStore = useUserStore();
-
+  const userStore = useUserStore();
+  const { token, isAuthenticated } = storeToRefs(userStore);
   // 從 localStorage 取出 token
   const tokenInLocalStorage = localStorage.getItem('token')
-  const tokenInStore = store.state.token
+  const tokenInStore = token.value
   // 預設是尚未驗證
-  let isAuthenticated = store.state.isAuthenticated
+  // let isAuthenticated = userStore.isAuthenticated
   // 如果有 token 的話才驗證
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     // 取得驗證成功與否
-    isAuthenticated = await store.dispatch('fetchCurrentUser')
-    // isAuthenticated = await userStore.fetchCurrentUser()
+    isAuthenticated.value = await userStore.fetchCurrentUser()
   }
 
   // 對於不需要驗證 token 的頁面
@@ -206,13 +205,13 @@ router.beforeEach(async (to, from, next) => {
   ]
 
   // 如果 token 無效則轉址到登入頁
-  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+  if (!isAuthenticated.value && !pathsWithoutAuthentication.includes(to.name)) {
     next('/signin')
     return
   }
 
   // 如果 token 有效則轉址到首頁
-  if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+  if (isAuthenticated.value && pathsWithoutAuthentication.includes(to.name)) {
     next('/warehouse/home')
     return
   }
