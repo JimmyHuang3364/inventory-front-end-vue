@@ -12,4 +12,8 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(store)
 app.use(router)
-  .mount('#app')
+
+
+
+
+app.mount('#app')
