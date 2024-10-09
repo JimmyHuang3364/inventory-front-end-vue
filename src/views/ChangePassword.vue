@@ -26,38 +26,36 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup lang="ts">
+import { useUserStore } from '../stores/userStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 import usersAPI from '../apis/users'
 import { ToastBottom } from '../utils/helpers';
-export default {
-  name: 'ChangePassword',
-  computed: {
-    ...mapState([
-      'currentUser',
-    ])
-  },
-  methods: {
-    async handleSubmit(e) {
-      try {
-        const form = e.target
-        const formData = new FormData(form)
-        const userId = this.$store.state.currentUser.id
-        const { data, status, statusText } = await usersAPI.updatePassword(userId, formData)
-        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
-        ToastBottom.fire({
-          icon: 'success',
-          title: data.message
-        })
-      } catch (error) {
-        ToastBottom.fire({
-          icon: 'error',
-          title: error
-        })
-      }
 
-    }
-  },
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore)
+const router = useRouter();
+
+const handleSubmit = async (e: Event) => {
+  try {
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    const userId = currentUser.value.id
+    const { data, status, statusText } = await usersAPI.updatePassword(userId, formData)
+    if (statusText!== 'OK' && status!== 200) { throw new Error(data.message) }
+    ToastBottom.fire({
+      icon:'success',
+      title: data.message
+    })
+    userStore.revokeAuthentication()
+    router.push({name: 'sign-in'})
+  } catch (error) {
+    ToastBottom.fire({
+      icon: 'error',
+      title: error
+    })
+  }
 }
 </script>
 
