@@ -24,39 +24,33 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue'
 import managersAPI from '../apis/managers';
 import { ToastBottom } from '../utils/helpers';
 
-export default {
-  name: 'ManagerUserSignup',
-  data() {
-    return {
-      permissionLevel: 'Choose...',
-      name: ''
-    }
-  },
-  methods: {
-    async handleSubmit(e) {
-      try {
-        const form = e.target
-        const formData = new FormData(form)
-        const { data, status, statusText } = await managersAPI.users.create(formData)
-        if (statusText !== 'OK' && status !== 200) { throw new Error(data.message) }
-        ToastBottom.fire({
-          icon: 'success',
-          title: data.message
-        })
-        this.permissionLevel = 'Choose...'
-        this.name = ''
-      } catch (error) {
-        ToastBottom.fire({
-          icon: 'error',
-          title: error
-        })
-      }
-    }
-  },
+const permissionLevel = ref('Choose...')
+const name = ref<string>('')
+
+const handleSubmit = async (e: Event) => {
+  try{
+    e.preventDefault()
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    const { data, status, statusText } = await managersAPI.users.create(formData)
+    if (statusText!== 'OK' && status!== 200) { throw new Error(data.message) }
+    ToastBottom.fire({
+      icon:'success',
+      title: data.message
+    })
+    permissionLevel.value = 'Choose...'
+    name.value = ''
+  } catch (error) {
+    ToastBottom.fire({
+      icon: 'error',
+      title: error
+    })
+  }
 }
 </script>
 

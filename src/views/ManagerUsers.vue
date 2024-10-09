@@ -73,84 +73,80 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '../stores/userStore';
+import { storeToRefs } from 'pinia';
 import managersAPI from '../apis/managers'
-import PageLoader from '../components/PageLoader.vue'
 import { ToastBottom, ToastConfirm } from '../utils/helpers'
-import { mapState } from 'vuex';
-export default {
-  name: "ManagerCustomers",
-  components: { PageLoader },
-  computed: {
-    ...mapState([
-      'currentUser',
-    ])
-  },
-  created() {
-    this.fetchCustomers();
-  },
-  data() {
-    return {
-      users: [],
-      isLoading: true
-    };
-  },
-  methods: {
-    async fetchCustomers() {
-      try {
-        this.isLoading = true
-        const { data, status, statusText } = await managersAPI.users.get();
-        if (statusText !== "OK" && status !== 200) {
-          throw new Error();
-        }
-        const { users } = data;
-        this.users = users;
-        this.isLoading = false
-      }
-      catch (error) {
-        ToastBottom.fire({
-          icon: "error",
-          title: "載入錯誤，請稍後再試。"
-        });
-        this.isLoading = false
-      }
-    },
-    async deleteUser(userId, userName) {
-      try {
-        if (this.currentUser.name === userName) {
-          throw new Error('不可刪除自己!!')
-        }
-        if (userName === 'root') {
-          throw new Error('此為root，不可刪除!!')
-        }
-        const deleteConfirm = await ToastConfirm.fire({
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          icon: 'warning',
-          title: '確定刪除?',
-          text: `確定後，你將刪除此使用者'${userName}'。`,
-          confirmButtonText: '確定'
-        })
-        if (deleteConfirm.value) {
-          const { data, status, statusText } = await managersAPI.users.delete(userId);
-          if (statusText !== "OK" && status !== 200) {
-            throw new Error();
-          }
-          this.users = this.users.filter(user => user.id !== userId);
-          ToastBottom.fire({
-            icon: "success",
-            title: data.message
-          })
-        }
-      }
-      catch (error) {
-        ToastBottom.fire({
-          icon: "error",
-          title: error ? error : "錯誤!!請稍後在試!!"
-        });
-      }
+// 組件引入
+import PageLoader from '../components/PageLoader.vue'
+
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
+
+const users = ref([]);
+const isLoading = ref<boolean>(true);
+
+const fetchCustomers = async () => {
+  try {
+    isLoading.value = true
+    const { data, status, statusText } = await managersAPI.users.get();
+    if (statusText!== "OK" && status!== 200) {
+      throw new Error();
     }
-  },
+    const _users = data.users;
+    users.value = _users;
+    isLoading.value = false
+  }
+  catch (error) {
+    ToastBottom.fire({
+      icon: "error",
+      title: "載入錯誤，請稍後再試。"
+    });
+    isLoading.value = false
+  }
 }
+
+// 刪除還不能用
+const deleteUser = async (_userId: number, _userName: string) => {
+  try {
+    if (currentUser.value.name === _userName) {
+      throw new Error('不可刪除自己!!')
+    }
+    if (_userName === 'root') {
+      throw new Error('此為root，不可刪除!!')
+    }
+    const deleteConfirm = await ToastConfirm.fire({
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      icon: 'warning',
+      title: '確定刪除?',
+      text: `確定後，你將刪除此使用者'${_userName}'。`,
+      confirmButtonText: '確定'
+    })
+    if (deleteConfirm.value) {
+      const { data, status, statusText } = await managersAPI.users.delete(_userId);
+      if (statusText!== "OK" && status!== 200) {
+        throw new Error();
+      }
+      users.value = users.value.filter((user: any) => user.id !== _userId);
+      ToastBottom.fire({
+        icon: "success",
+        title: data.message
+      })
+    }
+  } catch (error) {
+    ToastBottom.fire({
+      icon: "error",
+      title: error? error : "錯誤!!請稍後在試!!"
+    });
+  }
+}
+
+onMounted(() => {
+  fetchCustomers();
+})
+
 </script>
