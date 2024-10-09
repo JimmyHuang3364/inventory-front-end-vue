@@ -21,17 +21,17 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from "vuex"
 import { useRouter } from "vue-router"
+import { useUserStore } from '../stores/userStore';
 
 import authorizationAPI from './../apis/authorization'
 import { ToastBottom } from '../utils/helpers'
 
 const router = useRouter()
-const store = useStore()
-const name = ref('')
-const password = ref('')
-const isProcessing = ref(false)
+const name = ref<string>('')
+const password = ref<string>('')
+const isProcessing = ref<boolean>(false)
+const userStore = useUserStore();
 
 const handleSubmit = async () => {
   try {
@@ -61,8 +61,7 @@ const handleSubmit = async () => {
         // 將 token 存放在 localStorage 內
         localStorage.setItem('token', data.token)
 
-        //將資料傳到 vuex 中
-        store.commit('setCurrentUser', data.user)
+        userStore.fetchCurrentUser()
 
         // 成功登入後轉址到首頁
         router.push('/warehouse/home')

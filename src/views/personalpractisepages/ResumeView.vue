@@ -18,7 +18,7 @@
     <main>
       <section calss="personal-info">
         <div class="avatar">
-          <img class="avatar-img" src="https://scontent.frmq2-2.fna.fbcdn.net/v/t31.18172-8/472016_4315894187665_339406213_o.jpg?_nc_cat=101&ccb=1-7&_nc_sid=be3454&_nc_ohc=FC9XogXITM0AX-H6VNm&_nc_ht=scontent.frmq2-2.fna&oh=00_AfAvKeOhMMxMmBcCUunBa8XTcDyQBFxEhsp7fsjRpZ-Lkg&oe=6557F51B" alt="">
+          <img class="avatar-img" src="../../assets/personalPractise/avatar.jpg" alt="">
         </div>
         <h1 class="name">
           黃建銘
@@ -262,7 +262,10 @@ p {
 }
 
 .avatar {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .avatar-img {
@@ -279,7 +282,8 @@ p {
 }
 
 .social-media {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
