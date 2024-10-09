@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .t-customer-btn {
+    @apply t-transition t-border t-text-white t-font-bold t-py-1 t-px-2 t-rounded;
+    &:hover {
+      @apply t-bg-teal-200 t-text-black;
+    }
+    &.t-active {
+      @apply t-bg-teal-500 t-text-white;
+    }
+  }
+}
