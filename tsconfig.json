@@ -7,7 +7,7 @@
     "esModuleInterop": true, // 允許從 CommonJS 模組導入
     "skipLibCheck": true, // 跳過庫文件的檢查
     "forceConsistentCasingInFileNames": true, // 強制在文件名中使用一致的大小寫
-    "types": ["pinia"],
+    "types": ["pinia", "vue-sweetalert2"],
     "lib": ["dom", "esnext"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"], // 包含的文件
