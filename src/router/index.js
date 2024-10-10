@@ -149,6 +149,14 @@ const routes = [
     }
   },
   {
+    path: '/PersonalPractiseGeneral',
+    name: 'PersonalPractiseGeneral',
+    component: () => import('../views/personalpractisepages/PersonalPractiseGeneral.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
+  },
+  {
     path: '/personalPractise/resume',
     name: 'personalPractise-resume',
     component: () => import('../views/personalpractisepages/ResumeView.vue'),
@@ -207,10 +215,12 @@ router.beforeEach(async (to, from, next) => {
     'sign-in',
     'not-found',
     'personalPractise',
+    'PersonalPractiseGeneral',
     'personalPractise-resume',
     'personalPractise-color-code',
     'personalPractise-loaderPage',
-    'personalPractise-logOutAnimation'
+    'personalPractise-logOutAnimation',
+    'personalPractise-beach',
   ]
 
   // 如果 token 無效則轉址到登入頁

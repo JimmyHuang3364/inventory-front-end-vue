@@ -7,11 +7,12 @@
         </span>
         <div class="appearance">
           <span>Light</span>
-          <input type="checkbox" id="appearance-switch" v-model="checkBox" :checked="checkBox">
+          <input type="checkbox" id="appearance-switch" v-model="darkMode" :checked="darkMode">
           <label class="appearance-switch-label" for="appearance-switch">
             <span class="appearance-switch-txt" turnOn="light" turnOff="dark"></span>
           </label>
           <span>Dark</span>
+          <p class="t-ml-10">2024/10/11</p>
         </div>
       </nav>
     </header>
@@ -54,26 +55,48 @@
 
       <section class="skill-section">
         <h2>技能</h2>
-        <div class="skills">
-          <div class="skill">
-            <h3 class="skill-name">程式設計入門</h3>
-            <p class="skill-description description">具備網頁設計的能力，熟悉 HTML、CSS 和 JavaScript，並對於基礎的演算法有一定的掌握力。</p>
+          <div class="skills">
+            <div class="skill">
+              <h3 class="skill-name">程式設計入門</h3>
+              <p class="skill-description description">具備網頁設計的能力，熟悉 HTML、CSS 和 JavaScript，並對於基礎的演算法有一定的掌握力。</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">掌握網頁開發</h3>
+              <p class="skill-description description">能夠打造兼具前後端的 Web App 產品。從切版、RWD、操作 DOM 事件、使用 AJAX 與串接 API 等前端能力，到使用 Node.js 與 MongoDB 建立後端功能，並親手打造自己的產品。</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">軟體工程師實力</h3>
+              <p class="skill-description description">前端部分能夠透過VUE建立 SPA 頁面，後端則能夠以node.js Express進行全端開發。</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">擁有中大型專案開發/維護經驗</h3>
+              <p class="skill-description description">串接 API 套件評估、畫面切版以及使用多種技術/套件，進行中大型專案開發/維護。(ex: vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript...等)</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">使用多種技術/套件經驗</h3>
+              <p class="skill-description description">擁有使用過GCP、Heroku、Railway、vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript ...等經驗</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">持續精進</h3>
+              <p class="skill-description description">等待補到滿滿滿...</p>
+            </div>
           </div>
-          <div class="skill">
-            <h3 class="skill-name">掌握網頁開發</h3>
-            <p class="skill-description description">能夠打造兼具前後端的 Web App 產品。從切版、RWD、操作 DOM 事件、使用 AJAX 與串接 API 等前端能力，到使用 Node.js 與 MongoDB 建立後端功能，並親手打造自己的產品。</p>
-          </div>
-          <div class="skill">
-            <h3 class="skill-name">軟體工程師實力</h3>
-            <p class="skill-description description">前端部分能夠透過VUE建立 SPA 頁面，後端則能夠以node.js進行全端開發。</p>
-          </div>
-        </div>
+      </section>
+
+      <!-- 作品展示 -->
+      <section class="practise-section">
+        <h2>作品展示</h2>
+        <PractiseSwiper :darkMode="darkMode" />
       </section>
 
       <section class="exoerience-section">
         <h2 lass="job-exoerience">工作經歷</h2>
         <ul class="exoerience">
-          <li><span class="company"><i class="fas fa-building"></i>綠點高新科技股份有限公司</span>
+          <li class="t-my-10">
+            <span class="company">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512"><path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>
+              <p>綠點高新科技股份有限公司</p>
+            </span>
             <ul>
               <li class="job-title">職稱：品管／品保工程師</li>
               <li class="duration">任職期間：2014/8 ~ 2022/6</li>
@@ -88,13 +111,30 @@
               </ul>
             </ul>
           </li>
+          <li class="t-my-10">
+            <span class="company">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512"><path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>
+              <p>深思設計有限公司</p>
+            </span>
+            <ul>
+              <li class="job-title">職稱：網頁前端助理工程師</li>
+              <li class="duration">任職期間：2023/12 ~ 2024/9</li>
+              <li>
+                <p class="job-Work-content">工作內容與成就：</p>
+              </li>
+              <ul>
+                <li class="description">維護、開發 vue3 中大型專案：AP串接I、網頁畫面切版、各式優化、UI測試。</li>
+                <li class="description">使用到技術/套件： vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript ...等。</li>
+              </ul>
+            </ul>
+          </li>
         </ul>
       </section>
     </main>
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
   data() {
     return {
@@ -142,6 +182,55 @@ export default {
     }
   },
 }
+</script> -->
+
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
+
+// 組件
+import PractiseSwiper from './components/PractiseSwiper.vue';
+
+const darkMode = ref<boolean>(false)
+
+const func_changeAppearance = () => {
+  const 
+    htmlBody = document.querySelector('.body') as HTMLElement | null,
+    htmlH1 = document.querySelector('h1') as HTMLElement | null,
+    htmlH2 = document.querySelectorAll('h2') as NodeListOf<HTMLElement>,
+    htmlH3 = document.querySelectorAll('h3') as NodeListOf<HTMLElement>,
+    description = document.querySelectorAll('.description') as NodeListOf<HTMLElement>,
+    socialMediaSvg = document.querySelectorAll('svg') as NodeListOf<SVGElement>
+
+  if (!htmlBody || !htmlH1) return
+  
+  if (darkMode.value) {
+    htmlBody.style.background = 'black'
+    htmlH1.style.color = '#f6f7f8'
+    htmlH2.forEach(item => { item.style.color = '#f6f7f8' })
+    htmlH3.forEach(item => { item.style.color = '#f6f7f8' })
+    description.forEach((item) => { item.style.color = '#999999' })
+    socialMediaSvg.forEach((item) => { item.style.fill = '#999999' })
+    return
+  }
+  if (!darkMode.value) {
+    htmlBody.style.background = '#f6f7f8'
+    htmlH1.style.color = ''
+    htmlH2.forEach(item => { item.style.color = '' })
+    htmlH3.forEach(item => { item.style.color = '' })
+    description.forEach((item) => { item.style.color = '' })
+    socialMediaSvg.forEach((item) => { item.style.fill = '' })
+    return
+  }
+}
+
+onMounted(() => {
+  func_changeAppearance()
+})
+
+watch(
+  () => darkMode.value,
+  () => func_changeAppearance()
+)
 </script>
 
 <style scoped>
@@ -306,16 +395,20 @@ p {
 
 .skills {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .skill {
   width: 30%;
+  margin: 0px 0px 10px 0px;
 }
 
 .skill-name {
   border-top: 1px solid #999999;
   padding-top: 16px;
+  font-weight: bolder;
 }
 
 hr {
@@ -328,6 +421,9 @@ hr {
 .company {
   font-size: 22px;
   color: #666666;
+  display: flex;
+  align-items: baseline;
+  column-gap: 5px;
 }
 
 .job-title,

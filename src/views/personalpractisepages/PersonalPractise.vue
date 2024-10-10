@@ -42,6 +42,14 @@
       </div>
     </div>
     <div class="card m-2 t-border-2 t-border-inherit" style="width: 18rem;">
+      <img src="../../assets/personalPractise/PersonalPractiseGeneral.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">不同的展示所有作品方式</h5>
+        <p class="card-text">使用 swiper 套件。</p>
+        <router-link :to="{ name: 'PersonalPractiseGeneral' }" class="btn btn-primary">Go...</router-link>
+      </div>
+    </div>
+    <div class="card m-2 t-border-2 t-border-inherit" style="width: 18rem;">
       <img src="../../assets/personalPractise/default.jpg" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">努力練習產出中...</h5>

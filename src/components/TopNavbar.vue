@@ -74,7 +74,7 @@ const logout = () => {
 }
 
 const switchTitleName = () => { //轉換Navbar titleName
-  if (route.path.includes('personalPractise')) {
+  if (route.path.includes('personalPractise') ||  route.path.includes('PersonalPractiseGeneral')) {
     titleName.value = '個人練習作品'
     homePageLinkName.value = 'personalPractise'
   } else {
