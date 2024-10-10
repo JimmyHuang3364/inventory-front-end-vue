@@ -22,24 +22,28 @@
             <input v-model="endDate" type="date" class="form-control" name="endDate" id="endDate" value="">
           </div>
           <div class="col-auto align-self-end">
-            <router-link :to="{ name: 'warehouse-home', query: { searchText: searchText, startDate: startDate, endDate: endDate } }" class="btn btn-primary" role="button">搜尋</router-link>
+            <button class="t-bg-blue-500 t-text-white t-rounded t-h-[38px] t-w-[50px]"  @click="handleSearchPartNumbers">搜尋</button>
           </div>
         </div>
       </form>
 
-      <Swiper :slides-per-view="'auto'" :space-between="10" :watch-overflow="true" class="customer-btn-container">
-        <Swiper-slide class="t-flex t-justify-center customer-btn">
-          <router-link class="" :to="{ name: 'warehouse-home' }" role="button">全部</router-link>
-        </Swiper-slide>
-        <template v-for="customer in customers" :key="customer.id">
-          <Swiper-slide class="t-flex t-justify-center customer-btn">
-            <router-link :to="{ name: 'warehouse-home', query: { customerId: customer.id } }" role="button">
-              {{ customer.name }}
-            </router-link>
-          </Swiper-slide>
-        </template>
-      </Swiper>
-
+      <div class="t-mx-2 t-my-4">
+          <Swiper :slides-per-view="'auto'" :space-between="5" :watch-overflow="true">
+            <SwiperSlide class="!t-w-auto">
+              <div class="t-customer-btn" :class="{'t-active': !queryCategoryId || queryCategoryId === ''}" role="button" @click="func_fetchPartNumbers('', e)">
+                全部
+            </div>
+          </SwiperSlide>
+          <template v-for="customer in customers" :key="customer.id">
+            <SwiperSlide class="!t-w-auto">
+              <div class="t-customer-btn" :class="{'t-active': queryCategoryId === customer.id}" role="button" @click="func_fetchPartNumbers(customer.id)">
+                {{ customer.name }}
+              </div>
+            </SwiperSlide>
+          </template>
+        </Swiper>
+      </div>
+      
       <section class="d-flex justify-content-around">
         <div style="flex-basis: 45%;">
           <PartnumberTable :initialPartNumbers="partNumbers" />
@@ -48,194 +52,172 @@
         <div class="mb-3" style="flex-basis: 50%;">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-outline-light active">
-                <input @click="afterHandleShowWarehousingHistoriesTable" type="radio" name="options" id="option1" checked> 出入庫紀錄
+              <label class="btn btn-outline-light" :class="{'active': !showOutsourcingListsTable}">
+                <input @click="() => showOutsourcingListsTable = false" type="radio" name="options" id="option1"> 出入庫紀錄
               </label>
-              <label class="btn btn-outline-light">
-                <input @click="afterHandleShowOutsourcingListsTable" type="radio" name="options" id="option3"> 外包清單
+              <label class="btn btn-outline-light" :class="{'active': showOutsourcingListsTable}">
+                <input @click="() => showOutsourcingListsTable = true" type="radio" name="options" id="option3"> 外包清單
               </label>
             </div>
             <div>
               <div v-show="!showOutsourcingListsTable">
-                <button v-show="!isShowFastShippingWarehousingFormArea" @click="toggleShowFastShippingWarehousingFormArea" class="btn btn-outline-warning mr-2">快速新增</button>
+                <button v-show="!isShowFastShippingWarehousingFormArea" @click="() => isShowFastShippingWarehousingFormArea = true" class="btn btn-outline-warning mr-2">快速新增</button>
                 <router-link :to="{ name: 'warehouse-ShippingWarehousing' }" class="btn btn-info" role="button">新增出入庫</router-link>
               </div>
 
               <div v-show="showOutsourcingListsTable">
-                <button v-show="!isShowFastOutsourcingFormArea" @click="toggleShowFastOutsourcingFormArea" class="btn btn-outline-warning mr-2">快速新增</button>
+                <button v-show="!isShowFastOutsourcingFormArea" @click="() => isShowFastOutsourcingFormArea  = true" class="btn btn-outline-warning mr-2">快速新增</button>
                 <router-link :to="{ name: 'warehouse-outsourcing-new' }" class="btn btn-primary" role="button">新增外包</router-link>
               </div>
             </div>
           </div>
-          <WarehousingHistoriesTable @after-click-toggle-fast-form-area="toggleShowFastShippingWarehousingFormArea" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-part-numbers="partNumbers" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
-          <OutsourcingListsTable @outsourcing-delete="afterOutsourcingDoneToUpdateQuantity" @outsourcing-is-done-to-submit="afterOutsourcingDoneToUpdateQuantity" @after-submited-new="after_submited_new" @after-click-toggle-fast-form-area="toggleShowFastOutsourcingFormArea" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
+          <WarehousingHistoriesTable @after-click-toggle-fast-form-area="() => isShowFastShippingWarehousingFormArea = false" v-show="!showOutsourcingListsTable" :initial-warehousing-histories="warehousingHistories" :initial-part-numbers="partNumbers" :initial-is-show-fast-shipping-warehousing-form-area="isShowFastShippingWarehousingFormArea" />
+          <OutsourcingListsTable @outsourcing-delete="func_afterOutsourcingDoneToUpdateQuantity" @outsourcing-is-done-to-submit="func_afterOutsourcingDoneToUpdateQuantity" @after-submited-new="func_afterSubmitedNew" @after-click-toggle-fast-form-area="() => isShowFastOutsourcingFormArea = false" v-show="showOutsourcingListsTable" :initial-is-show-fast-outsourcing-form-area="isShowFastOutsourcingFormArea" :initial-part-numbers="partNumbers" />
         </div>
       </section>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper-bundle.css'
-
 import { ToastBottom } from '../utils/helpers'
 import partNumbersAPI from '../apis/part_numbers'
+// import { useRouter } from 'vue-router'
+// 組件引入
 import PartnumberTable from '../components/PartnumberTable.vue'
 import WarehousingHistoriesTable from '../components/WarehousingHistoriesTable.vue'
 import OutsourcingListsTable from '../components/OutsourcingListsTable.vue'
 import PageLoader from '../components/PageLoader.vue'
-export default {
-  name: 'HomePage',
-  components: { PartnumberTable, WarehousingHistoriesTable, OutsourcingListsTable, PageLoader, Swiper, SwiperSlide },
-  beforeRouteUpdate(to, from, next) {
-    if (to.query.searchText || to.query.startDate || to.query.endDate) {
-      const queryContent = {
-        searchText: to.query.searchText,
-        startDate: to.query.startDate,
-        endDate: to.query.endDate
-      }
-      this.handleSearchartNumbers(queryContent)
-      next();
-      return
+
+// const router = useRouter()
+const partNumbers = ref([])
+const customers = ref([])
+const warehousingHistories = ref([])
+const searchText = ref('')
+const startDate = ref('')
+const endDate = ref('')
+const isLoading = ref(true)
+const showOutsourcingListsTable = ref(false)
+const isShowFastShippingWarehousingFormArea = ref(false)
+const isShowFastOutsourcingFormArea = ref(false)
+const queryCategoryId = ref(null)
+
+const func_fetchPartNumbers = async (_customerId) => {
+  try {
+    if (queryCategoryId.value === _customerId) return
+    queryCategoryId.value = _customerId
+    isLoading.value = true
+    const response = await partNumbersAPI.getPartNumbers({ customerId: _customerId });
+    const { data, status, statusText } = response;
+    const { partNumbers: _partNumbers, customers: _customers, warehousingHistories: _warehousingHistories } = data;
+    if (statusText!== "OK" && status!== 200) {
+      throw new Error();
     }
-    const { customerId = '' } = to.query
-    this.fetchPartNumbers({ queryCategoryId: customerId })
-    next();
-  },
-  created() {
-    const { customerId = '' } = this.$route.query
-    this.fetchPartNumbers({ queryCategoryId: customerId });
-  },
-  data() {
-    return {
-      partNumbers: [],
-      customers: [],
-      warehousingHistories: [],
-      searchText: '',
-      startDate: '',
-      endDate: '',
-      isLoading: true,
-      showOutsourcingListsTable: false,
-      isShowFastShippingWarehousingFormArea: false,
-      isShowFastOutsourcingFormArea: false,
-    };
-  },
-
-  methods: {
-    async fetchPartNumbers({ queryCategoryId }) {
-      try {
-        this.isLoading = true
-        const response = await partNumbersAPI.getPartNumbers({ customerId: queryCategoryId });
-        const { data, status, statusText } = response;
-        const { partNumbers, customers, warehousingHistories } = data;
-        if (statusText !== "OK" && status !== 200) {
-          throw new Error();
-        }
-        this.partNumbers = partNumbers;
-        this.customers = customers;
-        this.warehousingHistories = warehousingHistories;
-        this.searchText = ''
-        this.startDate = ''
-        this.endDate = ''
-        this.isLoading = false
-      }
-      catch (error) {
-        ToastBottom.fire({
-          icon: "error",
-          title: "載入錯誤，請稍後再試。"
-        });
-        this.isLoading = false
-      }
-    },
-    async handleSearchartNumbers(queryContent) {
-      try {
-        this.isLoading = true
-        const { data, status, statusText } = await partNumbersAPI.getSearchPartNumbers(queryContent)
-        if (statusText !== "OK" && status !== 200) { throw new Error() }
-        const { partNumbers, warehousingHistories } = data;
-        this.partNumbers = partNumbers;
-        this.warehousingHistories = warehousingHistories;
-        this.isLoading = false
-      } catch (error) {
-        ToastBottom.fire({
-          icon: "error",
-          title: "載入錯誤，請稍後再試。"
-        });
-        this.isLoading = false
-      }
-    },
-    afterOutsourcingDoneToUpdateQuantity(outsourcingData, warehousingHistory) { //更新partNumbers數量，更新出入庫紀錄
-      this.warehousingHistory_update(warehousingHistory) //呼叫更新出入庫紀錄
-      for (let partNumber of this.partNumbers) {
-        if (partNumber.name === outsourcingData.partNumberName) {
-          partNumber.quantity = partNumber.quantity + Number(outsourcingData.quantity)
-          return
-        } else {
-          for (let subPartNumber of partNumber.subPartNumbers) {
-            if (subPartNumber.name === outsourcingData.partNumberName) {
-              subPartNumber.quantity = subPartNumber.quantity + Number(outsourcingData.quantity)
-              return
-            }
-          }
-        }
-      }
-    },
-    warehousingHistory_update(warehousingHistory) { // function---更新出入庫紀錄
-      // 更新出入庫版面
-      this.warehousingHistories.unshift({
-        PartNumber: { name: warehousingHistory.partNumberName },
-        note: warehousingHistory.note,
-        quntityOfShipping: null,
-        quntityOfWarehousing: warehousingHistory.quntityOfWarehousing,
-        textCreatedAt: `${new Date(warehousingHistory.updatedAt).getFullYear()}/${new Date(warehousingHistory.updatedAt).getMonth() + 1}/${new Date(warehousingHistory.updatedAt).getDate()}`,
-        totalQuntity: warehousingHistory.totalQuntity,
-      })
-
-      this.warehousingHistories.pop()
-    },
-    afterHandleShowOutsourcingListsTable() {
-      this.showOutsourcingListsTable = true
-    },
-    afterHandleShowWarehousingHistoriesTable() {
-      this.showOutsourcingListsTable = false
-    },
-    after_submited_new(partNumber, warehousingHistory, actionDate) {
-      // console.log('收到更新數量通知')
-      // console.log(partNumbers)
-      let left = -1, right = this.partNumbers.length
-      while (left + 1 !== right) {
-        let mid = Math.floor((left + right) / 2)
-        if (this.partNumbers[mid].name === partNumber.name) {
-          this.partNumbers[mid].quantity = partNumber.quantity
-          break
-        } else if (this.partNumbers[mid].name < partNumber.name) {
-          left = mid
-        } else {
-          right = mid
-        }
-      }
-
-      // 更新出入庫版面
-      this.warehousingHistories.unshift({
-        PartNumber: { name: partNumber.name },
-        note: warehousingHistory.note,
-        quntityOfShipping: warehousingHistory.quntityOfShipping,
-        quntityOfWarehousing: null,
-        textCreatedAt: `${new Date(actionDate).getFullYear()}/${new Date(actionDate).getMonth() + 1}/${new Date(actionDate).getDate()}`,
-        totalQuntity: warehousingHistory.totalQuntity,
-      })
-
-      this.warehousingHistories.pop()
-    },
-    toggleShowFastShippingWarehousingFormArea() {
-      this.isShowFastShippingWarehousingFormArea = !this.isShowFastShippingWarehousingFormArea
-    },
-    toggleShowFastOutsourcingFormArea() {
-      this.isShowFastOutsourcingFormArea = !this.isShowFastOutsourcingFormArea
-    }
-  },
+    partNumbers.value = _partNumbers
+    customers.value = _customers
+    warehousingHistories.value = _warehousingHistories
+    searchText.value = ''
+    startDate.value = ''
+    endDate.value = ''
+    isLoading.value = false
+  } catch (error) {
+    ToastBottom.fire({
+      icon: "error",
+      title: "載入錯誤，請稍後再試。"
+    });
+    isLoading.value = false
+  }
 }
+
+//更新partNumbers數量，更新出入庫紀錄
+const func_afterOutsourcingDoneToUpdateQuantity = (_outsourcingData, _warehousingHistory) => {
+  //呼叫更新出入庫紀錄
+  func_warehousingHistoryUpdate(_warehousingHistory)
+  for (let partNumber of partNumbers.value) {
+    if (partNumber.name === _outsourcingData.partNumberName) {
+      partNumber.quantity = partNumber.quantity + Number(_outsourcingData.quantity)
+      return
+    } else {
+      for (let subPartNumber of partNumber.subPartNumbers) {
+        if (subPartNumber.name === _outsourcingData.partNumberName) {
+          subPartNumber.quantity = subPartNumber.quantity + Number(_outsourcingData.quantity)
+          return
+        }
+      }
+    }
+  }
+}
+
+// 更新出入庫紀錄
+const func_warehousingHistoryUpdate = (_warehousingHistory) => {
+  if (!_warehousingHistory) return
+  // 更新出入庫版面
+  warehousingHistories.value.unshift({
+    PartNumber: { name: _warehousingHistory.partNumberName },
+    note: _warehousingHistory.note,
+    quntityOfShipping: null,
+    quntityOfWarehousing: _warehousingHistory.quntityOfWarehousing,
+    textCreatedAt: `${new Date(_warehousingHistory.updatedAt).getFullYear()}/${new Date(_warehousingHistory.updatedAt).getMonth() + 1}/${new Date(_warehousingHistory.updatedAt).getDate()}`,
+    totalQuntity: _warehousingHistory.totalQuntity,
+  })
+  warehousingHistories.value.pop()
+}
+
+const func_afterSubmitedNew = (_partNumber, _warehousingHistory, _actionDate) => {
+  let left = -1, right = partNumbers.value.length
+  while (left + 1!== right) {
+    let mid = Math.floor((left + right) / 2)
+    if (partNumbers.value[mid].name === _partNumber.name) {
+      partNumbers.value[mid].quantity = _partNumber.quantity
+      break
+    } else if (partNumbers.value[mid].name < _partNumber.name) {
+      left = mid
+    } else {
+      right = mid
+    }
+  }
+  // 更新出入庫版面
+  warehousingHistories.value.unshift({
+    PartNumber: { name: _partNumber.name },
+    note: _warehousingHistory.note,
+    quntityOfShipping: _warehousingHistory.quntityOfShipping,
+    quntityOfWarehousing: null,
+    textCreatedAt: `${new Date(_actionDate).getFullYear()}/${new Date(_actionDate).getMonth() + 1}/${new Date(_actionDate).getDate()}`,
+    totalQuntity: _warehousingHistory.totalQuntity,
+  })
+  warehousingHistories.value.pop()
+}
+
+const handleSearchPartNumbers = async () => {
+  try {
+    const _queryContent = {
+      searchText: searchText.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+    }
+    isLoading.value = true
+    const { data, status, statusText } = await partNumbersAPI.getSearchPartNumbers(_queryContent)
+    if (statusText!== "OK" && status!== 200) { throw new Error() }
+    const { partNumbers: _partNumbers, warehousingHistories: _warehousingHistories } = data;
+    partNumbers.value = _partNumbers
+    warehousingHistories.value = _warehousingHistories
+    isLoading.value = false
+  } catch (error) {
+    ToastBottom.fire({
+      icon: "error",
+      title: "載入錯誤，請稍後再試。"
+    });
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  func_fetchPartNumbers('')
+})
+
 </script>
 
 <style scoped>
