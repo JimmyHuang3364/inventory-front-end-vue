@@ -16,6 +16,15 @@
     class="mySwiper"
   >
     <SwiperSlide>
+      <img src="../../../assets/personalPractise/inventory.jpg" />
+      <div class="!t-max-h-[100px] t-overflow-auto t-text-white" :class="{'t-text-black': !props.darkMode}">
+        <h2>以前端VUE3框架開發網站(簡易倉庫系統)</h2>
+        <p class="t-truncate">以VUE3框架搭配各式套件(vite、VueRouter、bootstrap、sweet alert、pinia、tailwind...等)進行開發。簡單的倉庫紀錄系統(紀錄出入庫、產品外包狀態、廠商管理、模具管理)因之前開發的專案經使用者提出各種想法後，我以前端框架開發更能給使用者良好操作體驗，故又另自學VUE框架並使用axios串接先前以全端開發之API再次開發簡易出入庫倉庫系統。因有帳密保護，故專案連結無法詳細展示。(可於面試時展示)</p>
+        <button class="t-text-xs t-text-right t-block t-w-full t-text-cyan-600 hover:t-text-sky-200" @click="handleClick">顯示全文...</button>
+        <router-link :to="{ name: 'sign-in' }" class="btn btn-primary">Go...</router-link>
+      </div>
+    </SwiperSlide>
+    <SwiperSlide>
       <img src="../../../assets/personalPractise/resumeView.jpg" />
       <div class="t-text-white" :class="{'t-text-black': !props.darkMode}">
         <h2>個人資訊簡歷的頁面</h2>
@@ -38,15 +47,6 @@
         <p>七彩旋轉的載入畫面</p>
       </div>
       <router-link :to="{ name: 'personalPractise-loaderPage' }" class="btn btn-primary">Go...</router-link>
-    </SwiperSlide>
-    <SwiperSlide>
-      <img src="../../../assets/personalPractise/inventory.jpg" />
-      <div class="!t-max-h-[100px] t-overflow-auto t-text-white" :class="{'t-text-black': !props.darkMode}">
-        <h2>以前端VUE3框架開發網站(簡易倉庫系統)</h2>
-        <p class="t-truncate">簡單的倉庫紀錄系統(紀錄出入庫、產品外包狀態、廠商管理、模具管理)因之前開發的專案經使用者提出各種想法後，我以前端框架開發更能給使用者良好操作體驗，故又另自學VUE框架並使用axios串接先前以全端開發之API再次開發簡易出入庫倉庫系統。因有帳密保護，故專案連結無法詳細展示。(可於面試時展示)</p>
-        <button class="t-text-xs t-text-right t-block t-w-full t-text-cyan-600 hover:t-text-sky-200" @click="handleClick">顯示全文...</button>
-        <router-link :to="{ name: 'sign-in' }" class="btn btn-primary">Go...</router-link>
-      </div>
     </SwiperSlide>
     <SwiperSlide>
       <img src="../../../assets/personalPractise/logOutAnimation.jpg" />

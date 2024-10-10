@@ -73,8 +73,16 @@
               <p class="skill-description description">串接 API 套件評估、畫面切版以及使用多種技術/套件，進行中大型專案開發/維護。(ex: vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript...等)</p>
             </div>
             <div class="skill">
-              <h3 class="skill-name">使用多種技術/套件經驗</h3>
-              <p class="skill-description description">擁有使用過GCP、Heroku、Railway、vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript ...等經驗</p>
+              <h3 class="skill-name">前端使用多種技術/套件經驗</h3>
+              <p class="skill-description description">擁有使用過 vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript、webpack ...等經驗</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">後端使用多種技術/套件經驗</h3>
+              <p class="skill-description description">擁有使用過 Express、Handlebars、Sequelize ...等經驗</p>
+            </div>
+            <div class="skill">
+              <h3 class="skill-name">其他使用多種技術/套件經驗</h3>
+              <p class="skill-description description">擁有使用過 nvm、git、Railway、webpack、mongoDB、MySql、GCP、Heroku ...等經驗</p>
             </div>
             <div class="skill">
               <h3 class="skill-name">持續精進</h3>
