@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PractiseSwiper />
+    <PractiseSwiper :darkMode="true"/>
   </div>
 </template>
 <script setup lang="ts">

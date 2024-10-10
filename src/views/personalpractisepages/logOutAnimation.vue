@@ -85,7 +85,7 @@ const handleClickLeave = () => {
 
     if (_count < 0) {
       clearInterval(intervalId)
-      router.push({name: 'personalPractise'})
+      router.back()
     }
   }, 1000)
 }
