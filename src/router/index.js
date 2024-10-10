@@ -172,6 +172,14 @@ const routes = [
       title: 'Personal Practise',
     }
   },
+  {
+    path: '/personalPractise/logOutAnimation',
+    name: 'personalPractise-logOutAnimation',
+    component: () => import('../views/personalpractisepages/logOutAnimation.vue'),
+    meta: {
+      title: 'Personal Practise',
+    }
+  },
 ]
 
 const router = createRouter({
@@ -201,7 +209,8 @@ router.beforeEach(async (to, from, next) => {
     'personalPractise',
     'personalPractise-resume',
     'personalPractise-color-code',
-    'personalPractise-loaderPage'
+    'personalPractise-loaderPage',
+    'personalPractise-logOutAnimation'
   ]
 
   // 如果 token 無效則轉址到登入頁

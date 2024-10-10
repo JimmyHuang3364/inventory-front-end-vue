@@ -34,6 +34,14 @@
       </div>
     </div>
     <div class="card m-2 t-border-2 t-border-inherit" style="width: 18rem;">
+      <img src="../../assets/personalPractise/logOutAnimation.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">登出圖案</h5>
+        <p class="card-text">只用 tailwind 畫出開關門小動畫，點擊後 3 秒會離開該頁。</p>
+        <router-link :to="{ name: 'personalPractise-logOutAnimation' }" class="btn btn-primary">Go...</router-link>
+      </div>
+    </div>
+    <div class="card m-2 t-border-2 t-border-inherit" style="width: 18rem;">
       <img src="../../assets/personalPractise/default.jpg" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">努力練習產出中...</h5>
