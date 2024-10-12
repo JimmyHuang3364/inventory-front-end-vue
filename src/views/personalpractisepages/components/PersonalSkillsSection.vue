@@ -66,10 +66,10 @@ const mySkillItemsClass_2 = reactive([
 ]) 
 
 const func_showItems = () => {
-  if (props.currentscrollY >= document.documentElement.scrollHeight - 200 && !showSkillsTeam1.value) {
+  if (props.currentscrollY >= document.documentElement.scrollHeight - 500 && !showSkillsTeam1.value) {
     showSkillsTeam1.value = true
   }
-  if (props.currentscrollY >= document.documentElement.scrollHeight - 100 && !showSkillsTeam2.value) {
+  if (props.currentscrollY >= document.documentElement.scrollHeight - 350 && !showSkillsTeam2.value) {
     showSkillsTeam2.value = true
   }
 }

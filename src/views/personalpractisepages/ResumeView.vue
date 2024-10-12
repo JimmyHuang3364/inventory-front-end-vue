@@ -124,47 +124,7 @@
       </template>
 
       <template v-if="showPractiseSection">
-        <section class="exoerience-section">
-          <h2 lass="job-exoerience">工作經歷</h2>
-          <ul class="exoerience">
-            <li class="t-my-10">
-              <span class="company">
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512"><path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>
-                <p>綠點高新科技股份有限公司</p>
-              </span>
-              <ul>
-                <li class="job-title">職稱：品管／品保工程師</li>
-                <li class="duration">任職期間：2014/8 ~ 2022/6</li>
-                <li>
-                  <p class="job-Work-content">工作內容與成就：</p>
-                </li>
-                <ul>
-                  <li class="description">產品檢驗、建立自動化量測程式。</li>
-                  <li class="description">2018年獲得年度績優員工</li>
-                  <li class="description">提供眾多實用有效之改善提案（如：編寫EXCEL自動化程式、提供現場機台戰情看板資訊之想法與作法等…）
-                  </li>
-                </ul>
-              </ul>
-            </li>
-            <li class="t-my-10">
-              <span class="company">
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512"><path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>
-                <p>深思設計有限公司</p>
-              </span>
-              <ul>
-                <li class="job-title">職稱：網頁前端助理工程師</li>
-                <li class="duration">任職期間：2023/12 ~ 2024/9</li>
-                <li>
-                  <p class="job-Work-content">工作內容與成就：</p>
-                </li>
-                <ul>
-                  <li class="description">維護、開發 vue3 中大型專案：AP串接I、網頁畫面切版、各式優化、UI測試。</li>
-                  <li class="description">使用到技術/套件： vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript ...等。</li>
-                </ul>
-              </ul>
-            </li>
-          </ul>
-        </section>
+        <ExoerienceSection />
       </template>
     </main>
   </div>
@@ -176,6 +136,7 @@ import { ref, watch, onMounted, nextTick, onBeforeUnmount, computed } from 'vue'
 // 組件
 import PersonalSkillsSection from './components/PersonalSkillsSection.vue';
 import PractiseSwiper from './components/PractiseSwiper.vue';
+import ExoerienceSection from './components/ExoerienceSection.vue';
 
 const darkMode = ref<boolean>(false)
 const showAvatar = ref<boolean>(false)
