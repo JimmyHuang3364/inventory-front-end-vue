@@ -12,7 +12,7 @@
       </li>
       <ul>
         <template v-for="(_workContent, index) in props.experience.workContent" :key="index">
-          <li class="description">{{ _workContent }}</li>
+          <li class="description t-my-2"><span>－</span>{{ _workContent }}</li>
         </template>
       </ul>
     </ul>
@@ -38,9 +38,11 @@ const props = defineProps<{experience: Experience}>()
           fill: #9a9a9a;
         }
       }
+      
       .company-name{
         color: #fff;
       }
+
       li {
         color: #9a9a9a;
       }

@@ -25,7 +25,7 @@
           <h2>{{ practice.title }}</h2>
           <p class="t-truncate" :class="`practice-${index}`">{{ practice.description }}</p>
           <button v-show="practice.showMoreBtn" class="t-text-xs t-text-right t-block t-w-full t-text-cyan-600 hover:t-text-sky-200" @click="func_handleClick">顯示全文...</button>
-          <router-link :to="{ name: 'sign-in' }" class="btn btn-primary">Go...</router-link>
+          <router-link :to="{ name: practice.routerName }" class="btn btn-primary">Go...</router-link>
         </div>
       </SwiperSlide>
     </template>
@@ -64,36 +64,42 @@ const myPractices = reactive([
     title: '以前端VUE3框架開發網站(簡易倉庫系統)',
     description: '以VUE3框架搭配各式套件(vite、VueRouter、bootstrap、sweet alert、pinia、tailwind...等)進行開發。簡單的倉庫紀錄系統(紀錄出入庫、產品外包狀態、廠商管理、模具管理)因之前開發的專案經使用者提出各種想法後，我以前端框架開發更能給使用者良好操作體驗，故又另自學VUE框架並使用axios串接先前以全端開發之API再次開發簡易出入庫倉庫系統。因有帳密保護，故專案連結無法詳細展示。(可於面試時展示)',
     imgName: 'inventory.jpg',
+    routerName: 'sign-in',
     showMoreBtn: false
   },
   {
     title: '個人資訊簡歷的頁面',
     description: '就簡簡單單的簡歷，隨時增加或優化。',
     imgName: 'resumeView.jpg',
+    routerName: 'personalPractise-resume',
     showMoreBtn: false
   },
   {
     title: 'RGB色碼表',
     description: '調出喜歡的顏色並提供色碼，Background color會隨著不同的值跟著變換。',
     imgName: 'colorCode.jpg',
+    routerName: 'personalPractise-color-code',
     showMoreBtn: false
   },
   {
     title: '載入中的狀態頁面',
     description: '七彩旋轉的等待載入畫面',
     imgName: 'loaderPage.jpg',
+    routerName: 'personalPractise-loaderPage',
     showMoreBtn: false
   },
   {
     title: '登出圖案',
     description: '練習只用 tailwind 畫出開關門小動畫，點擊後 3 秒會離開該頁。',
     imgName: 'logOutAnimation.jpg',
+    routerName: 'personalPractise-logOutAnimation',
     showMoreBtn: false
   },
   {
     title: '不同的展示所有作品方式',
     description: '使用 swiper 套件。',
     imgName: 'PersonalPractiseGeneral.jpg',
+    routerName: 'PersonalPractiseGeneral',
     showMoreBtn: false
   },
 ])
