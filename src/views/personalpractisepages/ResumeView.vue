@@ -59,7 +59,9 @@
         </Transition>
       </section>
 
-      <section class="skill-section">
+      <PersonalSkillsSection :currentscrollY="currentscrollY"/>
+
+      <!-- <section class="skill-section">
         <h2>技能</h2>
         <div class="skills">
             <Transition name="skills-item-1">
@@ -111,7 +113,7 @@
               </div>
             </Transition>
           </div>
-      </section>
+      </section> -->
 
       <!-- 作品展示 -->
       <template v-if="showPractiseSection">
@@ -172,6 +174,7 @@
 import { ref, watch, onMounted, nextTick, onBeforeUnmount, computed } from 'vue'
 
 // 組件
+import PersonalSkillsSection from './components/PersonalSkillsSection.vue';
 import PractiseSwiper from './components/PractiseSwiper.vue';
 
 const darkMode = ref<boolean>(false)
@@ -180,6 +183,7 @@ const showDescription = ref<boolean>(false)
 const showSkillsTeam1 = ref<boolean>(false)
 const showSkillsTeam2 = ref<boolean>(false)
 const showPractiseSection = ref<boolean>(false)
+const currentscrollY = ref<number>(0)
 
 const func_changeAppearance = () => {
   if (localStorage.getItem('darkMode') === 'true') { darkMode.value = true } else { darkMode.value = false }
@@ -207,15 +211,14 @@ const func_changeAppearance = () => {
 }
 
 const func_showHiddenItems = () => {
-  if (window.scrollY > 50 && !showSkillsTeam1.value) {
-    showSkillsTeam1.value = true
-  }
-  if (window.scrollY > 200 && !showSkillsTeam2.value) {
-    showSkillsTeam2.value = true
-  }
-  if (window.scrollY > 600 &&!showPractiseSection.value) {
+  currentscrollY.value = window.scrollY + window.innerHeight
+  if (currentscrollY.value >= document.documentElement.scrollHeight &&!showPractiseSection.value) {
     showPractiseSection.value = true
   }
+}
+
+const func_checkHiddenItemIsVisible = () => {
+  
 }
 
 onMounted(() => {
