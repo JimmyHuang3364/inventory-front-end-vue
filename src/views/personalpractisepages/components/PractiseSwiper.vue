@@ -20,7 +20,7 @@
   >
     <template v-for="(practice, index) in myPractices" :key="index">
       <SwiperSlide>
-        <img :src="`/src/assets/personalPractise/${practice.imgName}`" />
+        <img :src="getImageUrl(practice.imgName)" />
         <div class="t-overflow-auto" :class="{'t-text-white': props.darkMode}">
           <h2 class="t-font-bold t-text-xl t-mb-2">{{ practice.title }}</h2>
           <p class="t-truncate" :class="`practice-${index}`">{{ practice.description }}</p>
@@ -31,7 +31,7 @@
     </template>
     
     <SwiperSlide>
-      <img src="../../../assets/personalPractise/default.jpg" />
+      <img :src="getImageUrl('default.jpg')" />
       <div class="" :class="{'t-text-white': props.darkMode}">
         <h2 class="t-font-bold t-text-xl t-mb-2">努力練習產出中..</h2>
         <p>努力找目標練習產出中...</p>
@@ -51,7 +51,6 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
 import type { Swiper as SwiperType } from 'swiper'
-
 
 const modules = [EffectCoverflow, Pagination]
 const props = defineProps<{darkMode: boolean}>()
@@ -138,6 +137,10 @@ const func_showMoreBtn = () => {
     }
   }
 }
+
+const getImageUrl = (imgName: string) => {
+  return new URL(`../../../assets/personalPractise/${imgName}`, import.meta.url).href;
+};
 
 onMounted(() => {
   nextTick(() => {
