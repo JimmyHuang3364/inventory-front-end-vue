@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6", // 指定 ECMAScript 版本
-    "module": "commonjs", // 指定模組系統
+    "target": "ESNext", // 指定 ECMAScript 版本
+    "module": "ESNext", // 指定模組系統
     "strict": true, // 啟用所有嚴格類型檢查選項
     "moduleResolution": "node",
     "esModuleInterop": true, // 允許從 CommonJS 模組導入
