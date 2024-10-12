@@ -22,7 +22,7 @@
       <SwiperSlide>
         <img :src="`/src/assets/personalPractise/${practice.imgName}`" />
         <div class="t-overflow-auto" :class="{'t-text-white': props.darkMode}">
-          <h2>{{ practice.title }}</h2>
+          <h2 class="t-font-bold t-text-xl t-mb-2">{{ practice.title }}</h2>
           <p class="t-truncate" :class="`practice-${index}`">{{ practice.description }}</p>
           <button v-show="practice.showMoreBtn" class="t-text-xs t-text-right t-block t-w-full t-text-cyan-600 hover:t-text-sky-200" @click="func_handleClick">顯示全文...</button>
           <router-link :to="{ name: practice.routerName }" class="btn btn-primary">Go...</router-link>
@@ -30,16 +30,14 @@
       </SwiperSlide>
     </template>
     
-    <template>
-      <SwiperSlide>
-        <img src="../../../assets/personalPractise/default.jpg" />
-        <div class="" :class="{'t-text-white': props.darkMode}">
-          <h2>努力練習產出中..</h2>
-          <p>努力找目標練習產出中...</p>
-        </div>
-        <div class="t-bg-[#8c9bab] t-text-black t-w-fit t-p-2 t-rounded" role="button">努力練習產出中...</div>
-      </SwiperSlide>
-    </template>
+    <SwiperSlide>
+      <img src="../../../assets/personalPractise/default.jpg" />
+      <div class="" :class="{'t-text-white': props.darkMode}">
+        <h2 class="t-font-bold t-text-xl t-mb-2">努力練習產出中..</h2>
+        <p>努力找目標練習產出中...</p>
+      </div>
+      <div class="t-bg-[#8c9bab] t-text-black t-w-fit t-p-2 t-rounded" role="button">努力練習產出中...</div>
+    </SwiperSlide>
   </Swiper>
 </template>
 
@@ -62,7 +60,7 @@ const switchSpeed = ref<number>(1000);
 const myPractices = reactive([
   {
     title: '以前端VUE3框架開發網站(簡易倉庫系統)',
-    description: '以VUE3框架搭配各式套件(vite、VueRouter、bootstrap、sweet alert、pinia、tailwind...等)進行開發。簡單的倉庫紀錄系統(紀錄出入庫、產品外包狀態、廠商管理、模具管理)因之前開發的專案經使用者提出各種想法後，我以前端框架開發更能給使用者良好操作體驗，故又另自學VUE框架並使用axios串接先前以全端開發之API再次開發簡易出入庫倉庫系統。因有帳密保護，故專案連結無法詳細展示。(可於面試時展示)',
+    description: '此系統於小公司實際持續運作中(非展示功能)。以VUE3框架搭配各式套件(vite、VueRouter、bootstrap、sweet alert、pinia、tailwind...等)進行開發。簡單的倉庫紀錄系統(紀錄出入庫、產品外包狀態、廠商管理、模具管理)因之前開發的專案經使用者提出各種想法後，我以前端框架開發更能給使用者良好操作體驗，故又另自學VUE框架並使用axios串接先前以全端開發之API再次開發簡易出入庫倉庫系統。因有帳密保護，故專案連結無法詳細展示。(可於面試時展示)',
     imgName: 'inventory.jpg',
     routerName: 'sign-in',
     showMoreBtn: false
