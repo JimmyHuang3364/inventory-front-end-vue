@@ -1,0 +1,1 @@
+import{P as e}from"./PractiseSwiper-C1h3JBzP.js";import{d as r,o,c as t,k as a}from"./index-WyistJZg.js";import"./swiper-vue-BA9jl0Be.js";import"./common-BL2qdO5q.js";const _=r({__name:"PersonalPractiseGeneral",setup(n){return(s,c)=>(o(),t("div",null,[a(e,{darkMode:!0})]))}});export{_ as default};
