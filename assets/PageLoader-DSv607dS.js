@@ -1,1 +1,0 @@
-import{_ as n,o as a,c as s,b as t}from"./index-WyistJZg.js";const o={},r={class:"loader-center m-0 p-0 text-white d-flex justify-content-center align-items-center"};function c(l,e){return a(),s("div",r,e[0]||(e[0]=[t("div",{class:"loader-ring"},null,-1),t("span",null,"loading...",-1)]))}const i=n(o,[["render",c],["__scopeId","data-v-80bfeaae"]]);export{i as P};
