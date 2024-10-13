@@ -12,11 +12,11 @@
             <span class="appearance-switch-txt" turnOn="light" turnOff="dark"></span>
           </label>
           <span>Dark</span>
-          <p class="t-ml-10">2024/10/12</p>
         </div>
       </nav>
     </header>
     <main>
+      <p class="t-ml-10 t-text-xs t-text-end">最後編輯: 2024/10/13</p>
       <section calss="personal-info">
         <div class="avatar">
           <Transition name="avatar">
@@ -61,60 +61,6 @@
 
       <PersonalSkillsSection :currentscrollY="currentscrollY"/>
 
-      <!-- <section class="skill-section">
-        <h2>技能</h2>
-        <div class="skills">
-            <Transition name="skills-item-1">
-              <div v-show="showSkillsTeam1" class="skill">
-                <h3 class="skill-name">程式設計入門</h3>
-                <p class="skill-description description">具備網頁設計的能力，熟悉 HTML、CSS 和 JavaScript，並對於基礎的演算法有一定的掌握力。</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-2">
-              <div v-show="showSkillsTeam1" class="skill">
-                <h3 class="skill-name">掌握網頁開發</h3>
-                <p class="skill-description description">能夠打造兼具前後端的 Web App 產品。從切版、RWD、操作 DOM 事件、使用 AJAX 與串接 API 等前端能力，到使用 Node.js 與 MongoDB 建立後端功能，並親手打造自己的產品。</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-3">
-              <div v-show="showSkillsTeam1" class="skill">
-                <h3 class="skill-name">軟體工程師實力</h3>
-                <p class="skill-description description">前端部分能夠透過VUE建立 SPA 頁面，後端則能夠以node.js Express進行全端開發。</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-4">
-              <div v-show="showSkillsTeam2" class="skill">
-                <h3 class="skill-name">擁有中大型專案開發/維護經驗</h3>
-                <p class="skill-description description">串接 API 套件評估、畫面切版以及使用多種技術/套件，進行中大型專案開發/維護。(ex: vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript...等)</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-5">
-              <div v-show="showSkillsTeam2" class="skill">
-                <h3 class="skill-name">前端使用多種技術/套件經驗</h3>
-                <p class="skill-description description">擁有使用過 vue、vite、VueRouter、bootstrap、sweet alert、pinia、tailwind、TypeScript、webpack ...等經驗</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-6">
-              <div v-show="showSkillsTeam2" class="skill">
-                <h3 class="skill-name">後端使用多種技術/套件經驗</h3>
-                <p class="skill-description description">擁有使用過 Express、Handlebars、Sequelize ...等經驗</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-7">
-              <div v-show="showSkillsTeam2" class="skill">
-                <h3 class="skill-name">其他使用多種技術/套件經驗</h3>
-                <p class="skill-description description">擁有使用過 nvm、git、Railway、webpack、mongoDB、MySql、GCP、Heroku ...等經驗</p>
-              </div>
-            </Transition>
-            <Transition name="skills-item-8">
-              <div v-show="showSkillsTeam2" class="skill">
-                <h3 class="skill-name">持續精進</h3>
-                <p class="skill-description description">等待補到滿滿滿...</p>
-              </div>
-            </Transition>
-          </div>
-      </section> -->
-
       <!-- 作品展示 -->
       <template v-if="showPractiseSection">
           <section class="practise-section">
@@ -123,10 +69,12 @@
           </section>
       </template>
 
+      <!-- 經歷 -->
       <template v-if="showPractiseSection">
         <ExoerienceSection />
       </template>
     </main>
+
   </div>
 </template>
 
@@ -141,8 +89,6 @@ import ExoerienceSection from './components/ExoerienceSection.vue';
 const darkMode = ref<boolean>(false)
 const showAvatar = ref<boolean>(false)
 const showDescription = ref<boolean>(false)
-const showSkillsTeam1 = ref<boolean>(false)
-const showSkillsTeam2 = ref<boolean>(false)
 const showPractiseSection = ref<boolean>(false)
 const currentscrollY = ref<number>(0)
 
@@ -150,23 +96,15 @@ const func_changeAppearance = () => {
   if (localStorage.getItem('darkMode') === 'true') { darkMode.value = true } else { darkMode.value = false }
   const 
     htmlBody = document.querySelector('.body') as HTMLElement | null
-    // htmlH1 = document.querySelector('h1') as HTMLElement | null,
-    // htmlH3 = document.querySelectorAll('h3') as NodeListOf<HTMLElement>
 
   if (!htmlBody) return
   
   if (darkMode.value) {
     htmlBody.classList.add('dark-mode')
-    // htmlBody.style.background = 'black'
-    // htmlH1.style.color = '#f6f7f8'
-    // htmlH3.forEach(item => { item.style.color = '#f6f7f8' })
     return
   }
   if (!darkMode.value) {
     htmlBody.classList.remove('dark-mode')
-    // htmlBody.style.background = '#f6f7f8'
-    // htmlH1.style.color = ''
-    // htmlH3.forEach(item => { item.style.color = '' })
     return
   }
 }
@@ -176,10 +114,6 @@ const func_showHiddenItems = () => {
   if (currentscrollY.value >= document.documentElement.scrollHeight &&!showPractiseSection.value) {
     showPractiseSection.value = true
   }
-}
-
-const func_checkHiddenItemIsVisible = () => {
-  
 }
 
 onMounted(() => {

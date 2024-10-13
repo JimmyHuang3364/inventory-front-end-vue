@@ -25,7 +25,7 @@ interface Experience {
   companyName: string;
   jobTitle: string;
   duration: string;
-  workContent: [];
+  workContent: string[];
 }
 
 const props = defineProps<{experience: Experience}>()
