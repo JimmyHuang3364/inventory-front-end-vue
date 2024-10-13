@@ -25,7 +25,7 @@
           <h2 class="t-font-bold t-text-xl t-mb-2">{{ practice.title }}</h2>
           <p class="t-truncate" :class="`practice-${index}`">{{ practice.description }}</p>
           <button v-show="practice.showMoreBtn" class="t-text-xs t-text-right t-block t-w-full t-text-cyan-600 hover:t-text-sky-200" @click="func_handleClick">顯示全文...</button>
-          <router-link :to="{ name: practice.routerName }" class="btn btn-primary">Go...</router-link>
+          <router-link :to="{ name: practice.routerName }" class="btn btn-primary" target="_blank">Go...</router-link>
         </div>
       </SwiperSlide>
     </template>
