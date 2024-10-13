@@ -13,7 +13,10 @@
                 <PersonalSkillItem  v-show="showSkillsTeam2" :content="content"/>
               </Transition>
             </template>
-          </div>
+        </div>
+        <Transition :name="`skills-Comment`">
+          <PersonalSkillComment v-show="showSkillsComment"/>
+        </Transition>
       </section>
   </div>
 </template>
@@ -24,10 +27,12 @@ const props = defineProps<{currentscrollY: number}>()
 
 
 // 組件
-import PersonalSkillItem from './PersonalSkillItem.vue';
+import PersonalSkillItem from './PersonalSkillItem.vue'
+import PersonalSkillComment from './PersonalSkillComment.vue';
 
 const showSkillsTeam1 = ref<boolean>(false)
 const showSkillsTeam2 = ref<boolean>(false)
+const showSkillsComment = ref<boolean>(false)
 const mySkillItemsClass_1 = reactive([
   {
     title: '程式設計入門',
@@ -71,6 +76,9 @@ const func_showItems = () => {
   }
   if (props.currentscrollY >= document.documentElement.scrollHeight - 350 && !showSkillsTeam2.value) {
     showSkillsTeam2.value = true
+  }
+  if (props.currentscrollY >= document.documentElement.scrollHeight - 150 && !showSkillsComment.value) {
+    showSkillsComment.value = true
   }
 }
 
@@ -144,7 +152,8 @@ watch(
 .skills-item-5-enter-active,
 .skills-item-6-enter-active,
 .skills-item-7-enter-active,
-.skills-item-8-enter-active {
+.skills-item-8-enter-active,
+.skills-Comment-enter-active {
   transition: all 0.3s ease-in-out;
 }
 
@@ -168,11 +177,16 @@ watch(
   transition-delay: 1.5s;
 }
 
+.skills-Comment-enter-active {
+  transition-delay: 1.8s;
+}
+
 .skills-item-4-enter-from,
 .skills-item-5-enter-from,
 .skills-item-6-enter-from,
 .skills-item-7-enter-from,
-.skills-item-8-enter-from{
+.skills-item-8-enter-from,
+.skills-Comment-enter-from{
   transform: translateY(50px);
   opacity: 0;
 }
